@@ -95,7 +95,7 @@ class CompositionTest extends TestCase
         $this->assertTrue(is_string($result));
     }
 
-    public function testItAppliesOnLast(): void
+    public function testComposesInReverse(): void
     {
 //        $composition = new Composition(fn (int $x): int => $x * 3);
 //        $composition->fmap(show(...));                                                   // show . (*3) :: Int => String
@@ -110,9 +110,7 @@ class CompositionTest extends TestCase
         // here to make this work we need to make the composition in reverse (conceptually)
         $fa = fn (int $x): int => $x * 100;
         $fmapComp = new Composition(fn ($x) => fmap($x, new Composition($fa)));
-        $aToB = (new Composition(fn (int $x): int => $x * 3))
-            ->fmap(show(...));
-        $result = $fmapComp($aToB);
+        $result = $fmapComp(fn ($x) => show($x * 3));       // here COULD be a composition too
 
         $this->assertIsCallable($result);
         $this->assertInstanceOf(Composition::class, $result);
