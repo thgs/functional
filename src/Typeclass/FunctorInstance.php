@@ -2,9 +2,6 @@
 
 namespace thgs\Functional\Typeclass;
 
-use thgs\Functional\F;
-use thgs\Functional\pure;
-
 /**
  * class Functor
  *      fmap :: (a -> b)  ->  f a  ->  f b
