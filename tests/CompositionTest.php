@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Instance\Composition;
+
 use function thgs\Functional\fmap;
+use function thgs\Functional\show;
 
 class CompositionTest extends TestCase
 {
@@ -80,5 +82,44 @@ class CompositionTest extends TestCase
 
         $this->assertEquals($result1(5), $result2(5), 'non associative');
         $this->assertEquals(210, $result1(5), 'failed to compose correctly (expected 210)');
+    }
+
+    public function testCanComposeWithShow(): void
+    {
+        $composition = new Composition(fn ($x) => $x * 3);
+        $composition = $composition->fmap(show(...));           // show . $g
+
+        $result = $composition(100);
+
+        $this->assertEquals('300', $result);
+        $this->assertTrue(is_string($result));
+    }
+
+    public function testItAppliesOnLast(): void
+    {
+//        $composition = new Composition(fn (int $x): int => $x * 3);
+//        $composition->fmap(show(...));                                                   // show . (*3) :: Int => String
+//
+//        $fmapComp = new Composition(fn ($x) => fmap($x, $composition));       // fmap (show . (*3)) :: f Int -> f String
+//
+//        // composition now needs 1 parameter (f Int) to return (f String)
+//        $fa = new Composition(fn (int $x): int => $x * 100);
+//        $result = $fmapComp($fa);                                          // fmap (show . (*3)) (*100) :: Int -> String
+
+        //
+        // here to make this work we need to make the composition in reverse (conceptually)
+        $fa = new Composition(fn (int $x): int => $x * 100);
+        $fmapComp = new Composition(fn ($x) => fmap($x, $fa));
+        $aToB = (new Composition(fn (int $x): int => $x * 3))
+            ->fmap(show(...));
+        $result = $fmapComp($aToB);
+
+        $this->assertIsCallable($result);
+        $this->assertInstanceOf(Composition::class, $result);
+
+        $calledResult = $result(2);                                         // fmap (show . (*3)) (*100) 2      == "600"
+
+        $this->assertEquals('600', $calledResult, 'result is calculated wrong');
+        $this->assertIsString($calledResult, 'show was not applied last');
     }
 }

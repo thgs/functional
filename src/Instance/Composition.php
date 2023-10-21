@@ -22,6 +22,7 @@ class Composition implements FunctorInstance
     public function __invoke()
     {
         // need to decide to curry here?
+        // or handle functor arguments?
         return ($this->g)(...func_get_args());
     }
 
@@ -40,6 +41,8 @@ class Composition implements FunctorInstance
     public function fmap(callable $f): Composition
     {
         $g = $this->g;
-        return new Composition(fn ($x) => $f( $g($x) ));
+        return new Composition(
+            fn ($x) => $f( $g($x) )
+        );
     }
 }

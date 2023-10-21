@@ -20,3 +20,8 @@ function fmap(callable $f, F $g): F {
     // todo: since $f is callable, we can wrap it in Composition?
     return $g->fmap($f);
 }
+
+function show($x): string
+{
+    return (string) $x;
+}
