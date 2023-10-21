@@ -108,8 +108,8 @@ class CompositionTest extends TestCase
 
         //
         // here to make this work we need to make the composition in reverse (conceptually)
-        $fa = new Composition(fn (int $x): int => $x * 100);
-        $fmapComp = new Composition(fn ($x) => fmap($x, $fa));
+        $fa = fn (int $x): int => $x * 100;
+        $fmapComp = new Composition(fn ($x) => fmap($x, new Composition($fa)));
         $aToB = (new Composition(fn (int $x): int => $x * 3))
             ->fmap(show(...));
         $result = $fmapComp($aToB);
