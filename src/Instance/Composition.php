@@ -31,7 +31,7 @@ class Composition implements FunctorInstance
      * fmap f g = (\x -> f (g x))
      *
      * Here we need to implement
-     * fmap :: (a -> b) -> -> (r -> b)
+     * fmap :: (a -> b) -> (r -> b)
      *
      * As the (r -> a) is $this->g
      *
