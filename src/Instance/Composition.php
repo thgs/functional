@@ -42,6 +42,9 @@ class Composition implements FunctorInstance
     {
         $g = $this->g;
         return new Composition(
+            /**
+             * @param R $x
+             */
             fn ($x) => $f( $g($x) )
         );
     }
