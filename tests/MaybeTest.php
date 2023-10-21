@@ -48,6 +48,7 @@ class MaybeTest extends TestCase
             ->fmap($g)
             ->fmap($f);
 
+        // todo: is this enough?
         $this->assertEquals($result1, $result2);
     }
 }

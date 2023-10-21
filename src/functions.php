@@ -2,6 +2,7 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Instance\Composition;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 
 /**
@@ -16,5 +17,6 @@ use thgs\Functional\Typeclass\FunctorInstance as F;
  */
 function fmap(callable $f, F $g): F {
     // call the instance method
+    // todo: since $f is callable, we can wrap it in Composition?
     return $g->fmap($f);
 }
