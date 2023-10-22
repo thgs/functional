@@ -3,7 +3,10 @@
 namespace thgs\Functional;
 
 use thgs\Functional\Data\Either;
+use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Left;
+use thgs\Functional\Data\Maybe;
+use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 use thgs\Functional\Typeclass\ShowInstance;
@@ -45,5 +48,22 @@ function either(callable $f, callable $g, Either $either)
     return match (\true) {
         $value instanceof Left => $f($value->getValue()),
         $value instanceof Right => $g($value->getValue())
+    };
+}
+
+/**
+ * @template A
+ * @template B
+ * @param B $default
+ * @param callable(A): B $f
+ * @param Maybe $maybe
+ * @return B
+ */
+function maybe($default, callable $f, Maybe $maybe)
+{
+    $value = $maybe->getValue();
+    return match (\true) {
+        $value instanceof Nothing => $default,
+        $value instanceof Just => $f($value->getValue())
     };
 }
