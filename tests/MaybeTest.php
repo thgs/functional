@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
+use thgs\Functional\Typeclass\EqInstance;
 
 class MaybeTest extends TestCase
 {
@@ -64,5 +65,31 @@ class MaybeTest extends TestCase
     {
         $data = new Maybe(new Just(67));
         $this->assertEquals('Just 67', (string) $data);
+    }
+
+    public function testEnforcesMaybeTypeConstraintOnEq(): void
+    {
+        // In PHP we have to go "in reverse", adding a constraint in the instances of Eq
+
+        $data = new Maybe(new Just(67));
+        $fiction = new class implements EqInstance {
+            public function getValue()
+            {
+                return new Just(67);
+            }
+
+            public function equals(EqInstance $other): bool
+            {
+                return false;
+            }
+
+            public function notEquals(EqInstance $other): bool
+            {
+                return false;
+            }
+        };
+
+        $this->expectException(TypeError::class);
+        $data->equals($fiction);
     }
 }

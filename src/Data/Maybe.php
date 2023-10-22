@@ -61,13 +61,24 @@ class Maybe implements
     }
 
 
+    /**
+     * @param Maybe $other
+     */
     public function equals(EqInstance $other): bool
     {
+        if (!$other instanceof Maybe) {
+            throw new \TypeError('Expecting instance of Maybe');
+        }
+
         return $this->getValue() == $other->getValue();
     }
 
     public function notEquals(EqInstance $other): bool
     {
+        if (!$other instanceof Maybe) {
+            throw new \TypeError('Expecting instance of Maybe');
+        }
+
         return !$this->equals($other);
     }
 
