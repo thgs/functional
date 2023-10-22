@@ -2,8 +2,8 @@
 
 namespace thgs\Functional;
 
-use thgs\Functional\Instance\Composition;
 use thgs\Functional\Typeclass\FunctorInstance as F;
+use thgs\Functional\Typeclass\ShowInstance;
 
 /**
  * @template A
@@ -21,7 +21,7 @@ function fmap(callable $f, F $g): F {
     return $g->fmap($f);
 }
 
-function show($x): string
+function show(int|string|float|bool|ShowInstance $x): string
 {
     return (string) $x;
 }

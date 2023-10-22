@@ -59,4 +59,10 @@ class MaybeTest extends TestCase
 
         $this->assertTrue($data->equals($other));
     }
+
+    public function testCanShow(): void
+    {
+        $data = new Maybe(new Just(67));
+        $this->assertEquals('Just 67', (string) $data);
+    }
 }

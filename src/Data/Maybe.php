@@ -4,6 +4,8 @@ namespace thgs\Functional\Data;
 
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
+use thgs\Functional\Typeclass\ShowInstance;
+use function thgs\Functional\show;
 
 /**
  * @template A
@@ -19,6 +21,7 @@ use thgs\Functional\Typeclass\FunctorInstance;
  */
 class Maybe implements
     EqInstance,
+    ShowInstance,
     FunctorInstance
     /*, ApplicativeFunctor, Monad */
 {
@@ -66,5 +69,13 @@ class Maybe implements
     public function notEquals(EqInstance $other): bool
     {
         return !$this->equals($other);
+    }
+
+    public function __toString(): string
+    {
+        return $this->x instanceof Nothing
+            ? 'Nothing'
+            // todo: $this->x->getValue() MUST be an instance of Show
+            : 'Just ' . show($this->x->getValue());
     }
 }
