@@ -5,7 +5,7 @@ namespace thgs\Functional\Data;
 /**
  * @template A
  */
-class Just
+final class Just
 {
     /**
      * @param A $value

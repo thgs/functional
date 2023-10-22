@@ -2,6 +2,6 @@
 
 namespace thgs\Functional\Data;
 
-class Nothing
+final class Nothing
 {
 }

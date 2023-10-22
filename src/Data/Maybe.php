@@ -2,6 +2,7 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
 
 /**
@@ -16,8 +17,9 @@ use thgs\Functional\Typeclass\FunctorInstance;
  * ie "Maybe Int" is (Just Int | Nothing)
  *
  */
-class Maybe
-    implements FunctorInstance
+class Maybe implements
+    EqInstance,
+    FunctorInstance
     /*, ApplicativeFunctor, Monad */
 {
     /**
@@ -53,5 +55,16 @@ class Maybe
             $this->x instanceof Nothing     => new Nothing(),
             $this->x instanceof Just        => new Just( $f ( $this->x->getValue() ) ),
         });
+    }
+
+
+    public function equals(EqInstance $other): bool
+    {
+        return $this->getValue() == $other->getValue();
+    }
+
+    public function notEquals(EqInstance $other): bool
+    {
+        return !$this->equals($other);
     }
 }

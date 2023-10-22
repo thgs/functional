@@ -51,4 +51,12 @@ class MaybeTest extends TestCase
         // todo: is this enough?
         $this->assertEquals($result1, $result2);
     }
+
+    public function testCanEq(): void
+    {
+        $data = new Maybe(new Just(67));
+        $other = new Maybe(new Just(67));
+
+        $this->assertTrue($data->equals($other));
+    }
 }
