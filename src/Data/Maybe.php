@@ -56,6 +56,7 @@ class Maybe implements
         // below does not need "match", a ternary can do, but for brevity now
         return new static(match (true) {
             $this->x instanceof Nothing     => new Nothing(),
+                                            // todo: use Composition ?
             $this->x instanceof Just        => new Just( $f ( $this->x->getValue() ) ),
         });
     }
