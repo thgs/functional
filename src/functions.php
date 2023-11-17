@@ -12,6 +12,8 @@ use thgs\Functional\Typeclass\Attribute\FunctorInstance as FunctorInstanceAttrib
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
+use function thgs\Functional\Internal\getAttributeProperty;
+
 /**
  * @template A
  * @template B
@@ -29,37 +31,14 @@ function fmap(callable $f, object|callable $g): object|callable {
         return $g->fmap($f);
     }
 
-//    if (!is_object($g)) {
-//        // temporarily do not support functions, if that is even possible or make sense (can a function be a typeclass itself?)
-//        // read this: https://stackoverflow.com/questions/43379364/typeclass-instances-for-functions
-//        throw new \TypeError('Functions are not yet supported as a functor value in fmap. Sorry.');
-//    }
+    // todo: support marking functions as functors
+    // see https://stackoverflow.com/questions/43379364/typeclass-instances-for-functions
 
-    $fmapMethod = getAttributeProperty($g, FunctorInstanceAttribute::class, 'fmap');
+    $fmapMethod = getAttributeProperty($g, FunctorInstanceAttribute::class, FunctorInstance::FMAP);
 
     return $g->$fmapMethod($f);
 
     // todo: support looking through methods if getAttributes on the reflObject is not doing it
-}
-
-// todo: move to internal
-// todo: change from object to ReflectionObject|ReflectionFunction
-function getAttributeProperty(object $value, string $attribute, string $property): ?string
-{
-    $reflectionObject = new \ReflectionObject($value);
-
-    $functorAttributes = $reflectionObject->getAttributes($attribute);
-    if (empty($functorAttributes)) {
-        throw new \Exception('I dont know how to fmap this value!');
-    }
-
-    if (count($functorAttributes) > 1) {
-        throw new \InvalidArgumentException('Multiple Functor attributes not supported yet. Sorry!!');
-    }
-
-    $functorMetadata = array_shift($functorAttributes);
-    [$property => $targetValue] = $functorMetadata->getArguments();
-    return $targetValue;
 }
 
 function show(int|string|float|bool|ShowInstance $x): string

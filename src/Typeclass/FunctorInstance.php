@@ -13,6 +13,8 @@ namespace thgs\Functional\Typeclass;
  */
 interface FunctorInstance
 {
+    public const FMAP = 'fmap';
+
     /**
      *      fmap :: (a -> b)  ->  f a  ->  f b
      *

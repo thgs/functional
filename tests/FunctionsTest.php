@@ -56,7 +56,6 @@ class FunctionsTest extends TestCase
             {
                 return new static(match (true) {
                     $this->x instanceof Nothing     => new Nothing(),
-                    // todo: use Composition ?
                     $this->x instanceof Just        => new Just( $f ( $this->x->getValue() ) ),
                 });
             }
@@ -65,7 +64,7 @@ class FunctionsTest extends TestCase
         // (a -> b) in this case (Int -> Bool)
         $function = function (int $x): bool { return $x == 2; };
 
-        // therfore the fmap is
+        // therefore the fmap is
         // fmap :: (Int -> Bool) -> f Int -> f Bool
 
         $mapped = fmap($function, $typeThatIsAFunctor);     // :: f b
