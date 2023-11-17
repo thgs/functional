@@ -5,6 +5,7 @@ namespace thgs\Functional\Data;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
+
 use function thgs\Functional\show;
 
 /**
