@@ -9,6 +9,7 @@ use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
 use thgs\Functional\Typeclass\Attribute\FunctorInstance as FunctorInstanceAttribute;
+use thgs\Functional\Typeclass\Attribute\ShowInstance as ShowInstanceAttribute;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
@@ -41,9 +42,19 @@ function fmap(callable $f, object|callable $g): object|callable {
     // todo: support looking through methods if getAttributes on the reflObject is not doing it
 }
 
-function show(int|string|float|bool|ShowInstance $x): string
+/**
+ * @param int|string|float|bool|ShowInstance|object $x
+ */
+function show(int|string|float|bool|object $x): string
 {
-    return (string) $x;
+    if (is_scalar($x) || $x instanceof ShowInstance | $x instanceof \Stringable) {
+        return (string) $x;
+    }
+
+    // note: with the new type hint for $x we lose the type error so getAttributeProperty has to
+    // raise a type error if the attribute is not there.
+    $showMethod = getAttributeProperty($x, ShowInstanceAttribute::class, 'show');
+    return $x->$showMethod();
 }
 
 /**

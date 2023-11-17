@@ -9,7 +9,7 @@ function getAttributeProperty(object $value, string $attribute, string $property
 
     $attributes = $reflectionObject->getAttributes($attribute);
     if (empty($attributes)) {
-        throw new \Exception("Expected attribute $attribute is missing.");
+        throw new \TypeError("Expected attribute $attribute is missing.");
     }
 
     if (count($attributes) > 1) {

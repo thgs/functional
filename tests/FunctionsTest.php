@@ -3,10 +3,12 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
-
 use thgs\Functional\Data\Nothing;
 use thgs\Functional\Typeclass\Attribute\FunctorInstance;
+use thgs\Functional\Typeclass\Attribute\ShowInstance;
+
 use function thgs\Functional\fmap;
+use function thgs\Functional\show;
 
 class FunctionsTest extends TestCase
 {
@@ -72,5 +74,25 @@ class FunctionsTest extends TestCase
 
         $this->assertInstanceOf(Just::class, $value, 'not an instance of Just');
         $this->assertTrue($value->getValue());
+    }
+
+    public function testCanShowFromMarked(): void
+    {
+        $showInstance = new #[ShowInstance(show: 'getValue')] class(123)
+        {
+            public function __construct(private int $x)
+            {
+            }
+
+            public function getValue(): string
+            {
+                return 'a' . $this->x;
+            }
+        };
+
+        $result = show($showInstance);
+
+        $this->assertIsString($result);
+        $this->assertEquals('a123', $result);
     }
 }
