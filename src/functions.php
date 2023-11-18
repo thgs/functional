@@ -8,8 +8,14 @@ use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
+use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 use thgs\Functional\Typeclass\ShowInstance;
+
+function equals(EqInstance $a, EqInstance $b): bool
+{
+    return $a->equals($b);
+}
 
 /**
  * @template A
@@ -27,7 +33,7 @@ function fmap(callable $f, F $g): F {
 }
 
 /**
- * @param int|string|float|bool|ShowInstance|object $x
+ * @param int|string|float|bool|ShowInstance $x
  */
 function show(int|string|float|bool|ShowInstance $x): string
 {
