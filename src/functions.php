@@ -8,12 +8,8 @@ use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
-use thgs\Functional\Typeclass\Attribute\FunctorInstance as FunctorInstanceAttribute;
-use thgs\Functional\Typeclass\Attribute\ShowInstance as ShowInstanceAttribute;
-use thgs\Functional\Typeclass\FunctorInstance;
+use thgs\Functional\Typeclass\FunctorInstance as F;
 use thgs\Functional\Typeclass\ShowInstance;
-
-use function thgs\Functional\Internal\getAttributeProperty;
 
 /**
  * @template A
@@ -22,39 +18,20 @@ use function thgs\Functional\Internal\getAttributeProperty;
  * @param callable $f
  * @psalm-param pure-callable(A): B $f
  *
- * @param FunctorInstance<A>|object|callable $g
- * @return FunctorInstance<B>|object|callable
+ * @param F<A> $g
+ * @return F<B>
  */
-function fmap(callable $f, object|callable $g): object|callable {
-    if ($g instanceof FunctorInstance) {
-        // call the instance method
-        // todo: since $f is callable, we can wrap it in Composition?
-        return $g->fmap($f);
-    }
-
-    // todo: support marking functions as functors
-    // see https://stackoverflow.com/questions/43379364/typeclass-instances-for-functions
-
-    $fmapMethod = getAttributeProperty($g, FunctorInstanceAttribute::class, FunctorInstance::FMAP);
-
-    return $g->$fmapMethod($f);
-
-    // todo: support looking through methods if getAttributes on the reflObject is not doing it
+function fmap(callable $f, F $g): F {
+    // todo: since $f is callable, we can wrap it in Composition?
+    return $g->fmap($f);
 }
 
 /**
  * @param int|string|float|bool|ShowInstance|object $x
  */
-function show(int|string|float|bool|object $x): string
+function show(int|string|float|bool|ShowInstance $x): string
 {
-    if (is_scalar($x) || $x instanceof ShowInstance | $x instanceof \Stringable) {
-        return (string) $x;
-    }
-
-    // note: with the new type hint for $x we lose the type error so getAttributeProperty has to
-    // raise a type error if the attribute is not there.
-    $showMethod = getAttributeProperty($x, ShowInstanceAttribute::class, 'show');
-    return $x->$showMethod();
+    return (string) $x;
 }
 
 /**
