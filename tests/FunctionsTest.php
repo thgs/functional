@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
+use thgs\Functional\Proof\FunctorProof;
 use thgs\Functional\Typeclass\Attribute\FunctorInstance;
 use thgs\Functional\Typeclass\Attribute\ShowInstance;
 
@@ -12,6 +13,8 @@ use function thgs\Functional\show;
 
 class FunctionsTest extends TestCase
 {
+    use FunctorProof;
+
     public function testFmap(): void
     {
         $data = new Maybe(new Just(5));
@@ -27,6 +30,12 @@ class FunctionsTest extends TestCase
         $this->assertInstanceOf(Maybe::class, $mapped, 'result not an instance of Maybe');
         $this->assertInstanceOf(Just::class, $value, 'value not an instance of Just');
         $this->assertEquals(true, $value->getValue());
+
+        $this->assertInstanceIsFunctor(
+            $mapped,
+            fn (bool $x) => !$x,
+            fn (bool $x) => $x && true
+        );
     }
 
     public function testShowWillTypeErrorWhenCannotShow(): void

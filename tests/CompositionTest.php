@@ -2,12 +2,15 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Instance\Composition;
+use thgs\Functional\Proof\FunctorProof;
 
 use function thgs\Functional\fmap;
 use function thgs\Functional\show;
 
 class CompositionTest extends TestCase
 {
+    use FunctorProof;
+
     public function testFmap(): void
     {
         $composition = new Composition(function ($x) { return $x + 100; });
@@ -60,28 +63,11 @@ class CompositionTest extends TestCase
 
     public function testIsAFunctor(): void
     {
-        // 1. If we map the `id` function over a functor, the functor that we get back should be the same as the original
-        $id = fn ($x) => $x;
-        $composition = new Composition(fn ($x) => $x + 2);
-        $result = $composition->fmap($id);
-        $resultIfCalled = $result(3);
-
-        $this->assertInstanceOf(Composition::class, $result, 'result not an instance of Composition');
-        $this->assertEquals($composition, $result, 'result not equal with initial composition');
-        $this->assertEquals(5, $resultIfCalled, 'result if called, does not return expected 5');
-
-
-        // 2. fmap (f . g) F = fmap f (fmap g F)
-        $f = fn ($x) => $x * 2;
-        $g = fn ($x) => $x + 100;
-        $c = fn ($x) => $f($g($x));
-
-        $result1 = new Composition($c);
-        $result2 = (new Composition($g))
-            ->fmap($f);
-
-        $this->assertEquals($result1(5), $result2(5), 'non associative');
-        $this->assertEquals(210, $result1(5), 'failed to compose correctly (expected 210)');
+        $this->assertInstanceIsFunctor(
+            new Composition(fn ($x) => $x + 2),
+            fn ($x) => $x * 2,
+            fn ($x) => $x + 100
+        );
     }
 
     public function testCanComposeWithShow(): void

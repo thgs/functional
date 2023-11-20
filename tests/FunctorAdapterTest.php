@@ -1,13 +1,16 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use thgs\Functional\Proof\FunctorProof;
 use thgs\Functional\Typeclass\Adapter\FunctorAdapter;
 
 class FunctorAdapterTest extends TestCase
 {
-    public function testCanAdapt(): void
+    use FunctorProof;
+
+    private function getDummy(): object
     {
-        $toWrap = new class ('prefix_', 123) {
+        return new class ('prefix_', 123) {
             public function __construct(private string $prefix, private $data)
             {
             }
@@ -22,13 +25,32 @@ class FunctorAdapterTest extends TestCase
                 return $this->prefix . $this->data;
             }
         };
+    }
 
-        $functor = new FunctorAdapter($toWrap, 'transformData');
+    public function testIsAFunctor(): void
+    {
+        $subject = new FunctorAdapter($this->getDummy(), 'transformData');
+
+        $this->assertInstanceIsFunctor(
+            $subject,
+            fn (int $x): int => $x + 2,
+            fn (int $x): int => $x + 2
+        );
+    }
+
+    public function testCanAdapt(): void
+    {
+        $functor = new FunctorAdapter($this->getDummy(), 'transformData');
 
         $add2 = fn (int $x): int => $x + 2;
-
         $result = $functor->fmap($add2)->fmap($add2);
 
         $this->assertEquals('prefix_127', $result->build());
+
+        $this->assertInstanceIsFunctor(
+            $result,
+            fn (int $x): int => $x + 2,
+            fn (int $x): int => $x + 2
+        );
     }
 }
