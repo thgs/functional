@@ -21,5 +21,10 @@
             "name": "thgs",
             "email": "theogpl57@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "psalm": "./vendor/bin/psalm --no-cache",
+        "phpstan": "./vendor/bin/phpstan analyse src --level max",
+        "test": "./vendor/bin/phpunit tests --testdox --color --display-deprecations"
+    }
 }
