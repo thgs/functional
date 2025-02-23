@@ -25,7 +25,42 @@ things into perspective.
 A Maybe tries to replicate Haskell's data type Maybe. As per
 definition it can be `Nothing` or `Just x` where x is any value.
 
-The defined structure here implements Functor, Applicative and Monad. (todo)
+To construct a `Maybe a` value you can:
+
+#+begin_src php
+
+  $maybe = new Maybe(new Just(123));
+  $anotherMaybe = new Maybe(new Nothing());
+
+  $actualValue = $maybe->getValue(); // returns Just 123, so you can match the type
+  $anotherActualvalue = $anotherMaybe->getValue();  // returns Nothing for the same reason
+
+#+end_src
+
+The object itself is a generic implementation but static analysis
+should be able to infer types, ie for the above it should be able to
+infer that it is Maybe<int>.
+
+TODO: See if that can work like that or user needs to extend Maybe to
+get consistency from static analysis. (getValue())
+
+~Maybe~ implements ~Functor~ so you can apply a function to the underlying
+value, taking into account the Maybe logic (it will apply only when it
+is Just).
+
+#+begin_src php
+
+  $maybe = new Maybe(new Just(123));
+  $maybeTimes34 = $maybe->fmap(fn ($x) => $x * 34);
+  $result = $maybeTimes34->getValue();  // returns a Just(4182)
+
+  $maybe = new Maybe(new Nothing());
+  $maybeTimes34 = $maybe->fmap(fn ($x) => $x * 34);
+  $result = $maybeTimes34->getValue(); // returns a Nothing
+
+#+end_src
+
+Apart from this, ~Maybe~ implements ~Show~ and ~Eq~.
 
 ** Either
 ** Composition
@@ -59,7 +94,38 @@ TODO: Ergonomics here, could also implement a ~__call~ magic function ? Or ~pipe
 so that the user can keep adding functions one after the other?
 
 ** Typeclasses
+
+Currently type classes have been implemented as an interface.
+
 *** Functor
+
+TODO: Add main part for FunctorInterface
+
+Utility traits are provided to help proove that your implementation satisfies
+Functor laws.  Example usage:
+
+#+begin_src php
+
+  use FunctorProof;
+
+  public function testIsAFunctor(): void
+  {
+      $this->assertInstanceIsFunctor(
+          new Maybe(new Just(5)),
+          fn (int $x): bool => $x == 5,
+          fn (bool $x): string => $x == true ? '100' : '500'
+      );
+  }
+#+end_src
+
+The first argument of ~assertInstanceIsFunctor()~ expects to receive your object
+that implements ~FunctorInterface~.
+
+The second and third arguments are two possible functions to check whether your
+functor implementation is indeed associative.
+
+TODO: What happens when the functor is not associative - expand.
+
 *** Applicative
 *** Monad
 * References and Reading material
