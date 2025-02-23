@@ -1,0 +1,21 @@
+#+TITLE: Project notes
+-----
+
+* Feedback
+** Discord
+adrian.2688 — i'd stick those utility methods into the associated
+ classes, as static methods ditch functions.php
+
+also when your traits refer to a method it expects the using class to
+have, you should define that method on the trait as abstract more
+broadly, as you work with this i'd suggest thinking more about how the
+ideas could apply / be more "naturally" implemented in php, rather
+than just trying to port them directly.  i don't do haskell, but some
+of these concepts seem like they don't accomplish much as php tools
+
+Crell — Functions are fine, but they does seem a bit over
+ engineered. And Left/Right eithers s**k. 🙂 Explicit Result eithers
+ are better DX.  I have my own composition centric library I've been
+ using, and am now trying again to get into core.
+
+https://github.com/Crell/fp
