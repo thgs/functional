@@ -14,7 +14,7 @@ Feel free to add any PR, comments, issues or discussions!
 
 ### Documentation
 
-See `Documentation.org` file (Emacs org-file).
+See [`Documentation.org`](https://github.com/thgs/functional/blob/master/Documentation.org) file (Emacs org-file).
 
 ### Other interesting functional programming in PHP libraries/projects
 
