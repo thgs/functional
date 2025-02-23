@@ -1,0 +1,68 @@
+#+HEADER: `functional` package Documentation
+-----
+
+* Introduction
+
+Drawing inspiration mainly from Haskell, this library is trying to replicate in
+behaviour a lot of Haskell's functional structures.
+
+This library is my own effort and journey into better understanding these
+functional structures and explore their use in PHP. If you find any error,
+theoretical or implementation related, do not hesitate to point it out.
+
+* Contributing
+
+The main idea driving the design is to have a public interface that is usable
+and allows static analysis to infer types. Under the public interface it is
+allowed to go to any length in design in order to satisfy the behaviour we are
+targeting. Things from Haskell do not necessarily map directly to PHP due to
+differences in capabilities offered. It is a fact we could re-implement the
+entirety of Haskell in PHP in behaviour but judgement must be used to bring
+things into perspective.
+
+* Usage
+** Maybe
+A Maybe tries to replicate Haskell's data type Maybe. As per
+definition it can be `Nothing` or `Just x` where x is any value.
+
+The defined structure here implements Functor, Applicative and Monad. (todo)
+
+** Either
+** Composition
+Composition is a structure to help you compose two functions. It is an
+abstraction to be used instead of manually composing and implements Functor.
+
+To compose a function you need to apply a new function to the composition
+through the Functor interface (fmap).
+
+Calling the function inside the Composition is as easy as:
+
+#+begin_src php
+
+  $composition = new Composition(min(...));
+  $result = $composition([2, 3, 4]); // returns 2
+
+#+end_src
+
+Composing a function becomes:
+
+#+begin_src php
+
+  $composition->fmap(fn ($x) => $x % 2);
+  $result = $composition([2, 3, 4]); // returns 0, effectively computing: min([2,3,4]) % 2 
+
+#+end_src
+
+The idea is that you can keep on applying functions into the composition.
+
+TODO: Ergonomics here, could also implement a ~__call~ magic function ? Or ~pipe()~
+so that the user can keep adding functions one after the other?
+
+** Typeclasses
+*** Functor
+*** Applicative
+*** Monad
+* References and Reading material
+
+[[https://www.haskellforall.com/2012/09/the-functor-design-pattern.html][Functor design pattern - HaskellForAll]]
+
