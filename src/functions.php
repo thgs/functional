@@ -28,7 +28,16 @@ function equals(EqInstance $a, EqInstance $b): bool
  * @return F<B>
  */
 function fmap(callable $f, F $g): F {
-    // todo: since $f is callable, we can wrap it in Composition?
+    /**
+     * @todo Since $f is callable, we can wrap it in Composition? And
+     * that gives fmap(callable, F|callable) and possibly opens up the
+     * way for fmap(F|callable, F|callable) because why not.
+     *
+     * instance Functor ((->) a)
+     *   fmap = (.)
+     *
+     * "Using fmap over functions is just composition"
+     */
     return $g->fmap($f);
 }
 
