@@ -3,7 +3,9 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
+use thgs\Functional\Data\Nothing;
 use thgs\Functional\Proof\FunctorProof;
+use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 
 class MaybeTest extends TestCase
@@ -68,5 +70,52 @@ class MaybeTest extends TestCase
 
         $this->expectException(TypeError::class);
         $data->equals($fiction);
+    }
+
+    public function testCanConstructApplicativeWithPure(): void
+    {
+        $applicative = Maybe::pure(67);
+
+        $this->assertInstanceOf(ApplicativeInstance::class, $applicative);
+        $this->assertInstanceOf(Maybe::class, $applicative);
+        $this->assertInstanceOf(Just::class, $applicative->getValue());
+    }
+
+
+    public function testCanSequenceApplicatives(): void
+    {
+        $ap1 = Maybe::pure(fn ($x) => $x + 3);
+        $ap2 = Maybe::pure(67);
+
+        $result = $ap1->sequence($ap2);   // Just (+3) <*> Just 67
+        // $result :: (Num b) => Maybe b
+
+        $this->assertInstanceOf(ApplicativeInstance::class, $result);
+        $this->assertInstanceOf(Maybe::class, $result);
+
+        $unwrapped = $result->getValue();
+        $this->assertInstanceOf(Just::class, $unwrapped);
+        $this->assertEquals(70, $unwrapped->getValue());
+    }
+
+    public function testCanSequenceApplicativesWithNothing(): void
+    {
+        // Nothing <*> Just 67 :: Nothing
+        $apNothing = new Maybe(new Nothing());
+        $ap2 = Maybe::pure(fn ($x) => $x + 3);
+        $result = $apNothing->sequence($ap2);
+        $this->assertInstanceOf(ApplicativeInstance::class, $result);
+        $this->assertInstanceOf(Maybe::class, $result);
+        $unwrapped = $result->getValue();
+        $this->assertInstanceOf(Nothing::class, $unwrapped);
+
+        // Just (+3) <*> Nothing :: Nothing
+        $ap1 = Maybe::pure(fn ($x) => $x + 3);
+        $apNothing = new Maybe(new Nothing());
+        $result = $ap1->sequence($apNothing);
+        $this->assertInstanceOf(ApplicativeInstance::class, $result);
+        $this->assertInstanceOf(Maybe::class, $result);
+        $unwrapped = $result->getValue();
+        $this->assertInstanceOf(Nothing::class, $unwrapped);
     }
 }
