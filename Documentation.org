@@ -20,6 +20,15 @@ differences in capabilities offered. It is a fact we could re-implement the
 entirety of Haskell in PHP in behaviour but judgement must be used to bring
 things into perspective.
 
+A second goal of this is to explore what is possible from the perspective of the
+user trying to use functional programming concepts from code that is not written
+in a functional programming style. Some effort can be seen with
+~FunctorAdapter~. The belief is that although functional programming in general is
+interesting and it has its benefits, if everything else is written in a
+non-functional way how one can interface with it. The end goal is to be able to
+express functionally and reuse other code in a functional programming way;
+rather than switching paradigms.
+
 * Usage
 ** Maybe
 A Maybe tries to replicate Haskell's data type Maybe. As per
