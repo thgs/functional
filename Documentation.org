@@ -62,6 +62,39 @@ is Just).
 
 Apart from this, ~Maybe~ implements ~Show~ and ~Eq~.
 
+** IO
+
+~IO~ is a wrapper for some action that will perform some IO or otherwise have some
+side-effect. The action must be provided in a callable. However, there is no
+strict check whether the provided action actually performs some IO or has some
+side-effect.
+
+#+begin_src php
+
+  $data = new IO(function () {
+      print "Hello world";
+      return time();
+  });
+
+  $result = $data->getValue(); // time() will run on the moment of this call
+
+#+end_src
+
+~IO~ implements ~Functor~ and can apply a function to the result of the IO operation.
+
+#+begin_src php
+
+  $data = new IO(function () {
+      print "Hello world";
+      return \time();
+  });
+
+  $data = $data->fmap( fn ($seconds) => (int) ($seconds / 60 / 60 / 24) );
+
+  $result = $data->getValue(); // time() will run on this call (returns value in days)
+
+#+end_src
+
 ** Either
 ** Composition
 Composition is a structure to help you compose two functions. It is an
