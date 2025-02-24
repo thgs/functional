@@ -28,6 +28,9 @@ trait FunctorProof
         $this->assertEquals($subject, $result, 'result is not the same after mapping');
     }
 
+    /**
+     * @todo is this enough to proove associativity?
+     */
     protected function assertFunctorInstanceIsAssociative(
         FunctorInstance $subject,
         callable $f,
@@ -42,4 +45,26 @@ trait FunctorProof
             'instance is not associative'
         );
     }
+
+    /**
+     * Asserts that two variables are equal.
+     *
+     * @throws PHPUnit\Framework\ExpectationFailedException
+     */
+    abstract static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+
+    /**
+     * Asserts that a variable is of a given type.
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws UnknownClassOrInterfaceException
+     *
+     * @psalm-template ExpectedType of object
+     *
+     * @psalm-param class-string<ExpectedType> $expected
+     *
+     * @psalm-assert =ExpectedType $actual
+     */
+    abstract static function assertInstanceOf(string $expected, mixed $actual, string $message = ''): void;
 }
