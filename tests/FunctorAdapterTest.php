@@ -1,12 +1,12 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use thgs\Functional\Proof\FunctorProof;
+use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\Adapter\FunctorAdapter;
 
 class FunctorAdapterTest extends TestCase
 {
-    use FunctorProof;
+    use FunctorLawsAssertions;
 
     private function getDummy(): object
     {

@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
-use thgs\Functional\Proof\FunctorProof;
+use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 
@@ -12,7 +12,7 @@ use function thgs\Functional\fmap;
 
 class MaybeTest extends TestCase
 {
-    use FunctorProof;
+    use FunctorLawsAssertions;
 
     public function testFmap()
     {

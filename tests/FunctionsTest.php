@@ -3,17 +3,13 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
-use thgs\Functional\Data\Nothing;
-use thgs\Functional\Proof\FunctorProof;
-use thgs\Functional\Typeclass\Attribute\FunctorInstance;
-use thgs\Functional\Typeclass\Attribute\ShowInstance;
+use thgs\Functional\Testing\FunctorLawsAssertions;
 
 use function thgs\Functional\fmap;
-use function thgs\Functional\show;
 
 class FunctionsTest extends TestCase
 {
-    use FunctorProof;
+    use FunctorLawsAssertions;
 
     public function testFmap(): void
     {

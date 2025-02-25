@@ -2,11 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\IO;
-use thgs\Functional\Proof\FunctorProof;
+use thgs\Functional\Testing\FunctorLawsAssertions;
 
 class IOTest extends TestCase
 {
-    use FunctorProof;
+    use FunctorLawsAssertions;
     
     public function testCanReturnValueAfterIO(): void
     {

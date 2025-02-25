@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Proof;
+namespace thgs\Functional\Testing;
 
 use thgs\Functional\Typeclass\FunctorInstance;
 
@@ -8,7 +8,7 @@ use thgs\Functional\Typeclass\FunctorInstance;
  * For now can just give a trait to be used in unit tests,
  * later can make it so client code can use it anywhere
  */
-trait FunctorProof
+trait FunctorLawsAssertions
 {
     protected function assertInstanceIsFunctor(
         FunctorInstance $subject,

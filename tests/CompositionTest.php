@@ -2,14 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Instance\Composition;
-use thgs\Functional\Proof\FunctorProof;
+use thgs\Functional\Testing\FunctorLawsAssertions;
 
 use function thgs\Functional\fmap;
 use function thgs\Functional\show;
 
 class CompositionTest extends TestCase
 {
-    use FunctorProof;
+    use FunctorLawsAssertions;
 
     public function testFmap(): void
     {
