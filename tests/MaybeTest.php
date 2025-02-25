@@ -8,6 +8,8 @@ use thgs\Functional\Proof\FunctorProof;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 
+use function thgs\Functional\fmap;
+
 class MaybeTest extends TestCase
 {
     use FunctorProof;
@@ -117,5 +119,36 @@ class MaybeTest extends TestCase
         $this->assertInstanceOf(Maybe::class, $result);
         $unwrapped = $result->getValue();
         $this->assertInstanceOf(Nothing::class, $unwrapped);
+    }
+
+    public function testCanSequenceAndPartiallyApply(): void
+    {
+        $this->markTestSkipped(); // skipped for now until we add
+                                  // partial application? or what is
+                                  // needed here.
+
+        $ap1 = Maybe::pure(fn ($x, $y) => $x + $y);
+        $ap2 = new Maybe(new Just(3));
+        $ap3 = new Maybe(new Just(4));
+
+        $result = $ap1
+            ->sequence($ap2)
+            ->sequence($ap3)
+            ->getValue();
+
+        $this->assertEquals(7, $result);
+    }
+
+    public function testCanFmapAndThenSequence(): void
+    {
+        $this->markTestSkipped(); // skipped for now until we add
+                                  // partial application? or what is
+                                  // needed here.
+
+        /** @var Maybe */
+        $maybeIntInt = fmap(fn ($x, $y) => $x + $y, Maybe::pure(3));
+        $maybeIntInt->sequence(Maybe::pure(5));
+
+        $this->assertEquals(8, $result);
     }
 }
