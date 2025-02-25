@@ -12,5 +12,5 @@ interface ApplicativeInstance
     /**
      * (<*>) :: f (a -> b) -> f a -> f b 
      */
-    public function sequence(ApplicativeInstance $functorWithFunction): ApplicativeInstance;
+    public function sequence(ApplicativeInstance $fa): ApplicativeInstance;
 }

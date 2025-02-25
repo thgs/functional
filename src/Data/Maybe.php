@@ -116,10 +116,10 @@ class Maybe implements
      * already typed it. But we have not really, any thing would pass PHP check in method
      * declaration.
      */
-    public function sequence(ApplicativeInstance $fab): ApplicativeInstance
+    public function sequence(ApplicativeInstance $fa): ApplicativeInstance
     {
         // runtime type check
-        if (!$fab instanceof Maybe) {
+        if (!$fa instanceof Maybe) {
             throw new \TypeError('Sequenced value (parameter) is not expected Maybe');
         }
 
@@ -134,6 +134,6 @@ class Maybe implements
         }
 
         // todo: psalm is telling us off because of `pure-callable` instead of `callable`
-        return fmap($callable, $fab); // alternatively could write $this->fmap($fab);
+        return fmap($callable, $fa); // alternatively could write $this->fmap($fab);
     }
 }
