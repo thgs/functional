@@ -190,5 +190,8 @@ TODO: What happens when the functor is not associative - expand.
 *** Monad
 * References and Reading material
 
+** Blog Articles
 [[https://www.haskellforall.com/2012/09/the-functor-design-pattern.html][Functor design pattern - HaskellForAll]]
+** Books
+[[https://learnyouahaskell.com][Learn You a Haskell for Great Good!]]
 
