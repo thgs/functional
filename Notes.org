@@ -1,6 +1,14 @@
 #+TITLE: Project notes
 -----
 
+* Todo [0/6]
+** TODO Partial application
+This seems such a central piece.
+** TODO Monoid
+** TODO Curry?
+** TODO List comprehension?
+** TODO How we handle ~newtype~ ?
+** TODO Consider single object per typeclass instance or why not
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
