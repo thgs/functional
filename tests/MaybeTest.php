@@ -8,6 +8,7 @@ use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 
+use thgs\Functional\Typeclass\MonadInstance;
 use function thgs\Functional\fmap;
 
 class MaybeTest extends TestCase
@@ -151,4 +152,19 @@ class MaybeTest extends TestCase
 
         $this->assertEquals(8, $result);
     }
+
+    public function testCanBind(): void
+    {
+        $maybe = Maybe::inject(123);
+
+        $result = $maybe->bind(fn (int $a) => Maybe::inject($a * 2));
+
+        $this->assertInstanceOf(MonadInstance::class, $result);
+
+        $just = $result->getValue();
+        $this->assertInstanceOf(Just::class, $just);
+        $this->assertEquals(123 * 2, $just->getValue());
+    }
+
+    // todo: test what happens when the callable passed to bind does not return MonadInstance
 }

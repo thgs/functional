@@ -5,6 +5,7 @@ namespace thgs\Functional\Data;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
+use thgs\Functional\Typeclass\MonadInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
 use function thgs\Functional\fmap;
@@ -23,8 +24,8 @@ class Maybe implements
     EqInstance,
     ShowInstance,
     FunctorInstance,
-    ApplicativeInstance
-    /* Monad */
+    ApplicativeInstance,
+    MonadInstance
 {
     /**
      * @param Nothing|Just<A1> $x
@@ -135,5 +136,17 @@ class Maybe implements
 
         // todo: psalm is telling us off because of `pure-callable` instead of `callable`
         return fmap($callable, $fa); // alternatively could write $this->fmap($fab);
+    }
+
+    public static function inject(mixed $a): MonadInstance
+    {
+        return self::pure($a);
+    }
+
+    public function bind(callable $f): MonadInstance
+    {
+        return $this->x instanceof Nothing
+            ? new Nothing() // no need for new really
+            : $f($this->x->getValue());
     }
 }
