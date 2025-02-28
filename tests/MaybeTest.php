@@ -7,8 +7,8 @@ use thgs\Functional\Data\Nothing;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
-
 use thgs\Functional\Typeclass\MonadInstance;
+
 use function thgs\Functional\fmap;
 
 class MaybeTest extends TestCase
