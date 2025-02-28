@@ -145,6 +145,9 @@ class Maybe implements
 
     public function bind(callable $f): MonadInstance
     {
+        // todo: is this implementation an "unsafe" bind? Could bind
+        // with a function that injects into a different monad.
+
         return $this->x instanceof Nothing
             ? new Nothing() // no need for new really
             : $f($this->x->getValue());
