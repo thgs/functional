@@ -38,15 +38,14 @@ abstract classes or some other form all together. Another example is that ~<-~
 from Haskell is implemented as getValue() method call. It could be ~__invoke~ or
 it could be a much more elaborate structure.
 
-There is a mapping of concepts from Category Haskell to Category PHP
-and that is opinionated, possibly the gravity is on composition at
-this point. A different mapping is used from other libraries. This is
-what I assume is the design of this library. For example `lamphpda`
-has different objects for each instance: there are distinct
-implementations of MaybeFunctor, MaybeApplicative etc because probably
-they map a Haskell type class instance into a single object, which
-makes a lot of sense as PHP does not support the concept of type
-classes natively.
+There is a mapping of concepts from Category Haskell to Category PHP and that is
+opinionated, possibly the gravity is on composition at this point. A different
+mapping is used from other libraries. This is what I assume is the design of
+this library. For example `lamphpda` has different objects for each instance:
+there are distinct implementations of MaybeFunctor, MaybeApplicative etc because
+probably they map a Haskell type class instance into a single object, which
+makes a lot of sense as PHP does not support the concept of type classes
+natively.
 
 * Usage
 ** Maybe
