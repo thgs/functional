@@ -36,25 +36,25 @@ namespace thgs\Functional;
 
 function partial(callable $f)
 {
-  // Fetch the initial parameters on initialization
-  $startParameters = array_slice(func_get_args(), 1);
-  $requiredSize = (new \ReflectionFunction($f))->getNumberOfRequiredParameters();
+    // Fetch the initial parameters on initialization
+    $startParameters = array_slice(func_get_args(), 1);
+    $requiredSize = (new \ReflectionFunction($f))->getNumberOfRequiredParameters();
 
-  // When we have enough arguments to evaluate the function, the edge-case.
-  if (sizeof($startParameters) >= $requiredSize) {
-    return call_user_func_array($f, $startParameters);
-  }
+    // When we have enough arguments to evaluate the function, the edge-case.
+    if (sizeof($startParameters) >= $requiredSize) {
+        return call_user_func_array($f, $startParameters);
+    }
 
-  // When we must partialize it
-  return function() use ($startParameters, $requiredSize, $f) {
-    $restParameters = func_get_args();
-    $remainingSize = $requiredSize - (count($restParameters) + count($startParameters));
+    // When we must partialize it
+    return function() use ($startParameters, $requiredSize, $f) {
+        $restParameters = func_get_args();
+        $remainingSize = $requiredSize - (count($restParameters) + count($startParameters));
 
-    // Join the current parameters with the newly received parameters
-    $allParams = array_merge($startParameters, $restParameters);
+        // Join the current parameters with the newly received parameters
+        $allParams = array_merge($startParameters, $restParameters);
 
-    // Append the function as the first item and call partialization again
-    array_unshift($allParams, $f);
-    return partial(...$allParams);
-  };
+        // Append the function as the first item and call partialization again
+        array_unshift($allParams, $f);
+        return partial(...$allParams);
+    };
 }
