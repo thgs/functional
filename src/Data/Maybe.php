@@ -2,6 +2,7 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Instance\Composition;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
@@ -66,7 +67,10 @@ class Maybe implements
             return new Maybe(new Nothing());
         }
 
-        return new Maybe(new Just($f($this->x->getValue())));
+        $composition = new Composition($f);
+        return new Maybe(
+            new Just( $composition($this->x->getValue()) )
+        );
     }
 
     /**

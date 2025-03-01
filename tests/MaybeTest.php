@@ -122,35 +122,32 @@ class MaybeTest extends TestCase
         $this->assertInstanceOf(Nothing::class, $unwrapped);
     }
 
+    /**
+     * (+) <*> Just 3 <*> Just 4   = Just 7
+     */
     public function testCanSequenceAndPartiallyApply(): void
     {
-        $this->markTestSkipped(); // skipped for now until we add
-                                  // partial application? or what is
-                                  // needed here.
+        $result =
+            Maybe::pure(fn ($x, $y) => $x + $y)
+            ->sequence(Maybe::pure(3))
+            ->sequence(Maybe::pure(4));
 
-        $ap1 = Maybe::pure(fn ($x, $y) => $x + $y);
-        $ap2 = new Maybe(new Just(3));
-        $ap3 = new Maybe(new Just(4));
-
-        $result = $ap1
-            ->sequence($ap2)
-            ->sequence($ap3)
-            ->getValue();
-
-        $this->assertEquals(7, $result);
+        $this->assertEquals(7, $result->getValue()->getValue());
     }
 
+    /**
+     * (+) <$> Just 3 <*> Just 5 == Just 8
+     */
     public function testCanFmapAndThenSequence(): void
     {
-        $this->markTestSkipped(); // skipped for now until we add
-                                  // partial application? or what is
-                                  // needed here.
+        $result =
+            fmap(
+                fn ($x, $y) => $x + $y,
+                Maybe::pure(3)
+            )
+            ->sequence(Maybe::pure(5));
 
-        /** @var Maybe */
-        $maybeIntInt = fmap(fn ($x, $y) => $x + $y, Maybe::pure(3));
-        $maybeIntInt->sequence(Maybe::pure(5));
-
-        $this->assertEquals(8, $result);
+        $this->assertEquals(8, $result->getValue()->getValue());
     }
 
     public function testCanBind(): void

@@ -3,6 +3,7 @@
 namespace thgs\Functional\Instance;
 
 use thgs\Functional\Typeclass\FunctorInstance;
+use function thgs\Functional\partial;
 
 /**
  * @template A
@@ -21,9 +22,7 @@ class Composition implements FunctorInstance
 
     public function __invoke()
     {
-        // need to decide to curry here?
-        // or handle functor arguments?
-        return ($this->g)(...func_get_args());
+        return partial ($this->g) (...func_get_args());
     }
 
     /**
@@ -40,12 +39,15 @@ class Composition implements FunctorInstance
      */
     public function fmap(callable $f): Composition
     {
-        $g = $this->g;
+        // todo: maybe this is too much wrapping in partial?
+        $pg = partial ($this->g);
+        $pf = partial ($f);
+
         return new Composition(
             /**
              * @param R $x
              */
-            fn ($x) => $f( $g($x) )
+            fn ($x) => $pf ($pg($x))
         );
     }
 }

@@ -13,7 +13,8 @@
             "thgs\\Functional\\": "src/"
         },
         "files": [
-            "src/functions.php"
+            "src/functions.php",
+            "src/partial.php"
         ]
     },
     "authors": [
