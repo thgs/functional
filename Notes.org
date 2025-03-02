@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/10]
+* Todo [4/11]
 ** TODO Monoid
 ** TODO Curry?
 ** TODO List comprehension?
@@ -28,6 +28,13 @@ Example for : x -: f = f x
 #+end_src
 
 First two do not look much of a helper really.
+** TODO Explore use cases
+Haskell is good with constructing hexagons. What aspects of haskell do that? Are they included?
+Just providing a base to work with the given structures (ie extending Maybe or reusing it)
+The adapters
+Implementations of the interfaces + test helpers for the laws
+
+Write the above in the docs.
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.
