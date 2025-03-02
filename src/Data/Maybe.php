@@ -9,6 +9,7 @@ use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\MonadInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
+use function thgs\Functional\c;
 use function thgs\Functional\fmap;
 use function thgs\Functional\show;
 
@@ -67,9 +68,8 @@ class Maybe implements
             return new Maybe(new Nothing());
         }
 
-        $composition = new Composition($f);
         return new Maybe(
-            new Just( $composition($this->x->getValue()) )
+            new Just( c ($f) ($this->x->getValue()) )
         );
     }
 

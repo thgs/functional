@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [1/10]
+* Todo [4/10]
 ** TODO Monoid
 ** TODO Curry?
 ** TODO List comprehension?
@@ -28,10 +28,12 @@ Example for : x -: f = f x
 #+end_src
 
 First two do not look much of a helper really.
-** TODO Generalise the callable so that can pass Composition too
-** TODO Partial function application depends on signatures.
-** TODO How do we reflect types from Composition ?
 ** ----- DONE ----
+** DONE Generalise the callable so that can pass Composition too
+** DONE Partial function application depends on signatures.
+** DONE How do we reflect types from Composition ?
+I think this actually is easy to solve if we return the ReflectionFunction instance from Composition.
+After handling the infinite loop.
 ** DONE Partial application
 This seems such a central piece.
 * Feedback

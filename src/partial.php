@@ -2,6 +2,9 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Instance\Composition;
+use function thgs\Functional\c;
+
 /**
  * The MIT License (MIT)
  *
@@ -32,10 +35,15 @@ namespace thgs\Functional;
  * more as time goes by.
  *
  * @todo Type hinting this will be challenging.
+ *
+ * @return mixed|callable|Composition
  */
-
-function partial(callable $f)
+function partial(callable|Composition $f)
 {
+    $isComposition = $f instanceof Composition;
+    
+    $reflectionFunction = $isComposition ? $f->getReflectionFunction() : new \ReflectionFunction($f);
+
     // Fetch the initial parameters on initialization
     $startParameters = array_slice(func_get_args(), 1);
     $requiredSize = (new \ReflectionFunction($f))->getNumberOfRequiredParameters();
@@ -45,8 +53,7 @@ function partial(callable $f)
         return call_user_func_array($f, $startParameters);
     }
 
-    // When we must partialize it
-    return function() use ($startParameters, $requiredSize, $f) {
+    $partialFunction = function() use ($startParameters, $requiredSize, $f) {
         $restParameters = func_get_args();
         $remainingSize = $requiredSize - (count($restParameters) + count($startParameters));
 
@@ -57,4 +64,6 @@ function partial(callable $f)
         array_unshift($allParams, $f);
         return partial(...$allParams);
     };
+
+    return $isComposition ? c ($partialFunction) : $partialFunction;
 }

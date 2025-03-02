@@ -50,4 +50,19 @@ class Composition implements FunctorInstance
             fn ($x) => $pf ($pg($x))
         );
     }
+
+    public function getReflectionFunction(): \ReflectionFunction
+    {
+        return new \ReflectionFunction($this->g);
+    }
+
+    public function getInnerCallable(): callable
+    {
+        return self::unwrap($this);
+    }
+
+    public static function unwrap(Composition $composition): callable
+    {
+        return $composition->g;
+    }
 }

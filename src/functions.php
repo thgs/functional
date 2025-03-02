@@ -8,6 +8,7 @@ use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
+use thgs\Functional\Instance\Composition;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 use thgs\Functional\Typeclass\ShowInstance;
@@ -37,8 +38,31 @@ function fmap(callable $f, F $g): F {
      *   fmap = (.)
      *
      * "Using fmap over functions is just composition"
+     *
+     * ---
+     *
+     * So that we do not have to force implementations handle whether the passed
+     * callable is indeed a Composition or not, we handle it here. Implementations
+     * can opt-in/out of using a composition during their fmap() though.
      */
+    $f = $f instanceof Composition ? unwrapC ($f) : $f;
     return $g->fmap($f);
+}
+
+/**
+ * Helper to call Composition::unwrap with fewer keystrokes.
+ */
+function unwrapC(Composition $composition): callable
+{
+    return Composition::unwrap($composition);
+}
+
+/**
+ * Helper to create a Composition, in a possibly cryptic but concise way.
+ */
+function c(callable $callable): Composition
+{
+    return new Composition($callable);
 }
 
 /**
@@ -84,3 +108,5 @@ function maybe($default, callable $f, Maybe $maybe)
         $value instanceof Just => $f($value->getValue())
     };
 }
+
+// todo: define `pure` & `sequence` from Applicative.
