@@ -1,14 +1,39 @@
 #+TITLE: Project notes
 -----
 
-* Todo [0/6]
-** TODO Partial application
-This seems such a central piece.
+* Todo [1/10]
 ** TODO Monoid
 ** TODO Curry?
 ** TODO List comprehension?
 ** TODO How we handle ~newtype~ ?
 ** TODO Consider single object per typeclass instance or why not
+** TODO (ergonomics) Refine Syntax helpers ?
+
+Example for : x -: f = f x
+
+#+begin_src php
+
+  SyntaxHelper::start(3)
+     ->apply(f(...));
+
+      // or "stack" based
+
+  StackSyntaxHelper::push(3)
+      ->push(f(...))
+      ->apply();
+
+  StackSyntaxHelper::push(3, 4, 6)->apply('max');
+  StackSyntaxHelper::push(3, 4, 6, 'max')->applyFirstCallable();
+
+#+end_src
+
+First two do not look much of a helper really.
+** TODO Generalise the callable so that can pass Composition too
+** TODO Partial function application depends on signatures.
+** TODO How do we reflect types from Composition ?
+** ----- DONE ----
+** DONE Partial application
+This seems such a central piece.
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
