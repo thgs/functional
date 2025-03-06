@@ -33,6 +33,28 @@ class Tuple implements
     {
         return new self($a, $b);
     }
+
+    /**
+     * @param A $a
+     * @return self<A,A>
+     */
+    public static function dupe(mixed $a): self
+    {
+        return new self($a, $a);
+    }
+
+    /**
+     * both :: (a -> b) -> (a, a) -> (b, b)
+     *
+     * @param callable(A):B $f
+     * @param Tuple<A,A> $p
+     * @return self<B,B>
+     */
+    public static function both(callable $f, Tuple $p): self
+    {
+        $g = partial ($f);
+        return new self($g ($p->fst()), $g ($p->snd()));
+    }
     
     /** @return A */
     public function fst(): mixed
