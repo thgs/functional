@@ -13,7 +13,7 @@ class FunctorAdapter implements FunctorInstance
 {
     public function __construct(
         private object $wrap,
-        private string $method
+        private string $method = '__invoke'
     ) {
         if (!method_exists($wrap, $method)) {
             throw new \InvalidArgumentException('Method does not exist in given object.');
