@@ -39,15 +39,11 @@ class Composition implements FunctorInstance
      */
     public function fmap(callable $f): Composition
     {
-        // todo: maybe this is too much wrapping in partial?
-        $pg = partial ($this->g);
-        $pf = partial ($f);
-
         return new Composition(
             /**
              * @param R $x
              */
-            fn ($x) => $pf ($pg($x))
+            fn ($x) => partial ($f) /*$*/ (partial ($this->g) ($x))
         );
     }
 
