@@ -57,9 +57,8 @@ function partial(callable|Composition $f)
         );
     }
 
-    $partialFunction = function() use ($startParameters, $requiredSize, $f) {
+    $partialFunction = function() use ($startParameters, $f) {
         $restParameters = func_get_args();
-        $remainingSize = $requiredSize - (count($restParameters) + count($startParameters));
 
         // Join the current parameters with the newly received parameters
         $allParams = array_merge($startParameters, $restParameters);
