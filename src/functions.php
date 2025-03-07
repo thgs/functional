@@ -22,13 +22,13 @@ function equals(EqInstance $a, EqInstance $b): bool
  * @template A
  * @template B
  *
- * @param callable $f
- * @psalm-param pure-callable(A): B $f
+ * @param Composition|callable(A):B $f
+ * @psalm-param Composition|callable(A):B $f
  *
- * @param F<A> $g
+ * @param F<A>|callable(A):B $g
  * @return F<B>
  */
-function fmap(callable $f, F|callable $g): F {
+function fmap(Composition|callable $f, F|callable $g): F {
     /**
      * @todo Since $f is callable, we can wrap it in Composition? And
      * that gives fmap(callable, F|callable) and possibly opens up the
@@ -46,6 +46,10 @@ function fmap(callable $f, F|callable $g): F {
      * can opt-in/out of using a composition during their fmap() though.
      */
     $f = $f instanceof Composition ? unwrapC ($f) : $f;
+
+    /**
+     * Ensure $g has fmap
+     */
     $g = $g instanceof F ? $g : c ($g);
     return $g ->fmap ($f);
 }
