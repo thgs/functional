@@ -46,11 +46,11 @@ function partial(callable|Composition $f)
 
     // Fetch the initial parameters on initialization
     $startParameters = array_slice(func_get_args(), 1);
-    $requiredSize = (new \ReflectionFunction($f))->getNumberOfRequiredParameters();
+    $requiredSize = $reflectionFunction->getNumberOfRequiredParameters();
 
     // When we have enough arguments to evaluate the function, the edge-case.
     if (sizeof($startParameters) >= $requiredSize) {
-        return call_user_func_array($f, $startParameters);
+        return call_user_func_array($isComposition ? unwrapC($f) : $f, $startParameters);
     }
 
     $partialFunction = function() use ($startParameters, $requiredSize, $f) {
