@@ -36,7 +36,7 @@ $logger = new CallableWiringFunctorAdapter( fn (Tuple $p) => $psr3Logger->log($p
  * We start mapping functions over our functor.  The below will add prefix and
  * extraContext.
  */
-$contextLogger = $logger ->fmap ( fn (Tuple $p) => t ($prefix . $p->fst(), [$extraContext] + $p->snd() ) );
+$contextLogger = $logger ->fmap ( fn (Tuple $p): Tuple => t ($prefix . $p->fst(), [$extraContext] + $p->snd() ) );
 
 /**
  * We call the logger, (only one method; log() as per wiring) and actually log things
@@ -45,4 +45,17 @@ $contextLogger (t ("one",   ["context"]) );
 $contextLogger (t ("two",   ["context"]) );
 $contextLogger (t ("three", ["context"]) );
 $contextLogger (t ("four",  ["context"]) );
+
+return;
+
+// Below fails
+// todo: what if in the above line that now passes callable(Tuple):Tuple, we fmap with callable(Tuple):Int
+
+$mapFunction = function (Tuple $p): Int {
+    return strlen($p->fst());
+};
+$addedFunctionality = $contextLogger -> fmap ( $mapFunction );
+
+$return = $addedFunctionality (t ("added", ["additional"]));
+var_dump($return);
 
