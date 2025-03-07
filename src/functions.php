@@ -28,7 +28,7 @@ function equals(EqInstance $a, EqInstance $b): bool
  * @param F<A> $g
  * @return F<B>
  */
-function fmap(callable $f, F $g): F {
+function fmap(callable $f, F|callable $g): F {
     /**
      * @todo Since $f is callable, we can wrap it in Composition? And
      * that gives fmap(callable, F|callable) and possibly opens up the
@@ -46,7 +46,8 @@ function fmap(callable $f, F $g): F {
      * can opt-in/out of using a composition during their fmap() though.
      */
     $f = $f instanceof Composition ? unwrapC ($f) : $f;
-    return $g->fmap($f);
+    $g = $g instanceof F ? $g : c ($g);
+    return $g ->fmap ($f);
 }
 
 /**
