@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/11]
+* Todo [4/12]
 ** TODO Monoid
 ** TODO Curry?
 ** TODO List comprehension?
@@ -35,6 +35,10 @@ The adapters
 Implementations of the interfaces + test helpers for the laws
 
 Write the above in the docs.
+** TODO Make `fmap` accept ~F|callable~
+Now it is ~fmap(callable $f, F $g): F~ But as the argument $g has to be
+a functor, we can accept a callable if we wrap it in composition (that
+will also apply partial).
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.
