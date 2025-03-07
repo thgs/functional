@@ -42,7 +42,9 @@ function partial(callable|Composition $f)
 {
     $isComposition = $f instanceof Composition;
     
-    $reflectionFunction = $isComposition ? $f->getReflectionFunction() : new \ReflectionFunction($f);
+    $reflectionFunction = $isComposition
+        ? $f->getReflectionFunction()
+        : new \ReflectionFunction($f instanceof \Closure ? $f : \Closure::fromCallable($f));
 
     // Fetch the initial parameters on initialization
     $startParameters = array_slice(func_get_args(), 1);
@@ -50,7 +52,9 @@ function partial(callable|Composition $f)
 
     // When we have enough arguments to evaluate the function, the edge-case.
     if (sizeof($startParameters) >= $requiredSize) {
-        return call_user_func_array($isComposition ? unwrapC($f) : $f, $startParameters);
+        return call_user_func_array(
+            $isComposition ? unwrapC($f) : $f, $startParameters
+        );
     }
 
     $partialFunction = function() use ($startParameters, $requiredSize, $f) {
