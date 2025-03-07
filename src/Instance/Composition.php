@@ -39,6 +39,8 @@ class Composition implements FunctorInstance
      */
     public function fmap(callable $f): Composition
     {
+        // todo: is $x really needed?
+
         return new Composition(
             /**
              * @param R $x
