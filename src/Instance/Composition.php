@@ -6,15 +6,20 @@ use thgs\Functional\Typeclass\FunctorInstance;
 use function thgs\Functional\partial;
 
 /**
+ * @template R
  * @template A
  * @template B
- * @template R
+ *
+ * @implements FunctorInstance<A>
  */
 class Composition implements FunctorInstance
 {
     /** @var callable(R): A */
     private $g;
 
+    /**
+     * @param callable(R):A $g
+     */
     public function __construct(callable $g)
     {
         $this->g = $g;
@@ -34,8 +39,9 @@ class Composition implements FunctorInstance
      *
      * As the (r -> a) is $this->g
      *
-     * @param callable(A): B $f
-     * @return Composition
+     * @template B1
+     * @param callable(A):B1 $f
+     * @return Composition<R,B1,A>
      */
     public function fmap(callable $f): Composition
     {
@@ -44,6 +50,7 @@ class Composition implements FunctorInstance
         return new Composition(
             /**
              * @param R $x
+             * @return B1
              */
             fn ($x) => partial ($f) /*$*/ (partial ($this->g) ($x))
         );
@@ -51,14 +58,26 @@ class Composition implements FunctorInstance
 
     public function getReflectionFunction(): \ReflectionFunction
     {
-        return new \ReflectionFunction($this->g);
+        return new \ReflectionFunction(
+            $this->g instanceof \Closure ? $this->g : \Closure::fromCallable($this->g)
+        );
     }
 
+    /**
+     * @return callable(R):A
+     */
     public function getInnerCallable(): callable
     {
         return self::unwrap($this);
     }
 
+    /**
+     * @template R1
+     * @template A1
+     * @template B1
+     * @param Composition<R1,A1,B1> $composition
+     * @return callable(R1):A1
+     */
     public static function unwrap(Composition $composition): callable
     {
         return $composition->g;

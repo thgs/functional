@@ -3,15 +3,28 @@
 namespace thgs\Functional\Typeclass;
 
 /**
- * @template A
  * Prelude now defines Monad with a type constraint to be an Applicative.
+ *
+ * This :: m a
+ * ie  MonadInstance<A> means Maybe Int so it should be MonadInstance<Maybe<Int>> ?
+ * then bind is :: m a                       -> (a   -> m b        ) -> m b
+ * which should :: MonadInstance<Maybe<Int>> -> (Int -> Maybe<Bool>) -> Maybe<Bool>
+ * and inject   :: a                         -> m a
+ * which is     :: Int                       -> Maybe<Int>
+ *
+ * so an implements tag should say MonadInstance<Maybe<A1>> ?
+ *
+ * @template A
  */
 interface MonadInstance
 {
     /**
      * Equivalent of Haskell's `return`
-     * @param A $a
-     * @return MonadInstance<A>
+     *
+     * @template A1
+     * @psalm-param A1 $a
+     * @return MonadInstance<A1>
+     *
      * @todo or maybe use `pure`
      */
     public static function inject(mixed $a): MonadInstance;
@@ -28,7 +41,7 @@ interface MonadInstance
      * one.
      *
      * @template B
-     * @param callable(A):MonadInstance<B>
+     * @param callable(A):MonadInstance<B> $f
      * @return MonadInstance<B>
      */
     public function bind(callable $f): MonadInstance;
