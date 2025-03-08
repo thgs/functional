@@ -4,7 +4,7 @@
     "type": "library",
     "require-dev": {
         "phpunit/phpunit": "^10.4",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^2.1"
     },
     "license": "MIT",
     "autoload": {
@@ -24,7 +24,7 @@
     ],
     "scripts": {
         "psalm": "./vendor/bin/psalm --no-cache",
-        "phpstan": "./vendor/bin/phpstan analyse src --level max",
+        "phpstan": "./vendor/bin/phpstan analyse src -c phpstan.neon",
         "test": "./vendor/bin/phpunit tests --testdox --display-deprecations"
     }
 }
