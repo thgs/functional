@@ -8,7 +8,6 @@ use function thgs\Functional\partial;
 /**
  * @template R
  * @template A
- * @template B
  *
  * @implements FunctorInstance<A>
  */
@@ -39,9 +38,9 @@ class Composition implements FunctorInstance
      *
      * As the (r -> a) is $this->g
      *
-     * @template B1
-     * @param callable(A):B1 $f
-     * @return Composition<R,B1,A>
+     * @template B
+     * @param callable(A):B $f
+     * @return Composition<R,B>
      */
     public function fmap(callable $f): Composition
     {
@@ -50,7 +49,7 @@ class Composition implements FunctorInstance
         return new Composition(
             /**
              * @param R $x
-             * @return B1
+             * @return B
              */
             fn ($x) => partial ($f) /*$*/ (partial ($this->g) ($x))
         );
@@ -74,8 +73,7 @@ class Composition implements FunctorInstance
     /**
      * @template R1
      * @template A1
-     * @template B1
-     * @param Composition<R1,A1,B1> $composition
+     * @param Composition<R1,A1> $composition
      * @return callable(R1):A1
      */
     public static function unwrap(Composition $composition): callable

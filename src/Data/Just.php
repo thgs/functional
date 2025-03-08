@@ -6,7 +6,9 @@ use thgs\Functional\Typeclass\ShowInstance;
 use function thgs\Functional\show;
 
 /**
- * @template A
+ * @todo fix show
+ *
+ * @template A of int|string|float|bool|ShowInstance
  * @implements ShowInstance<A>
  */
 final class Just implements ShowInstance

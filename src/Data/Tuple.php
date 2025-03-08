@@ -8,6 +8,7 @@ use function thgs\Functional\partial;
 /**
  * @template A
  * @template B
+ *
  * @implements EqInstance<Tuple<A,B>>
  */
 class Tuple implements
@@ -15,6 +16,7 @@ class Tuple implements
 {
     /**
      * (,) :: a -> b -> (a, b)
+     *
      * @param A $a
      * @param B $b
      */
@@ -25,9 +27,12 @@ class Tuple implements
 
     /**
      * (,) :: a -> b -> (a, b)
-     * @param A $a
-     * @param B $b
-     * @return self<A,B>
+     *
+     * @template A1
+     * @template B1
+     * @param A1 $a
+     * @param B1 $b
+     * @return self<A1,B1>
      */
     public static function new(mixed $a, mixed $b): self
     {
@@ -35,8 +40,9 @@ class Tuple implements
     }
 
     /**
-     * @param A $a
-     * @return self<A,A>
+     * @template A1
+     * @param A1 $a
+     * @return self<A1,A1>
      */
     public static function dupe(mixed $a): self
     {
@@ -46,12 +52,18 @@ class Tuple implements
     /**
      * both :: (a -> b) -> (a, a) -> (b, b)
      *
-     * @param callable(A):B $f
-     * @param Tuple<A,A> $p
-     * @return self<B,B>
+     * @template A1
+     * @template B1
+     * @param callable(A1):B1 $f
+     * @param Tuple<A1,A1> $p
+     * @return self<B1,B1>
      */
     public static function both(callable $f, Tuple $p): self
     {
+        /**
+         * Type override here for now.
+         * @var callable $g
+         */
         $g = partial ($f);
         return new self($g ($p->fst()), $g ($p->snd()));
     }
@@ -69,39 +81,58 @@ class Tuple implements
     }
 
     /**
-     * @template C
-     * @param callable(Tuple<A,B>):C $f
-     * @return C
+     * @template A1
+     * @template B1
+     * @template C1
+     * @param callable(Tuple<A1,B1>):C1 $f
+     * @return C1
      */
-    public function curry(callable $f, mixed $a, mixed $b): mixed
+    public static function curry(callable $f, mixed $a, mixed $b): mixed
     {
-        return partial ($f) (new self($a, $b));
+        /**
+         * Temporary type override here and assignment.
+         * @var callable(Tuple<A1,B1>):C1 $partialF
+         */
+        $partialF = partial ($f);
+        return $partialF (new self($a, $b));
     }
 
     /**
-     * @template C
-     * @param callable(A,B):C $f
-     * @param Tuple<A,B>
-     * @return C
+     * @template A1
+     * @template B1
+     * @template C1
+     * @param callable(A1,B1):C1 $f
+     * @return callable(Tuple<A1,B1>):C1
      */
-    public function uncurry(callable $f, Tuple $p): callable
+    public static function uncurry(callable $f)
     {
-        return partial ($f) ($p->fst()) ($p->snd());
+        /**
+         * Temporary type override here and assignment.
+         * @var callable(Tuple<A1,B1>):C1 $partialF
+         */
+        $partialF = partial (
+            /**
+             * @param Tuple<A1,B1> $p
+             * @return C1
+             */
+            fn (Tuple $p): mixed => $f($p->fst(), $p->snd())
+        );
+        return $partialF;
     }
 
+    /**
+     * @return self<B,A>
+     */
     public function swap(): self
     {
         return new self($this->b, $this->a);
     }
 
-    /**
-     * @param EqInstance<Tuple<A,B>> $other
-     */
     public function equals(EqInstance $other): bool
     {
         /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (!$other instanceof Tuple) {
-            throw new \TypeError('Expecting instance of ' . Tuple::class);
+            return false;
         }
  
         /**

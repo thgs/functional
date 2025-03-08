@@ -17,10 +17,9 @@ use function thgs\Functional\show;
  * @template A1
  * @implements FunctorInstance<A1>
  * @implements EqInstance<Maybe<A1>>
- * @implements ShowInstance<Maybe>
- *
- * ApplicativeFunctor<Maybe>
- * Monad<Maybe>
+ * @implements ShowInstance<Maybe<A1>>
+ * @implements ApplicativeInstance<Maybe<A1>>
+ * @implements MonadInstance<Maybe<A1>>
  */
 class Maybe implements
     EqInstance,
@@ -108,6 +107,11 @@ class Maybe implements
         return show($this->x);
     }
 
+    /**
+     * @template X
+     * @param X $a
+     * @return Maybe<X>
+     */
     public static function pure(mixed $a): ApplicativeInstance
     {
         return new Maybe(new Just($a));

@@ -17,7 +17,7 @@ interface FunctorInstance
      * but changes from a -> b
      *
      * @template B
-     * @psalm-param pure-callable(A):B $f
+     * @psalm-param callable(A):B $f
      * @return FunctorInstance<B>
      */
     public function fmap(callable $f): FunctorInstance;

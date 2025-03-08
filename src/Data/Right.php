@@ -2,13 +2,22 @@
 
 namespace thgs\Functional\Data;
 
+/**
+ * @template A
+ */
 final class Right
 {
-    public function __construct(private $x)
+    /**
+     * @param A $x
+     */
+    public function __construct(private mixed $x)
     {
     }
 
-    public function getValue()
+    /**
+     * @return A
+     */
+    public function getValue(): mixed
     {
         return $this->x;
     }
