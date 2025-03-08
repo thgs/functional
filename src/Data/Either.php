@@ -3,7 +3,6 @@
 namespace thgs\Functional\Data;
 
 use thgs\Functional\Typeclass\EqInstance;
-use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
 use function thgs\Functional\show;
@@ -11,11 +10,16 @@ use function thgs\Functional\show;
 /**
  * @template A
  * @template B
+ *
+ * @implements EqInstance<Either<A,B>>
+ * @implements ShowInstance<Either<A,B>>
+ *
+ * implements FunctorInstance<Either<A,B>>
  */
 class Either implements
     EqInstance,
-    ShowInstance,
-    FunctorInstance
+    ShowInstance
+    /*FunctorInstance*/
 {
     /**
      * @param Left<A>|Right<B> $x
@@ -24,13 +28,16 @@ class Either implements
     {
     }
 
+    /**
+     * @return Left<A>|Right<B>
+     */
     public function getValue(): Left|Right
     {
         return $this->x;
     }
 
     /**
-     * @param Either $other
+     * @param EqInstance<*>|Either<*,*> $other
      */
     public function equals(EqInstance $other): bool
     {
@@ -52,11 +59,15 @@ class Either implements
         return ($this->x instanceof Left ? 'Left ' : 'Right ') . show($this->x->getValue());
     }
 
+    /**
+     * @todo correct this, Either is : Functor (Either a)
+     *
     public function fmap(callable $f): FunctorInstance
     {
         return match (\true) {
-            $this->x instanceof Left => new static(clone $this->x),
-            $this->x instanceof Right => new static(new Right( $f($this->x->getValue()) ))
+            $this->x instanceof Left => new self(clone $this->x),
+            $this->x instanceof Right => new self(new Right( c ($f) ($this->x->getValue()) ))
         };
     }
+    */
 }

@@ -63,9 +63,9 @@ function partial(callable|Composition $f)
         // Join the current parameters with the newly received parameters
         $allParams = array_merge($startParameters, $restParameters);
 
+        /** @var callable $f */
         // Append the function as the first item and call partialization again
-        array_unshift($allParams, $f);
-        return partial(...$allParams);
+        return partial($f, ...$allParams);
     };
 
     return $isComposition ? c ($partialFunction) : $partialFunction;

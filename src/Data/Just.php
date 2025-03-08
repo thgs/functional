@@ -8,7 +8,7 @@ use function thgs\Functional\show;
 /**
  * @todo fix show
  *
- * @template A of int|string|float|bool|ShowInstance
+ * @template A
  * @implements ShowInstance<A>
  */
 final class Just implements ShowInstance

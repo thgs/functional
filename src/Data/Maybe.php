@@ -56,20 +56,24 @@ class Maybe implements
      * This class is Maybe Int. WE have a func (Int -> Bool)
      * result of fmap will be a Maybe Bool
      *
-     *
+     * fmap :: (a -> b) -> f a -> f b
+
      * @template B1
      * @param callable(A1):B1 $f
-     * @return FunctorInstance<B1>
+     * @return Maybe<B1>
      */
-    public function fmap(callable $f): FunctorInstance
+    public function fmap(callable $f): Maybe
     {
         if ($this->x instanceof Nothing) {
-            return new Maybe(new Nothing());
+            return $this;
         }
+        /** @var Composition<A1,B1> */
+        $c = c ($f);
 
-        return new Maybe(
-            new Just( c ($f) ($this->x->getValue()) )
-        );
+        /** @phpstan-assert B1 $this->x->getValue() */
+        $x = $this->x->getValue();
+
+        return new Maybe(new Just( $c ($x) ));
     }
 
     /**
@@ -146,6 +150,11 @@ class Maybe implements
         return fmap($callable, $fa); // alternatively could write $this->fmap($fab);
     }
 
+    /**
+     * @template X
+     * @param X $a
+     * @return Maybe<X>
+     */
     public static function inject(mixed $a): MonadInstance
     {
         return self::pure($a);
@@ -157,7 +166,7 @@ class Maybe implements
         // with a function that injects into a different monad.
 
         return $this->x instanceof Nothing
-            ? new Nothing() // no need for new really
-            : $f($this->x->getValue());
+            ?  new Maybe($this->x) // no need for new really
+            : c ($f) ($this->x->getValue());
     }
 }

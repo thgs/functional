@@ -56,13 +56,13 @@ class Tuple implements
      * @template B1
      * @param callable(A1):B1 $f
      * @param Tuple<A1,A1> $p
-     * @return self<B1,B1>
+     * @return Tuple<B1,B1>
      */
     public static function both(callable $f, Tuple $p): self
     {
         /**
          * Type override here for now.
-         * @var callable $g
+         * @var callable(A1):B1 $g
          */
         $g = partial ($f);
         return new self($g ($p->fst()), $g ($p->snd()));
@@ -128,6 +128,9 @@ class Tuple implements
         return new self($this->b, $this->a);
     }
 
+    /**
+     * @param EqInstance<*>|Tuple<*,*> $other
+     */
     public function equals(EqInstance $other): bool
     {
         /** @psalm-suppress RedundantConditionGivenDocblockType */

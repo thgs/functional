@@ -24,6 +24,9 @@ class Composition implements FunctorInstance
         $this->g = $g;
     }
 
+    /**
+     * @return A
+     */
     public function __invoke()
     {
         return partial ($this->g) (...func_get_args());
