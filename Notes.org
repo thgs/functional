@@ -7,6 +7,12 @@
 ** TODO List comprehension?
 ** TODO How we handle ~newtype~ ?
 ** TODO Consider single object per typeclass instance or why not
+Lets take for example Maybe. Maybe has 1 type variable `a`. If Maybe
+is implemented in a single class there might be a type `a` that cannot
+be an instance of Show but is Functor for example. Implementing it in
+a single class may be quite restrictive as the type variable `a` will
+have to implement all requirements coming from the PHP interfaces
+(that try to map a typeclass) ? Is this right?
 ** TODO (ergonomics) Refine Syntax helpers ?
 
 Example for : x -: f = f x
