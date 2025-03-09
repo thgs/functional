@@ -37,6 +37,15 @@ class Either implements
     }
 
     /**
+     * @phpstan-assert-if-true Right<B> $this->x
+     * @phpstan-assert-if-true Right<B> $this->getValue()
+     */
+    public function isRight(): bool
+    {
+        return $this->x instanceof Right;
+    }
+
+    /**
      * @param EqInstance<*>|Either<*,*> $other
      */
     public function equals(EqInstance $other): bool
