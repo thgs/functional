@@ -46,7 +46,7 @@ probably they map a Haskell type class instance into a single object, which
 makes a lot of sense as PHP does not support the concept of type classes
 natively.
 
-*** Blue - Adapt to old code and use it from functional programming structures
+*** Blue - Adapt to existing code and use it from functional programming structures
 Another goal is to explore what is possible from the perspective of the user
 trying to use functional programming concepts from code that is not written in a
 functional programming style. Specifically, how do we reuse existing code that
