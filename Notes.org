@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/16]
+* Todo [4/17]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -51,6 +51,8 @@ be a functor, we can accept a callable if we wrap it in composition (that will
 also apply partial).
 ** TODO Improve types in partial / composition
 Also rethink and add any aliases/names. Partial might need an object instead of returning an anonymous function.
+** TODO Some things can be implemented lazy
+By returning a function and with the help of partial application.
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.

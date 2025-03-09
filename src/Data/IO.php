@@ -26,12 +26,12 @@ class IO implements
     MonadInstance
 {
     /**
-     * @var \Closure():R
+     * @var \Closure():ReturnType
      */
     private \Closure $action;
 
     /**
-     * @param callable():R $action
+     * @param callable():ReturnType $action
      */
     public function __construct(callable $action)
     {
@@ -40,7 +40,7 @@ class IO implements
 
     /**
      * This is effectively (<-)
-     * @return R
+     * @return ReturnType
      */
     public function getValue()
     {
@@ -48,7 +48,7 @@ class IO implements
     }
 
     /**
-     * @return R
+     * @return ReturnType
      */
     public function __invoke()
     {
@@ -64,7 +64,7 @@ class IO implements
 
     /**
      * @template B1
-     * @param callable(R):B1
+     * @param callable(ReturnType):B1
      * @return FunctorInstance<B1>
      */
     public function fmap(callable $f): FunctorInstance
@@ -126,11 +126,30 @@ class IO implements
      */
     public static function inject($a): MonadInstance
     {
-        return is_callable($a) ? new self($a) : new self(fn () => $a);
+        return new self(is_callable($a) ? fn () => $a() : fn() => $a);
+        // return is_callable($a) ? new self($a) : new self(fn () => $a);
     }
 
+    /**
+     * (>>=) :: m a -> (a -> m b) -> m b
+     *
+     * bindIO :: IO a -> (a -> IO b) -> IO b
+     * bindIO (IO m) k = IO (\ s -> case m s of (# new_s, a #) -> unIO (k a) new_s)
+     *
+     * @template B
+     * @param callable(ReturnType):IO<B> $f
+     * @return IO<B>
+     */
     public function bind(callable $f): MonadInstance
     {
-        throw new \Exception('Will be implemented');
+        $action = $this->action;
+        $do = function () use ($f, $action) {
+            $x = ($action)();
+
+            // todo: could add a type check here? that return type is indeed m b ?
+            return (partial ($f) ($x))
+                ->getValue(); // unIO
+        };
+        return new IO($do);
     }
 }

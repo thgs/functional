@@ -122,4 +122,44 @@ class IOTest extends TestCase
         // IO (a -> b)  <*>  IO a   :: IO b
         $result = $ap1->sequence($ap2);
     }
+
+    public function testCanBind(): void
+    {
+        // $ioString :: IO String
+        $ioString = IO::inject("Hello");
+
+        // $f :: (String -> IO LowercaseString)
+        $sideEffectCheck = [];
+        $f = function (string $x) use (&$sideEffectCheck) {
+            $sideEffectCheck[] = 'called';
+
+            return IO::inject(strtolower($x));
+        };
+
+        // $bound :: IO LowercaseString
+        $bound = $ioString ->bind ($f);
+
+        $this->assertInstanceOf(IO::class, $bound);
+        $this->assertEmpty($sideEffectCheck);
+
+        // Perform IO
+        $result = $bound();
+
+        $this->assertEquals('hello', $result);
+        $this->assertEquals(['called'], $sideEffectCheck);
+    }
+
+    public function testCanBindMultiple(): void
+    {
+        // todo: in reality IO probably happens inside IO::inject and not before, or both?
+        $int =
+            IO::inject('Hello')
+            ->bind(fn (string $x) => /* IO happens here */ IO::inject(strtolower($x)))
+            ->bind(fn (string $x) => /* IO happens here */ IO::inject(strtoupper($x)))
+            ->bind(fn (string $x) => /* IO happens here */ IO::inject(strlen($x)))
+            ->getValue();
+
+        $this->assertEquals(5, $int);
+        $this->assertIsInt($int);
+    }
 }
