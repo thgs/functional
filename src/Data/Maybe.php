@@ -44,6 +44,15 @@ class Maybe implements
     }
 
     /**
+     * @phpstan-assert-if-true Just<A1> $this->x
+     * @phpstan-assert-if-true Just<A1> $this->getValue()
+     */
+    public function isJust(): bool
+    {
+        return $this->x instanceof Just;
+    }
+
+    /**
      * instance Functor Maybe where
      *      fmap f (Just x) = Just (f x)
      *      fmap f Nothing = Nothing
