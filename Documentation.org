@@ -12,6 +12,14 @@ theoretical or implementation related, do not hesitate to point it out.
 
 * Contributing & Current design
 
+** Goals
+
+There is a set of goals that are driving the development of this library. Below
+is a list, in historical order they were decided and not in priority, no one
+goal is more important than the other. To reflect that they have been given
+colours instead of numbers.
+
+*** Purple - Usable public interface to achieve functionality
 The main idea driving the design is to have a public interface that is usable
 and allows static analysis to infer types. Under the public interface it is
 allowed to go to any length in design in order to satisfy the behaviour we are
@@ -19,15 +27,6 @@ targeting. Things from Haskell do not necessarily map directly to PHP due to
 differences in capabilities offered. It is a fact we could re-implement the
 entirety of Haskell in PHP in behaviour but judgement must be used to bring
 things into perspective.
-
-A second goal of this is to explore what is possible from the perspective of the
-user trying to use functional programming concepts from code that is not written
-in a functional programming style. Some effort can be seen with
-~FunctorAdapter~. The belief is that although functional programming in general is
-interesting and it has its benefits, if everything else is written in a
-non-functional way how one can interface with it. The end goal is to be able to
-express functionally and reuse other code in a functional programming way;
-rather than switching paradigms.
 
 There is a mapping of concepts from Haskell to PHP. For example, a function in
 Haskell can be represented as a Composition in PHP when you want to compose with
@@ -46,6 +45,22 @@ there are distinct implementations of MaybeFunctor, MaybeApplicative etc because
 probably they map a Haskell type class instance into a single object, which
 makes a lot of sense as PHP does not support the concept of type classes
 natively.
+
+*** Blue - Adapt to old code and use it from functional programming structures
+Another goal is to explore what is possible from the perspective of the user
+trying to use functional programming concepts from code that is not written in a
+functional programming style. Specifically, how do we reuse existing code that
+is not written in a functional programming way from the functional programming
+structures in this package. If I can create functors or monads for new code
+written specifically for this library it has very little benefit when this code
+has to interface with existing other code that is not written with functors or
+monads in mind (for example).
+
+Some effort can be seen with ~FunctorAdapter~. The belief is that although
+functional programming in general is interesting and it has its benefits, if
+everything else is written in a non-functional way how one can interface with
+it. The essence of this is to be able to express functionally and reuse other
+code in a functional programming way; rather than switching paradigms.
 
 * Usage
 ** Maybe
