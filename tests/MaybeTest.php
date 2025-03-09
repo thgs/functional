@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use thgs\Functional\Data\IO;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
@@ -136,6 +137,17 @@ class MaybeTest extends TestCase
     }
 
     /**
+     * Not so sure if this should be enforced yet.
+     */
+    public function testThrowsWhenSequenceWithAnotherApplicativeInstance(): void
+    {
+        $this->expectException(TypeError::class);
+
+        Maybe::pure(fn ($x, $y) => $x + $y)
+            ->sequence(IO::pure(fn () => 3));
+    }
+
+    /**
      * (+) <$> Just 3 <*> Just 5 == Just 8
      */
     public function testCanFmapAndThenSequence(): void
@@ -162,6 +174,8 @@ class MaybeTest extends TestCase
         $this->assertInstanceOf(Just::class, $just);
         $this->assertEquals(123 * 2, $just->getValue());
     }
+
+    // todo: test Applicative sequencing (<*>) with more than 2
 
     // todo: test what happens when the callable passed to bind does not return MonadInstance
 }

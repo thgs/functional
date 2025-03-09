@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\IO;
+use thgs\Functional\Data\Maybe;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
@@ -95,5 +96,30 @@ class IOTest extends TestCase
 
         $this->assertEquals(7, $result());
         $this->assertEquals(['ap1' => 123, 'ap2' => 456], $sideEffectVar);
+    }
+
+    /**
+     * Not yet fully sure if this should be enforced, by types it probably should.
+     */
+    public function testThrowsWhenSequenceToAnotherInstanceOfApplicative(): void
+    {
+        /** @var array */
+        $sideEffectVar = [];
+
+        // This must be IO (a -> b)
+        $ap1 = new IO(function () {
+            /** assumed IO happening here */
+
+            /** (a -> b) */
+            return fn($x) => $x+3;
+        });
+
+        // This must be IO a
+        $ap2 = Maybe::pure(3);
+
+        $this->expectException(TypeError::class);
+
+        // IO (a -> b)  <*>  IO a   :: IO b
+        $result = $ap1->sequence($ap2);
     }
 }
