@@ -139,10 +139,10 @@ side-effect.
 
 ** Either
 ** Composition
-~Composition~ is a general helper and a syntax helper. Function composition is
-implented in its ~fmap()~ which essentially implements a version of ~Functor ((->)
-r)~. However the class itself is bundling more utilities and can better be seen
-as a form of expression.
+~Composition~ is a general helper and a syntax helper. Function
+composition is implented in its ~fmap()~ which essentially implements a
+version of ~Functor ((->) r)~. However the class itself is bundling more
+utilities and can better be seen as a form of expression.
 
 Example usage:
 
@@ -164,8 +164,8 @@ Alternative with the shorthand function ~c~:
 
 #+end_src
 
-Note that spaces have been added for brevity, `c` is a regular function and this
-would be entirely fine:
+Note that spaces have been added for brevity, `c` is a regular
+function and this would be entirely fine:
 
 #+begin_src php
 
@@ -173,9 +173,9 @@ would be entirely fine:
 
 #+end_src
 
-The above is a trivial example to show the syntax, if one is to use min to
-calculate the minumum of an array there is no direct need to use the
-~Composition~.
+The above is a trivial example to show the syntax, if one is to use
+min to calculate the minumum of an array there is no direct need to
+use the ~Composition~.
 
 Among the features of this wrapper is composing functions:
 
@@ -193,8 +193,8 @@ Which is the equivalent of:
 
 #+end_src
 
-Note that the order of application is as they appear in the expression, making
-it the reverse of Haskell's (.) which would be
+Note that the order of application is as they appear in the
+expression, making it the reverse of Haskell's (.) which would be
 
 #+begin_src haskell
 
@@ -203,9 +203,10 @@ it the reverse of Haskell's (.) which would be
 
 #+end_src
 
-The important goal here is that using `c` and `fmap` we now have control over a
-"composition" of function calls and this is why it is considered an expression
-helper. Notable is that it also wraps around partial application.
+The important goal here is that using `c` and `fmap` we now have
+control over a "composition" of function calls and this is why it is
+considered an expression helper. Notable is that it also wraps around
+partial application.
 
 #+begin_src php
 
@@ -214,8 +215,9 @@ helper. Notable is that it also wraps around partial application.
 
 #+end_src
 
-TODO: Ergonomics here, could also implement a ~__call~ magic function ? Or ~pipe()~
-so that the user can keep adding functions one after the other?
+TODO: Ergonomics here, could also implement a ~__call~ magic function ?
+Or ~pipe()~ so that the user can keep adding functions one after the
+other?
 
 ** Typeclasses
 
