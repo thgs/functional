@@ -3,9 +3,9 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
-use thgs\Functional\Instance\Composition;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 
+use function thgs\Functional\c;
 use function thgs\Functional\fmap;
 
 class FunctionsTest extends TestCase
@@ -41,7 +41,7 @@ class FunctionsTest extends TestCase
 
         // this fmap is :: (Int -> Bool) -> Maybe Int -> Maybe Bool
         $mapped = fmap(
-            new Composition(fn (int $x): Bool => $x == 5),
+            c (fn (int $x): Bool => $x == 5),
             $data
         );
 

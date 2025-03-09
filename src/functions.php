@@ -6,7 +6,7 @@ use thgs\Functional\Data\Either;
 use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
-use thgs\Functional\Instance\Composition;
+use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 

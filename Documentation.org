@@ -139,13 +139,12 @@ side-effect.
 
 ** Either
 ** Composition
-Composition is a structure to help you compose two functions. It is an
-abstraction to be used instead of manually composing and implements Functor.
+~Composition~ is a general helper and a syntax helper. Function composition is
+implented in its ~fmap()~ which essentially implements a version of ~Functor ((->)
+r)~. However the class itself is bundling more utilities and can better be seen
+as a form of expression.
 
-To compose a function you need to apply a new function to the composition
-through the Functor interface (fmap).
-
-Calling the function inside the Composition is as easy as:
+Example usage:
 
 #+begin_src php
 
@@ -154,7 +153,59 @@ Calling the function inside the Composition is as easy as:
 
 #+end_src
 
-Composing a function becomes:
+Alternative with the shorthand function ~c~:
+
+#+begin_src php
+
+  $composition = c (min(...));
+  $composition = c ('min'); // equivalent
+
+  $result = $composition ([2, 3, 4]);
+
+#+end_src
+
+Note that spaces have been added for brevity, `c` is a regular function and this
+would be entirely fine:
+
+#+begin_src php
+
+  $result = c('min')([2, 3, 4]);
+
+#+end_src
+
+The above is a trivial example to show the syntax, if one is to use min to
+calculate the minumum of an array there is no direct need to use the
+~Composition~.
+
+Among the features of this wrapper is composing functions:
+
+#+begin_src php
+
+  $result = c ('array_filter') ->fmap('min') ([0, 2, 3, 4]);
+
+#+end_src
+
+Which is the equivalent of:
+
+#+begin_src php
+
+  $result = min( array_filter([0, 2, 3, 4]) );
+
+#+end_src
+
+Note that the order of application is as they appear in the expression, making
+it the reverse of Haskell's (.) which would be
+
+#+begin_src haskell
+
+  let result = minimum . arrayFilter $ [0, 2, 3, 4]
+    where arrayFilter = filter (\x -> x > 0)
+
+#+end_src
+
+The important goal here is that using `c` and `fmap` we now have control over a
+"composition" of function calls and this is why it is considered an expression
+helper. Notable is that it also wraps around partial application.
 
 #+begin_src php
 
@@ -162,8 +213,6 @@ Composing a function becomes:
   $result = $composition([2, 3, 4]); // returns 0, effectively computing: min([2,3,4]) % 2 
 
 #+end_src
-
-The idea is that you can keep on applying functions into the composition.
 
 TODO: Ergonomics here, could also implement a ~__call~ magic function ? Or ~pipe()~
 so that the user can keep adding functions one after the other?

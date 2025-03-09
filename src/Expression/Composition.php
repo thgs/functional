@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Instance;
+namespace thgs\Functional\Expression;
 
 use thgs\Functional\Typeclass\FunctorInstance;
 use function thgs\Functional\partial;
@@ -10,6 +10,14 @@ use function thgs\Functional\partial;
  * @template A
  *
  * @implements FunctorInstance<A>
+ *
+ * This is not just function composition but also a wrapper around
+ * `partial`.  In times you may opt in to use just `partial` but if
+ * you wish for the full functionality you may opt in to use
+ * Composition.
+ *
+ * Function composition is provided by implementing Functor ((r ->)),
+ * see fmap.
  */
 class Composition implements FunctorInstance
 {

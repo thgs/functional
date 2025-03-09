@@ -1,9 +1,11 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/15]
+* Todo [4/16]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
+** TODO Implement ReverseComposition or swap names
+I think "Composition" became natural because of partial application.
 ** TODO Monoid
 ** TODO Curry?
 ** TODO List comprehension?

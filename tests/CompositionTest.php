@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use thgs\Functional\Instance\Composition;
+use thgs\Functional\Expression\Composition;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 
 use function thgs\Functional\fmap;
@@ -105,5 +105,14 @@ class CompositionTest extends TestCase
 
         $this->assertEquals('600', $calledResult, 'result is calculated wrong');
         $this->assertIsString($calledResult, 'show was not applied last');
+    }
+
+    public function testCanComposeWithPHPFunctions(): void
+    {
+        $result = (new Composition('array_filter'))
+            ->fmap ('min')
+            ([0, 2, 3, 4]);
+
+        $this->assertEquals(2, $result);
     }
 }
