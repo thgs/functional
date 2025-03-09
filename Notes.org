@@ -1,7 +1,9 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/12]
+* Todo [4/15]
+** TODO Fix IO
+** TODO Fix Applicative sequence() types
 ** TODO Monoid
 ** TODO Curry?
 ** TODO List comprehension?
@@ -42,9 +44,11 @@ Implementations of the interfaces + test helpers for the laws
 
 Write the above in the docs.
 ** TODO Make `fmap` accept ~F|callable~
-Now it is ~fmap(callable $f, F $g): F~ But as the argument $g has to be
-a functor, we can accept a callable if we wrap it in composition (that
-will also apply partial).
+Now it is ~fmap(Composition|callable $f, F $g): F~ But as the argument $g has to
+be a functor, we can accept a callable if we wrap it in composition (that will
+also apply partial).
+** TODO Improve types in partial / composition
+Also rethink and add any aliases/names. Partial might need an object instead of returning an anonymous function.
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.
