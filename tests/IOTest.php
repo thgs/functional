@@ -3,6 +3,8 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\IO;
 use thgs\Functional\Testing\FunctorLawsAssertions;
+use thgs\Functional\Typeclass\ApplicativeInstance;
+use thgs\Functional\Typeclass\FunctorInstance;
 
 class IOTest extends TestCase
 {
@@ -28,10 +30,20 @@ class IOTest extends TestCase
 
     public function testCanFmap(): void
     {
+        /** @var IO<Int> */
         $data = new IO(function () { /* action would be here */ return 5; });
+
+        /**
+         * fmap (*2) $data
+         * Essentially we fmap a `Int -> Int` to an `IO Int` functor
+         * @var FunctorInstance<IO<Int>>
+         */
         $mapped = $data->fmap(fn ($x) => $x * 2);
 
-        $result = $mapped->getValue();
+        /**
+         * $result <- $mapped
+         */
+        $result = $mapped();
         $this->assertEquals(10, $result);
     }
 
@@ -42,5 +54,46 @@ class IOTest extends TestCase
             fn (int $x): bool => $x == 5,
             fn (bool $x): string => $x == true ? '100' : '500'
         );
+    }
+
+    public function testCanConstructApplicativeWithPure(): void
+    {
+        $applicative = IO::pure(fn () => 123);
+
+        $this->assertInstanceOf(ApplicativeInstance::class, $applicative);
+        $this->assertInstanceOf(IO::class, $applicative);
+        $this->assertEquals(123, $applicative->getValue());
+    }
+
+    public function testCanSequenceApplicatives(): void
+    {
+        /** @var array */
+        $sideEffectVar = [];
+
+        // This must be IO (a -> b)
+        $ap1 = new IO(function () use (&$sideEffectVar) {
+            /** assumed IO happening here */
+            $sideEffectVar['ap1'] = 123;
+
+            /** (a -> b) */
+            return fn($x) => $x+3;
+        });
+
+        // This must be IO a
+        $ap2 = new IO(function () use (&$sideEffectVar) {
+            /** assumed IO happening here */
+            $sideEffectVar['ap2'] = 456;
+
+            return 4;
+        });
+
+
+        // IO (a -> b)  <*>  IO a   :: IO b
+        $result = $ap1->sequence($ap2);
+        $this->assertInstanceOf(ApplicativeInstance::class, $result);
+        $this->assertEmpty($sideEffectVar);
+
+        $this->assertEquals(7, $result());
+        $this->assertEquals(['ap1' => 123, 'ap2' => 456], $sideEffectVar);
     }
 }
