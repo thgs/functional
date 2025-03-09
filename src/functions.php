@@ -9,6 +9,7 @@ use thgs\Functional\Data\Nothing;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
+use thgs\Functional\Typeclass\MonadInstance;
 
 /**
  * @template A of EqInstance
@@ -129,3 +130,21 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
 }
 
 // todo: define `pure` & `sequence` from Applicative.
+
+
+/**
+ * A draft implementation of do-notation
+ */
+function dn(MonadInstance|callable ...$fs)
+{
+    $last = array_shift($fs);
+    while ($new = array_shift($fs)) {
+        $last = $last->bind($new);
+
+        // Pedantic type check below
+        if (!$last instanceof MonadInstance) {
+            throw new \TypeError('Result is not a monad instance');
+        }
+    }
+    return $last;
+}

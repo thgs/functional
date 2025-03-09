@@ -162,4 +162,26 @@ class IOTest extends TestCase
         $this->assertEquals(5, $int);
         $this->assertIsInt($int);
     }
+
+    public function testCanBindWithDoNotation(): void
+    {
+        $int = thgs\Functional\dn(
+            IO::inject('Hello'),
+            fn (string $x) => /* IO happens here */ IO::inject(strtolower($x)),
+            fn (string $x) => /* IO happens here */ IO::inject(strtoupper($x)),
+            fn (string $x) => /* IO happens here */ IO::inject(strlen($x)),
+        )
+            ->getValue();
+
+        /**
+         * @todo Should/can this getValue() be inside dn() ?  IO (and
+         * each other) could provide ioDo(IO ...$ios) that in the end
+         * does getValue() or whatever it is on each one so as not to
+         * have a unified interface for unwrapping.  But we could as
+         * well have.
+         */
+
+        $this->assertEquals(5, $int);
+        $this->assertIsInt($int);
+    }
 }
