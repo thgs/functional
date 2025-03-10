@@ -5,6 +5,7 @@ use thgs\Functional\Data\IO;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
+use thgs\Functional\Testing\EqAssertions;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
@@ -15,8 +16,9 @@ use function thgs\Functional\fmap;
 class MaybeTest extends TestCase
 {
     use FunctorLawsAssertions;
+    use EqAssertions;
 
-    public function testFmap()
+    public function testFmap(): void
     {
         $data = new Maybe(new Just(3));
         $mapped = $data->fmap(fn (int $x) => $x + 2);
@@ -36,12 +38,10 @@ class MaybeTest extends TestCase
         );
     }
 
-    public function testCanEq(): void
+    public function testImplementsEqCorrectly(): void
     {
-        $data = new Maybe(new Just(67));
-        $other = new Maybe(new Just(67));
-
-        $this->assertTrue($data->equals($other));
+        $this->assertImplementsEqCorrectly(Maybe::pure(3), Maybe::pure(2));
+        $this->assertImplementsEqCorrectly(Maybe::pure(3), new Maybe(new Nothing()));
     }
 
     public function testCanShow(): void

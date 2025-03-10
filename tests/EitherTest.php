@@ -4,9 +4,12 @@ use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Either;
 use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Right;
+use thgs\Functional\Testing\EqAssertions;
 
 class EitherTest extends TestCase
 {
+    use EqAssertions;
+
     public function testCanReturnLeftValue(): void
     {
         $either = new Either(new Left(123));
@@ -19,19 +22,9 @@ class EitherTest extends TestCase
         $this->assertEquals(123, $either->getValue()->getValue());
     }
 
-    // todo: these could be part of a trait ?
-    // with the runtime checks behaviour as well?
-    // apart from the laws there is some boilerplate.
-    public function testCanEq(): void
+    public function testImplementsEqCorrectly(): void
     {
-        $either = new Either(new Right(123));
-        $either2 = new Either(new Right(123));
-
-        $this->assertTrue($either->equals($either2));
-
-        $either = new Either(new Right(123));
-        $either2 = new Either(new Left(123));
-
-        $this->assertTrue($either->notEquals($either2));
+        $this->assertImplementsEqCorrectly(new Either(new Right(123)), new Either(new Right(456)));
+        $this->assertImplementsEqCorrectly(new Either(new Left(123)), new Either(new Right(456)));
     }
 }

@@ -3,11 +3,14 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Tuple;
 
+use thgs\Functional\Testing\EqAssertions;
 use function thgs\Functional\partial;
 use function thgs\Functional\t;
 
 class TupleTest extends TestCase
 {
+    use EqAssertions;
+
     public function testCanCreateTuple(): void
     {
         $tuple = Tuple::new(123, "hello world");
@@ -69,7 +72,10 @@ class TupleTest extends TestCase
         $this->assertEquals(40, $result);
     }
 
-    // todo: add equals
+    public function testImplementsEq(): void
+    {
+        $this->assertImplementsEqCorrectly(Tuple::new(1,3), Tuple::new(3,8));
+    }
 
     /**
      * @template A
