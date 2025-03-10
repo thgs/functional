@@ -2,7 +2,7 @@
 
 namespace thgs\Functional\Wrapper;
 
-use thgs\Functional\Instance\Composition;
+use thgs\Functional\Expression\Composition;
 use function thgs\Functional\partial;
 
 /**
