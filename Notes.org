@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/18]
+* Todo [4/20]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -68,6 +68,13 @@ instance Monad ((->) r) where
 
 #+end_src
 
+** TODO Would mocking of functions be part of this?
+Cheers to Olle from phpc
+** TODO Could this be implemented:
+fmap :: (a -> b) -> (f a -> f b)
+
+So that we return a function and once that function is called with arg: f a then we call fmap on it?
+I suppose so. Does it work now?
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.
