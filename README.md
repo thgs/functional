@@ -75,6 +75,32 @@ $bound(); // will run getLine and then bind the result to putStrLn and print it
 
 ```
 
+#### Helpers for your tests
+
+```php
+
+class MyType implements FunctorInstance
+{
+    public function fmap(callable $f): FunctorInstance
+    {
+        // your code here
+    }
+}
+
+class MyTypeTest
+{
+    // use helper traits to prove your implementation of fmap abides by the Functor Law.
+    use FunctorLawsAssertions;
+
+    public function testIsAFunctor(): void
+    {
+        $myType = new MyType();
+        $this->assertInstanceIsFunctor($myType);
+    }
+}
+
+```
+
 #### Wrap existing code
 
 ```php
@@ -98,6 +124,16 @@ $contextLogger = $wrapper ->fmap ( fn (Tuple $p): Tuple => t ($prefix . $p->fst(
 ```
 
 Note that the above is very draft/experimental still.
+
+
+#### Loads of bugs and inconsistencies
+
+phpstan is complaining, the tests are not yet fully there but I only
+have covered some portion of the functionality. Nevertheless, I expect
+there are things that might have been implemented or type hinted wrong
+at this point. Especially if you stress the limits of the definitions
+or functionality.
+
 
 ### Contributing
 
