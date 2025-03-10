@@ -64,8 +64,8 @@ class IO implements
 
     /**
      * @template B1
-     * @param callable(ReturnType):B1
-     * @return FunctorInstance<B1>
+     * @param callable(ReturnType):B1 $f
+     * @return IO<B1>
      */
     public function fmap(callable $f): FunctorInstance
     {
@@ -91,10 +91,15 @@ class IO implements
         );
     }
 
+    /**
+     * @template X
+     * @param X $a
+     * @return IO<X>
+     */
     public static function pure($a): ApplicativeInstance
     {
         // constructor will throw typeError if it is not callable.
-        return new IO($a);
+        return self::inject($a);
     }
 
     /**
