@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/17]
+* Todo [4/18]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -53,6 +53,21 @@ also apply partial).
 Also rethink and add any aliases/names. Partial might need an object instead of returning an anonymous function.
 ** TODO Some things can be implemented lazy
 By returning a function and with the help of partial application.
+** TODO Implement these on Composition
+#+begin_src haskell
+
+-- | @since base-2.01
+instance Applicative ((->) r) where
+    pure = const
+    (<*>) f g x = f x (g x)
+    liftA2 q f g x = q (f x) (g x)
+
+-- | @since base-2.01
+instance Monad ((->) r) where
+    f >>= k = \ r -> k (f r) r
+
+#+end_src
+
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.
