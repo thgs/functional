@@ -2,7 +2,7 @@
 
 namespace thgs\Functional\Data;
 
-use thgs\Functional\Instance\Composition;
+use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
