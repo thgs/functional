@@ -49,7 +49,7 @@ print $gf(123);  // (123 + 2) * 2 = 250
 
 Wrap any php function
 
-```
+```php
 $min = c('min');
 
 $maybeArrayOfInt = new Maybe(new Just(range(1,4)));
