@@ -7,6 +7,7 @@ use thgs\Functional\Typeclass\Adapter\CallableWiringFunctorAdapter;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Wrapper\CallbackWrapper;
 use function thgs\Functional\c;
+use function thgs\Functional\t;
 
 /**
  * This is a rough and simplified recreation of https://github.com/WyriHaximus/php-psr-3-context-logger
@@ -23,7 +24,6 @@ $psr3Logger = new class /*implements LoggerInterface -- level removed to use Tup
     }
 };
 
-function t(mixed $a, mixed $b) { return Tuple::new($a, $b); }
 $prefix = 'functional: ';
 $extraContext = 'contextual';
 
