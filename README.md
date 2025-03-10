@@ -8,6 +8,97 @@ and very quickly realised that a very very similar approach was used in
 [marcosh/lamphpda](https://github.com/marcosh/lamphpda). That is a more complete
 library.
 
+### Highlight features
+
+##### Basic structures from Haskell
+
+```php
+
+$maybeInt = new Maybe(new Just(123));
+$maybeInt = $maybeInt->fmap(fn ($x) => $x * 2);
+
+if ($maybeInt->isJust()) {
+    print $maybeInt->unwrap();
+}
+
+```
+
+Including `Maybe`, `Either`, `IO` with instances as functors, applicative functors and monads.
+
+##### Expression helpers
+
+Composition of function calls
+
+```php
+
+$result = c (fn ($x) => $x + 2) (123); // 125
+
+```
+
+Function composition
+
+```php
+
+$f = fn ($x) => $x + 2;
+$g = fn ($x) => $x * 2;
+$gf = c($f)->fmap($g); // equivalent of g(f($x))
+
+print $gf(123);  // (123 + 2) * 2 = 250
+
+```
+
+Wrap any php function
+
+```
+$min = c('min');
+
+$maybeArrayOfInt = new Maybe(new Just(range(1,4)));
+
+$maybeMinOfArray = fmap($min, $maybeArrayOfInt);
+
+var_dump($maybeMinOfArray->unwrap());
+
+```
+
+Do notation
+
+```php
+
+// putStrLn :: String -> IO ()
+$putStrLn = fn (string $x) => IO::inject(fn () => print $x . "\n");
+
+// getLine :: IO String
+$getLine = IO::inject(fn (): string => fgets(\STDIN));
+
+$bound = dn($getLine, $putStrLn);
+$bound(); // will run getLine and then bind the result to putStrLn and print it
+
+```
+
+##### Wrap existing code
+
+```php
+
+/**
+ * Create a CallbackWrapper that connects the psr3Logger to a Tuple input.
+ * However here we can also pass the `fmap` method.
+ */
+$wrapper = new CallbackWrapper(
+    fn (Tuple $p) => $psr3Logger->log($p->fst(), $p->snd()),
+    ['fmap' => fn (callable $f) => c ($f) ->fmap ($this->wiring)]
+);
+
+/**
+ * We create the contextLogger
+ */
+$contextLogger = $wrapper ->fmap ( fn (Tuple $p): Tuple => t ($prefix . $p->fst(), [$extraContext] + $p->snd() ) );
+
+($contextLogger) (t ("wrapped one", ["contextt"]));
+
+```
+
+Note that the above is very draft/experimental still.
+
 ### Contributing
 
 Feel free to add any PR, comments, issues or discussions!
@@ -15,6 +106,7 @@ Feel free to add any PR, comments, issues or discussions!
 ### Documentation
 
 See [`Documentation.org`](https://github.com/thgs/functional/blob/master/Documentation.org) file (Emacs org-file).
+
 
 ### Other interesting functional programming in PHP libraries/projects
 
