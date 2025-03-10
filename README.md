@@ -10,7 +10,7 @@ library.
 
 ### Highlight features
 
-##### Basic structures from Haskell
+#### Basic structures from Haskell
 
 ```php
 
@@ -25,7 +25,7 @@ if ($maybeInt->isJust()) {
 
 Including `Maybe`, `Either`, `IO` with instances as functors, applicative functors and monads.
 
-##### Expression helpers
+#### Expression helpers
 
 Composition of function calls
 
@@ -75,7 +75,7 @@ $bound(); // will run getLine and then bind the result to putStrLn and print it
 
 ```
 
-##### Wrap existing code
+#### Wrap existing code
 
 ```php
 
