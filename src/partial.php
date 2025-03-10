@@ -2,7 +2,7 @@
 
 namespace thgs\Functional;
 
-use thgs\Functional\Instance\Composition;
+use thgs\Functional\Expression\Composition;
 use function thgs\Functional\c;
 
 /**
