@@ -134,11 +134,17 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
 
 /**
  * A draft implementation of do-notation
+ *
+ * @template A
+ * @template B
+ * @param MonadInstance<A> $ma
+ * @param callable(A):MonadInstance<B> $fs
+ * @return MonadInstance<*>
  */
-function dn(MonadInstance|callable ...$fs)
+function dn(MonadInstance $ma, callable ...$fs)
 {
-    $last = array_shift($fs);
-    while ($new = array_shift($fs)) {
+    $last = $ma;
+    foreach ($fs as $new) {
         $last = $last->bind($new);
 
         // Pedantic type check below
