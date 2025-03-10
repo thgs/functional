@@ -95,7 +95,14 @@ class MyTypeTest
     public function testIsAFunctor(): void
     {
         $myType = new MyType();
-        $this->assertInstanceIsFunctor($myType);
+
+        // Provide an instance and two functions for this assertion
+
+        $this->assertInstanceIsFunctor(
+            $myType,
+            fn (int $x): int => $x + 2,
+            fn (int $x): int => $x + 2
+        );
     }
 }
 
