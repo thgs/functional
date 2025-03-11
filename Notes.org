@@ -83,6 +83,28 @@ I think this actually is easy to solve if we return the ReflectionFunction insta
 After handling the infinite loop.
 ** DONE Partial application
 This seems such a central piece.
+* Other notes
+** Trying the pipe operator
+*** Try flipping ~__invoke~ with `fmap` or `bind` at will (some dynamic front object).
+Or contramap once implemented, something along the lines of:
+
+#+begin_src php
+
+  cFlippedWithFmap ('abs') |> $maybeInt // 
+
+#+end_src
+
+Could then mean
+
+#+begin_src php
+
+  fmap ('abs', $maybeInt);
+
+  // coming from calling `fmap()` in the $maybeInt object, cFlippedWithFmap would have to implement
+  // that in its __invoke
+
+#+end_src
+*** Play with contramap and the pipe operator
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
