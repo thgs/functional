@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/20]
+* Todo [4/26]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -75,6 +75,35 @@ fmap :: (a -> b) -> (f a -> f b)
 
 So that we return a function and once that function is called with arg: f a then we call fmap on it?
 I suppose so. Does it work now?
+** TODO Contravariant could be used for the wrappers
+See https://stackoverflow.com/questions/38034077/what-is-a-contravariant-functor
+specially https://stackoverflow.com/a/56150133
+
+#+begin_src haskell
+
+instance Contravariant (Op a) where
+  contramap :: (b' -> b) -> (Op a b -> Op a b')
+  contramap f g = Op (getOp g . f)
+
+#+end_src
+
+contramap :: (b -> a) -> f a -> f b
+
+The (b -> a) in Contravariant defines the "medium", the way we are going to produce
+something that can consume b out of something that was consuming a.
+
+** TODO Implement Category
+** TODO Implement Op
+** TODO Separate data and control functors
+https://www.tweag.io/blog/2020-01-16-data-vs-control/
+
+And also here we could elaborate on the Data.IO and Control.Monad.IO
+so that the latter implements in terms of monadic operations. What
+about the first though?
+** TODO Implement MoreAccurateFunctor
+https://stackoverflow.com/questions/53854853/why-is-there-a-distinction-between-co-and-contravariant-functors-in-haskell-but
+Also called Categorical Functor but seems like this generalisation can be very useful.
+** TODO Add missing law helpers for testing
 ** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.

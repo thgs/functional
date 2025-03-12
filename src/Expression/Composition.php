@@ -2,6 +2,7 @@
 
 namespace thgs\Functional\Expression;
 
+use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
 use function thgs\Functional\partial;
 
@@ -10,6 +11,13 @@ use function thgs\Functional\partial;
  * @template A
  *
  * @implements FunctorInstance<A>
+ * @implements ContravariantInstance<A>
+ *
+ * @todo not sure if you can implement both covariant and
+ * contravariant functor instances with the same A in the same object
+ * and still make sense, sure we could just use one or the other and
+ * share a PHP class for now.
+ * @see https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Functor-Contravariant.html#v:phantom
  *
  * This is not just function composition but also a wrapper around
  * `partial`.  In times you may opt in to use just `partial` but if
@@ -19,7 +27,9 @@ use function thgs\Functional\partial;
  * Function composition is provided by implementing Functor ((r ->)),
  * see fmap.
  */
-class Composition implements FunctorInstance
+class Composition implements
+    FunctorInstance,
+    ContravariantInstance
 {
     /** @var callable(R): A */
     private $g;
@@ -66,6 +76,33 @@ class Composition implements FunctorInstance
         );
     }
 
+    /**
+     * contramap' :: (b -> a) -> (a -> r) -> (b -> r)
+     * flipped a with r to align with this class
+     * contramap' :: (b -> r) -> (r -> a) -> (b -> a)
+     *
+     * Essentially, let $this = f b then
+     * (>$$<) :: Contravariant f => f b -> (a -> b) -> f a
+     * re-written to make sense with type variables here
+     * let $this = f a
+     * (>$$<) :: Contravariant f => f a -> (b -> a) -> f b
+     *
+     * @template B
+     * @param callable(B):R $fba
+     * @return Composition<B,A>
+     */
+    public function contramap(callable $fba): ContravariantInstance
+    {
+        // manually flipped, the definition is really `contramap = flip (.)`
+        return new Composition(
+            /**
+             * @param R $x
+             * @return B
+             */
+            fn ($x) => partial ($this->g) /*$*/ (partial ($fba) ($x))
+        );
+    }
+
     public function getReflectionFunction(): \ReflectionFunction
     {
         return new \ReflectionFunction(
@@ -91,4 +128,5 @@ class Composition implements FunctorInstance
     {
         return $composition->g;
     }
+
 }

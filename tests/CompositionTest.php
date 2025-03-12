@@ -11,7 +11,7 @@ class CompositionTest extends TestCase
 {
     use FunctorLawsAssertions;
 
-    public function testFmap(): void
+    public function testCanFmap(): void
     {
         $composition = new Composition(function ($x) { return $x + 100; });
 
@@ -23,6 +23,29 @@ class CompositionTest extends TestCase
         $fullyApplied = $result(3);
 
         $this->assertEquals(309, $fullyApplied);
+    }
+
+    public function testCanContramap(): void
+    {
+        // contramap' :: (b -> a) -> (a -> r) -> (b -> r)
+        // (a -> r) is passed on the constructor
+        // b : bool
+        // a : int
+        // r : string
+
+        $composition = new Composition(fn (int $x): string => (string) $x);
+        $contramapped = $composition->contramap(fn (bool $x): int => (int) $x);
+
+        // now given a (b -> a) we can make a (b -> r)
+        // now given a bool -> int we can make a bool -> string
+
+        $result = $contramapped (true);
+        $this->assertEquals('1', $result);
+        $this->assertIsString($result);
+
+        $result = $contramapped (false);
+        $this->assertEquals('0', $result);
+        $this->assertIsString($result);
     }
 
     public function testCanCompose5(): void

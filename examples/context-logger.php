@@ -43,6 +43,7 @@ $logger = new CallableWiringFunctorAdapter( fn (Tuple $p) => $psr3Logger->log($p
  * We start mapping functions over our functor.  The below will add prefix and
  * extraContext.
  */
+// todo: fix this as it is contramap and not fmap really - I think.
 $contextLogger = $logger ->fmap ( fn (Tuple $p): Tuple => t ($prefix . $p->fst(), [$extraContext] + $p->snd() ) );
 
 /**
