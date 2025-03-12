@@ -147,7 +147,7 @@ function dn(MonadInstance $ma, callable ...$fs)
 {
     $last = $ma;
     foreach ($fs as $new) {
-        $last = $last->bind($new);
+        $last = $new |> $last->bind(...);
 
         // Pedantic type check below
         if (!$last instanceof MonadInstance) {

@@ -85,8 +85,7 @@ class IO implements
         // todo: self or static?
         return new self(
             function () use ($f) {
-                $result = ($this->action)();
-                return $f($result);
+                return ($this->action)() |> $f;
             }
         );
     }
@@ -116,11 +115,10 @@ class IO implements
         }
 
         // todo: rewrite this in a more concise manner, but for brevity now:
-        $do = function () use ($fa) {
-            $f = $this();
-            $g = $fa();
-            return partial ($f) ($g);
-        };
+        $do = fn ()
+            => null |> $fa
+            |> partial (null |> $this);
+
         return IO::inject($do);
     }
 
@@ -149,10 +147,8 @@ class IO implements
     {
         $action = $this->action;
         $do = function () use ($f, $action) {
-            $x = ($action)();
-
             // todo: could add a type check here? that return type is indeed m b ?
-            return (partial ($f) ($x))
+            return (null |> $action |> partial ($f))
                 ->getValue(); // unIO
         };
         return new IO($do);
