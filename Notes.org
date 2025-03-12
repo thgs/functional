@@ -1,7 +1,14 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/26]
+* Todo [4/27]
+** TODO Improve partial function
+Write tests for the actual usage, see that it works passing one
+argument at a time. Somewhere had to pass both at one call.
+Would an object help rather than a closure for the types?
+
+I think fixing partial in respect to the types will help a lot with
+the static analysis errors.
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -75,6 +82,17 @@ fmap :: (a -> b) -> (f a -> f b)
 
 So that we return a function and once that function is called with arg: f a then we call fmap on it?
 I suppose so. Does it work now?
+
+#+begin_src php
+
+  function partialFmap(callable $f) {
+      return partial (fmap(...), $f)
+  }
+
+#+end_src
+
+Should be it.
+
 ** TODO Contravariant could be used for the wrappers
 See https://stackoverflow.com/questions/38034077/what-is-a-contravariant-functor
 specially https://stackoverflow.com/a/56150133
