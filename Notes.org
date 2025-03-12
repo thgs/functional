@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [4/27]
+* Todo [5/28]
 ** TODO Improve partial function
 Write tests for the actual usage, see that it works passing one
 argument at a time. Somewhere had to pass both at one call.
@@ -93,7 +93,21 @@ I suppose so. Does it work now?
 
 Should be it.
 
-** TODO Contravariant could be used for the wrappers
+** TODO Implement Category
+** TODO Implement Op
+** TODO Separate data and control functors
+https://www.tweag.io/blog/2020-01-16-data-vs-control/
+
+And also here we could elaborate on the Data.IO and Control.Monad.IO
+so that the latter implements in terms of monadic operations. What
+about the first though?
+** TODO Implement MoreAccurateFunctor
+https://stackoverflow.com/questions/53854853/why-is-there-a-distinction-between-co-and-contravariant-functors-in-haskell-but
+Also called Categorical Functor but seems like this generalisation can be very useful.
+** TODO Add missing law helpers for testing
+** TODO Add tests & docs for Wrapper and clean up older tries
+** ----- DONE ----
+** DONE Contravariant could be used for the wrappers
 See https://stackoverflow.com/questions/38034077/what-is-a-contravariant-functor
 specially https://stackoverflow.com/a/56150133
 
@@ -110,19 +124,6 @@ contramap :: (b -> a) -> f a -> f b
 The (b -> a) in Contravariant defines the "medium", the way we are going to produce
 something that can consume b out of something that was consuming a.
 
-** TODO Implement Category
-** TODO Implement Op
-** TODO Separate data and control functors
-https://www.tweag.io/blog/2020-01-16-data-vs-control/
-
-And also here we could elaborate on the Data.IO and Control.Monad.IO
-so that the latter implements in terms of monadic operations. What
-about the first though?
-** TODO Implement MoreAccurateFunctor
-https://stackoverflow.com/questions/53854853/why-is-there-a-distinction-between-co-and-contravariant-functors-in-haskell-but
-Also called Categorical Functor but seems like this generalisation can be very useful.
-** TODO Add missing law helpers for testing
-** ----- DONE ----
 ** DONE Generalise the callable so that can pass Composition too
 ** DONE Partial function application depends on signatures.
 ** DONE How do we reflect types from Composition ?
@@ -152,6 +153,13 @@ Could then mean
 
 #+end_src
 *** Play with contramap and the pipe operator
+** Random Insights
+*** Implementing fmap with fmap function and a composition
+When implementing fmap for an instance, we can always ~fmap()~ over a
+~Composition~ to have a central place where we can control things like
+partial application or other `utilities`. It is however slightly more
+expensive as it wraps things again and again and does a few extra
+calls.
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
