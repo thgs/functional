@@ -87,23 +87,6 @@ class Wrapper implements
             3 => new self(fn (Tuple3 $p) => ($a) ($p->fst3(), $p->snd3(), $p->thd3()) ),
             default => throw new \TypeError('Wrapping with more than 3 arguments is not yet supported'),
         };
-
-        //
-
-        $instance = new self($a);
-        if (!$input) {
-            /** @var Wrapper<A> $instance */
-            return match ($noOfParameters) {
-                0 => $instance,
-                1 => $instance,
-                2 => $instance->constructWithTuple2(),
-                3 => $instance->constructWithTuple3(),
-                default => throw new \Exception('Wrapping with more than 3 arguments is not yet supported'),
-            };
-        }
-        /** @var Wrapper<B> $newInstance*/
-        $newInstance = $instance->contramap($input);
-        return $newInstance;
     }
 
     /**
