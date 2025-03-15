@@ -12,15 +12,7 @@ use function thgs\Functional\fmap;
 use function thgs\Functional\partial;
 use function thgs\Functional\reflectNoOfArguments;
 
-
 /**
- * data Wrapper g = Callback g
- * 
- * In a callback we could have any object with the information on what
- * method to call.
- * 
- * eg. fn ($x, $y, $z) => $psr3Logger->critical($x, [$y, $z]);
- *
  * We generally do not care much about the output of the callback for
  * the Wrapper. The wrapper cares about the input. So template A is
  * describing the input. Essentially, Wrapper<A> means a wrapper of
@@ -45,6 +37,7 @@ use function thgs\Functional\reflectNoOfArguments;
  * FunctorInstance.
  *
  * @implements FunctorInstance<A>
+ * @todo fix the above issue with the FunctorInstance template.
  */
 class Wrapper implements
     ContravariantInstance,
@@ -56,7 +49,7 @@ class Wrapper implements
     /**
      * @param callable(A):mixed $a
      */
-    public function __construct(callable $a)
+    protected function __construct(callable $a)
     {
         $this->wrapped = $a;
     }
@@ -72,11 +65,7 @@ class Wrapper implements
         $noOfParameters = reflectNoOfArguments($a);
 
         if ($input) {
-            $inputNoOfParameters = reflectNoOfArguments($input);
-            if ($inputNoOfParameters > 1) {
-                throw new \TypeError('Given input function has more parameters than 1.');
-            }
-            return (new self($a))->contramap($input);
+            return self::withAdjustedInput($a)->adjustInput($input);
         }
 
         /** @var Wrapper<A> $instance */
@@ -116,9 +105,13 @@ class Wrapper implements
         return $new;
     }
 
+    /**
+     * @template B
+     * @param callable(B):A $fba
+     * @return Wrapper<B>
+     */
     public function adjustInput(callable $fba): ContravariantInstance
     {
-        // todo: is this tedious type check?
         if (reflectNoOfArguments($fba) > 1) {
             throw new \TypeError("Callable with more than one arguments passed");
         }
@@ -127,41 +120,37 @@ class Wrapper implements
     }
 
     /**
-     * Implementing __invoke is required so we can actually call the
-     * wrapped callable, but we offer partial application as well.
-     *
      * @param A $xs
      * @return mixed
      */
     public function __invoke(...$xs)
     {
-        // buggy: return partial ($this->wrapped) (...func_get_args());
-        return partial ($this->wrapped) (...$xs);
+        /**
+         * Below is like this to support $this->wrapped callables with
+         * no args.
+         */
+        return partial ($this->wrapped, ...$xs);
     }
 
     /**
-     * fmap :: (a -> b) -> Wrapper a -> Wrapper b
-     *
-     * Template letters are inversed below to follow what
-     * we initially defined for Contravariant. The end result
-     * is not different input but different output
+     * @template B
+     * @param callable(A):B $f
+     * @return Wrapper<A>
      */
     public function fmap(callable $f): FunctorInstance
     {
         return new self(
             fn ($x) => $f (partial ($this->wrapped) ($x))
         );
-
-        // the below would still be valid but more expensive
-        // todo: it is not valid.
-        return new self(
-            fn ($x) => fmap ($f, c ($this->wrapped, $x))
-        );
     }
 
+    /**
+     * @template B
+     * @param callable(A):B $f
+     * @return Wrapper<A>
+     */
     public function adjustOutput(callable $f): FunctorInstance
     {
-        // todo: is this tedious type check?
         if (reflectNoOfArguments($f) > 1) {
             throw new \TypeError("Callable with more than one arguments passed");
         }
