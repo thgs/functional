@@ -91,8 +91,6 @@ class ExpandedWrapper implements
             $reflection = new \ReflectionFunction(\Closure::fromCallable($a));
             $noOfParameters = $reflection->getNumberOfParameters();
 
-            var_dump($noOfParameters);
-
             /** @var Wrapper<A> $instance */
             return match ($noOfParameters) {
                 0 => $instance,
