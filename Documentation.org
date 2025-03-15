@@ -254,6 +254,111 @@ TODO: What happens when the functor is not associative - expand.
 
 *** Applicative
 *** Monad
+** Wrap existing code
+A convenience class is provided called ~Wrapper~ to help wrap around
+existing code. Creating the ~Wrapper~ by calling
+~Wrapper::withAdjustedInput~ will automatically reflect on the callable
+and assume input in a Tuple or Tuple3 (2 or 3 arguments).
+
+Then you can further
+adjust the input by calling `adjustInput` or `contramap` directly.
+
+#+begin_src php
+
+  $wrapper = Wrapper::withAdjustedInput($psr3logger->critical(...)); // Arguments: string message, array $context = []
+
+  $wrapper( t("Log message", ["context"]) );
+  $newWrapper = $wrapper->adjustInput(fn (Tuple $p) => t("prefix: " . $p->fst(), [$p->snd()]);
+
+#+end_src
+
+Note that in ~adjustInput~ we need to accept a Tuple or Tuple3 if the
+initial arguments are 2 or 3. More than 3 arguments are not currently
+supported. In the case of 0 or 1 arguments there is no need to use any
+tuple class.
+
+~withAdjustedInput~ accepts a second optional argument to pass the first
+input adjustment function directly and avoid reflection.
+
+#+begin_src php
+
+  $wrapper = Wrapper::withAdjustedInput(
+      $psr3logger->critical(...),
+      fn (Tuple $p) => t ($p->fst(), [$p->snd()]) // notice we need to return Tuple
+  );
+
+  $wrapper( t("Log message", "context") );
+
+#+end_src
+
+For better control on how you call the wrapped dependency you may supply a closure.
+
+#+begin_src php
+
+  $wrapper = Wrapper::withAdjustedInput( fn (Tuple $p) => $psr3logger->critical($p->fst(), [$p->snd()]) );
+
+  $wrapper( t("Log message", "context") );
+
+#+end_src
+
+You may construct the wrapper without any input adjustment by using
+the constructor directly. This will skip reflection and adjustment of
+input to a Tuple.
+
+#+begin_src php
+
+  $wrapper = new Wrapper($psr3logger->critical(...));
+
+  $wrapper("Log message", ["context"]);
+
+#+end_src
+
+The ~Wrapper~ supports adjusting the output as well by calling
+~adjustOutput~ or directly ~fmap~.
+
+#+begin_src php 
+
+  $wrapper = new Wrapper($psr3logger->critical(...)); // returns void
+
+  // we expect nothing to be passed as argument as the output is void
+  $newWrapper = $wrapper->fmap( fn () => time() ); 
+
+  $result = $newWrapper ("Log message", ["context"]);
+
+  print $result; // Prints the result of time()
+
+#+end_src
+
+The above works because $psr3Logger->critical() returns ~void~. Here is
+a different example to demonstrate adjusting the output without
+adjusting the input.
+
+#+begin_src php
+
+  $exampleClosure = fn (int $x, int $y, int $z): int => ($x + $y) * $z;
+
+  $wrapper = new Wrapper($exampleClosure); // no input adjustment
+
+  $newWrapper = $wrapper->fmap(fn (int $result):string => "The result is $result\n");
+
+  $result = $newWrapper(2, 5, 2); // (2+5) * 2 = 14
+
+  print $result;  // Prints "The result is 14\n"
+
+#+end_src
+
+Generally we wrap the input in a Tuple (or Tuple3) so that the types
+can be inferred by static analysis and also to provide a unified
+interface for adjusting input, conveying the information that these
+are the parameters for initially wrapped thing.
+
+If for some reason the adjustment of input or output that the ~Wrapper~
+provides is not the desired one, then one must implement their own
+wrapper class and can benefit from taking the existing code as an
+example for implementing fmap and contramap. The author of this
+library would be very interested to know about any interesting
+use-cases and variations.
+
 * References and Reading material
 
 ** Blog Articles

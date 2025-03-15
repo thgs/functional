@@ -2,6 +2,8 @@
 
 namespace thgs\Functional\Wrapper;
 
+use thgs\Functional\Data\Tuple;
+use thgs\Functional\Data\Tuple3;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
 use function thgs\Functional\c;
@@ -58,6 +60,54 @@ class Wrapper implements
     }
 
     /**
+     * This is implemented like this because we cannot use $this in static context.
+     */
+    private function constructWithTuple2(): self
+    {
+        return new self(fn (Tuple $p) => ($this) ($p->fst(), $p->snd()) );
+        //return $this->contramap(fn (Tuple $p) => partial ($this->wrapped, $p->fst(), $p->snd()));
+    }
+
+    /**
+     * This is implemented like this because we cannot use $this in static context.
+     */
+    private function constructWithTuple3(): self
+    {
+        return new self(fn (Tuple3 $p) => ($this) ($p->fst3(), $p->snd3(), $p->thd3()) );
+        //return $this->contramap(fn (Tuple3 $p) => c ($this->wrapped) ($p->fst3(), $p->snd3(), $p->thd3()));
+    }
+
+    /**
+     * @param callable(A):mixed $a
+     * @template B
+     * @param null|callable(B):A $input
+     * @return Wrapper<A>|Wrapper<B>
+     */
+    public static function withAdjustedInput(callable $a, ?callable $input = null): self
+    {
+        $instance = new self($a);
+        if (!$input) {
+            // todo: is the reflection really worth it? User should know already.
+            $reflection = new \ReflectionFunction(\Closure::fromCallable($a));
+            $noOfParameters = $reflection->getNumberOfParameters();
+
+            var_dump($noOfParameters);
+
+            /** @var Wrapper<A> $instance */
+            return match ($noOfParameters) {
+                0 => $instance,
+                1 => $instance,
+                2 => $instance->constructWithTuple2(),
+                3 => $instance->constructWithTuple3(),
+                default => throw new \Exception('Wrapping with more than 3 arguments is not yet supported'),
+            };
+        }
+        /** @var Wrapper<B> $newInstance*/
+        $newInstance = $instance->contramap($input);
+        return $newInstance;
+    }
+
+    /**
      * contramap :: (b -> a) -> Wrapper a -> Wrapper b
      *
      * Wrapper a is $this therefore here we need to return Wrapper
@@ -75,24 +125,31 @@ class Wrapper implements
         /** @var Wrapper<B> */
         $new = new self(
             /**
-             * @param B $b
+             * @param B $bs
              * @return mixed
              */
-            fn ($b) => c ($this->wrapped) ($fba ($b))
+            fn (...$bs) => c ($this->wrapped) ($fba (...$bs))
         ); 
 
         return $new;
+    }
+
+    public function adjustInput(callable $fba): ContravariantInstance
+    {
+        return $this->contramap($fba);
     }
 
     /**
      * Implementing __invoke is required so we can actually call the
      * wrapped callable, but we offer partial application as well.
      *
+     * @param A $xs
      * @return mixed
      */
-    public function __invoke()
+    public function __invoke(...$xs)
     {
-        return partial ($this->wrapped) (...func_get_args());
+        // buggy: return partial ($this->wrapped) (...func_get_args());
+        return partial ($this->wrapped, ...$xs);
     }
 
     /**
@@ -105,12 +162,18 @@ class Wrapper implements
     public function fmap(callable $f): FunctorInstance
     {
         return new self(
-            fn ($x) => $f (partial ($this->wrapped) ($x))
+            fn (...$xs) => $f (partial ($this->wrapped, ...$xs))
         );
 
         // the below would still be valid but more expensive
+        // todo: it is not valid.
         return new self(
-            fn ($x) => fmap ($f, c ($this->wrapped))
+            fn ($x) => fmap ($f, c ($this->wrapped, $x))
         );
+    }
+
+    public function adjustOutput(callable $f): FunctorInstance
+    {
+        return $this->fmap($f);
     }
 }
