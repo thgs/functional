@@ -13,7 +13,8 @@
         },
         "files": [
             "src/functions.php",
-            "src/partial.php"
+            "src/partial.php",
+            "src/reflection.php"
         ]
     },
     "authors": [

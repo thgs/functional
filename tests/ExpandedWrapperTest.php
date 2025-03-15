@@ -1,14 +1,12 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use thgs\Functional\Wrapper\Wrapper;
+use thgs\Functional\Wrapper\ExpandedWrapper as Wrapper;
 use thgs\Functional\Data\Tuple;
-use thgs\Functional\Data\Tuple3;
 
 use function thgs\Functional\t;
-use function thgs\Functional\t3;
 
-class WrapperTest extends TestCase
+class ExpandedWrapperTest extends TestCase
 {
     public function testCanWrapClosure(): void
     {
@@ -19,23 +17,11 @@ class WrapperTest extends TestCase
 
     public function testCanWrapWithInputOfTwo(): void
     {
-        $wrapper = Wrapper::withAdjustedInput(fn (int $x, int $y): int => $x + $y);
-        $result = $wrapper( t(2, 3) );
+        // todo: this has an issue with the types because we type hint
+        // as callable(A) and A is a single parameter.
+        $wrapper = new Wrapper(fn (int $x, int $y): int => $x + $y);
+        $result = $wrapper( 2, 3 );
         $this->assertEquals(5, $result);
-    }
-
-    public function testWillThrowWithInputOfTwoInConstructor(): void
-    {
-        // todo: decide and sort this case out.
-        $this->markTestSkipped();
-
-        $caught = false;
-        try {
-            new Wrapper(fn (int $x, int $y): int => $x + $y);
-        } catch (\Throwable $e) {
-            $caught = true;
-        }
-        $this->assertTrue($caught, 'TypeError was not thrown');
     }
 
     public function testCanAutomaticallyAdjustInput(): void
@@ -49,9 +35,9 @@ class WrapperTest extends TestCase
 
     public function testCanAdjustOutputWithInputOfTwo(): void
     {
-        $wrapper = Wrapper::withAdjustedInput(fn (int $x, int $y): int => $x + $y);
+        $wrapper = new Wrapper(fn (int $x, int $y): int => $x + $y);
         $newWrapper = $wrapper->fmap(fn ($result) => $result * 2);
-        $result = $newWrapper( t(2, 3) );
+        $result = $newWrapper( 2, 3 );
         $this->assertEquals(10, $result);
     }
 
@@ -103,13 +89,29 @@ class WrapperTest extends TestCase
     public function testCanAdjustOutputGivenInputOfThree(): void
     {
         $exampleClosure = fn (int $x, int $y, int $z): int => ($x + $y) * $z;
-        $wrapper = Wrapper::withAdjustedInput($exampleClosure);
+        $wrapper = new Wrapper($exampleClosure); // no input adjustment
         $newWrapper = $wrapper->fmap(fn (int $result):string => "The result is $result\n");
-        $result = $newWrapper(t3 (2, 5, 2)); // (2+5) * 2 = 14
+        $result = $newWrapper(2, 5, 2); // (2+5) * 2 = 14
         $this->assertEquals("The result is 14\n", $result);
     }
 
-    public function testWillThrowWhenExpandingInput(): void
+    public function testClosureCanDoVariadic(): void
+    {
+        $fn = fn (...$xs) => count($xs);
+        $result = $fn(1,2,3,4);
+        $this->assertEquals(4, $result);
+
+        $f = fn($x, $y) => $x + $y;
+        $fn = fn (...$xs) => $f(...$xs);
+        $result = $fn(2,3);
+        $this->assertEquals(5, $result);
+    }
+
+    /**
+     * @todo is this even right? Only works because contramap is doing variadic
+     * what about the types?
+     */
+    public function testCanAdjustAndExpandInput(): void
     {
         $initial = static fn (int $x, int $y): int => $x * $y;
         $wrapper = Wrapper::withAdjustedInput($initial);
@@ -117,8 +119,10 @@ class WrapperTest extends TestCase
         $result = $wrapper(t(3,4));
         $this->assertEquals(12, $result);
 
-        $this->expectException(TypeError::class);
         $newWrapper = $wrapper->adjustInput(fn (Tuple $p, int $z): Tuple => t($p->fst() * $z, $p->snd() * $z));
+
+        $result = ($newWrapper) (t(3,4), 2); // (3 * 2) * (4 * 2) = 48
+        $this->assertEquals(48, $result);
     }
 
     // todo: add more tests

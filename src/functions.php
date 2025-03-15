@@ -181,5 +181,5 @@ function t(mixed $a, mixed $b): Tuple
  */
 function t3(mixed $a, mixed $b, mixed $c): Tuple3
 {
-    return new Tuple3($a, $b);
+    return new Tuple3($a, $b, $c);
 }

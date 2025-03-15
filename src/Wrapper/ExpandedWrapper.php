@@ -6,11 +6,9 @@ use thgs\Functional\Data\Tuple;
 use thgs\Functional\Data\Tuple3;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
-
 use function thgs\Functional\c;
 use function thgs\Functional\fmap;
 use function thgs\Functional\partial;
-use function thgs\Functional\reflectNoOfArguments;
 
 
 /**
@@ -46,7 +44,7 @@ use function thgs\Functional\reflectNoOfArguments;
  *
  * @implements FunctorInstance<A>
  */
-class Wrapper implements
+class ExpandedWrapper implements
     ContravariantInstance,
     FunctorInstance
 {
@@ -62,6 +60,24 @@ class Wrapper implements
     }
 
     /**
+     * This is implemented like this because we cannot use $this in static context.
+     */
+    private function constructWithTuple2(): self
+    {
+        return new self(fn (Tuple $p) => ($this) ($p->fst(), $p->snd()) );
+        //return $this->contramap(fn (Tuple $p) => partial ($this->wrapped, $p->fst(), $p->snd()));
+    }
+
+    /**
+     * This is implemented like this because we cannot use $this in static context.
+     */
+    private function constructWithTuple3(): self
+    {
+        return new self(fn (Tuple3 $p) => ($this) ($p->fst3(), $p->snd3(), $p->thd3()) );
+        //return $this->contramap(fn (Tuple3 $p) => c ($this->wrapped) ($p->fst3(), $p->snd3(), $p->thd3()));
+    }
+
+    /**
      * @param callable(A):mixed $a
      * @template B
      * @param null|callable(B):A $input
@@ -69,29 +85,14 @@ class Wrapper implements
      */
     public static function withAdjustedInput(callable $a, ?callable $input = null): self
     {
-        $noOfParameters = reflectNoOfArguments($a);
-
-        if ($input) {
-            $inputNoOfParameters = reflectNoOfArguments($input);
-            if ($inputNoOfParameters > 1) {
-                throw new \TypeError('Given input function has more parameters than 1.');
-            }
-            return (new self($a))->contramap($input);
-        }
-
-        /** @var Wrapper<A> $instance */
-        return match ($noOfParameters) {
-            0 => new self($a),
-            1 => new self($a),
-            2 => new self(fn (Tuple $p) => ($a) ($p->fst(), $p->snd()) ),
-            3 => new self(fn (Tuple3 $p) => ($a) ($p->fst3(), $p->snd3(), $p->thd3()) ),
-            default => throw new \TypeError('Wrapping with more than 3 arguments is not yet supported'),
-        };
-
-        //
-
         $instance = new self($a);
         if (!$input) {
+            // todo: is the reflection really worth it? User should know already.
+            $reflection = new \ReflectionFunction(\Closure::fromCallable($a));
+            $noOfParameters = $reflection->getNumberOfParameters();
+
+            var_dump($noOfParameters);
+
             /** @var Wrapper<A> $instance */
             return match ($noOfParameters) {
                 0 => $instance,
@@ -127,7 +128,7 @@ class Wrapper implements
              * @param B $bs
              * @return mixed
              */
-            fn ($x) => c ($this->wrapped) ($fba ($x))
+            fn (...$bs) => c ($this->wrapped) ($fba (...$bs))
         ); 
 
         return $new;
@@ -135,11 +136,6 @@ class Wrapper implements
 
     public function adjustInput(callable $fba): ContravariantInstance
     {
-        // todo: is this tedious type check?
-        if (reflectNoOfArguments($fba) > 1) {
-            throw new \TypeError("Callable with more than one arguments passed");
-        }
-
         return $this->contramap($fba);
     }
 
@@ -153,7 +149,7 @@ class Wrapper implements
     public function __invoke(...$xs)
     {
         // buggy: return partial ($this->wrapped) (...func_get_args());
-        return partial ($this->wrapped) (...$xs);
+        return partial ($this->wrapped, ...$xs);
     }
 
     /**
@@ -166,7 +162,7 @@ class Wrapper implements
     public function fmap(callable $f): FunctorInstance
     {
         return new self(
-            fn ($x) => $f (partial ($this->wrapped) ($x))
+            fn (...$xs) => $f (partial ($this->wrapped, ...$xs))
         );
 
         // the below would still be valid but more expensive
@@ -178,11 +174,6 @@ class Wrapper implements
 
     public function adjustOutput(callable $f): FunctorInstance
     {
-        // todo: is this tedious type check?
-        if (reflectNoOfArguments($f) > 1) {
-            throw new \TypeError("Callable with more than one arguments passed");
-        }
-
         return $this->fmap($f);
     }
 }
