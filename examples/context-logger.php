@@ -35,7 +35,7 @@ $extraContext = 'contextual';
  * - this is an array
  * - this is an array of parameters that you need to unpack.
  */
-$wrapper = new Wrapper(fn (Tuple $p) => $psr3Logger->log($p->fst(), $p->snd()));
+$wrapper = Wrapper::withAdjustedInput(fn (Tuple $p) => $psr3Logger->log($p->fst(), $p->snd()));
 
 /**
  * Using `contramap` we do not have to define the obvious

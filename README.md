@@ -126,25 +126,30 @@ class MyTypeTest
 ```php
 
 /**
- * Create a CallbackWrapper that connects the psr3Logger to a Tuple input.
- * However here we can also pass the `fmap` method.
+ * Create a Wrapper with an anonymous function that calls the psr3Logger from a Tuple input.
  */
-$wrapper = new CallbackWrapper(
-    fn (Tuple $p) => $psr3Logger->log($p->fst(), $p->snd()),
-    ['fmap' => fn (callable $f) => c ($f) ->fmap ($this->wiring)]
+$wrapper = Wrapper::withAdjustedInput(
+    fn (Tuple $p) => $psr3Logger -> log ($p->fst(), $p->snd()),
 );
 
 /**
- * We create the contextLogger
+ * Let's add a prefix
  */
-$contextLogger = $wrapper ->fmap ( fn (Tuple $p): Tuple => t ($prefix . $p->fst(), [$extraContext] + $p->snd() ) );
+$prefix = 'prefixHere: ';
 
-($contextLogger) (t ("wrapped one", ["contextt"]));
+/**
+ * Adjust the input
+ */
+$contextLogger = $wrapper -> adjustInput (fn (Tuple $p): Tuple => t ($prefix . $p->fst(), [$p->snd()]) );
+
+/**
+ * Adjust the output
+ */
+$logger = $contextLogger -> adjustOutput (fn () => time());
+
+$currentTime = $logger (t ("Log message", "context"));
 
 ```
-
-Note that the above is very draft/experimental still.
-
 
 #### Loads of bugs and inconsistencies
 
