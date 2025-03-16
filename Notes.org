@@ -104,6 +104,8 @@ about the first though?
 ** TODO Implement MoreAccurateFunctor
 https://stackoverflow.com/questions/53854853/why-is-there-a-distinction-between-co-and-contravariant-functors-in-haskell-but
 Also called Categorical Functor but seems like this generalisation can be very useful.
+https://hackage.haskell.org/package/categories-1.0.7/docs/Control-Categorical-Functor.html
+
 ** TODO Add missing law helpers for testing
 ** TODO Add tests & docs for Wrapper and clean up older tries
 ** ----- DONE ----
