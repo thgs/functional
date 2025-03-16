@@ -353,6 +353,44 @@ example for implementing fmap and contramap. The author of this
 library would be very interested to know about any interesting
 use-cases and variations.
 
+** Do notation
+Example do-notation below.
+
+#+begin_src php
+
+  dn(
+      writeFile("test.txt", show (123 * 123)),
+      appendFile("test.txt", "Hello!\n"),
+      readFile("test.txt"),
+      putStrLn(...)
+  )();
+
+#+end_src
+
+Function ~dn~ will use ~bind~ (>>=) if an argument is callable or a
+~Composition~ otherwise will use ~then~ (>>) to combine actions. Expanded
+and commented version below.
+
+#+begin_src php
+
+  $ioAction = dn(
+      // IO<int|false>
+      writeFile("test.txt", show (123 * 123)),
+
+      // IO<int|false>     therefore will use (>>)
+      appendFile("test.txt", "Hello!\n"),
+
+      // IO<string|false>  therefore will use (>>)
+      readFile("test.txt"),
+
+      // callable    therefore will use (>>=)
+      putStrLn(...)
+  );
+
+  $ioAction();
+
+#+end_src
+
 * References and Reading material
 
 ** Blog Articles
