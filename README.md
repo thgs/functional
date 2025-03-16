@@ -75,6 +75,19 @@ $bound(); // will run getLine and then bind the result to putStrLn and print it
 
 ```
 
+Or a more elaborate example
+
+```php
+
+dn(
+    writeFile("test.txt", show (123 * 123)),
+    appendFile("test.txt", "Hello!\n"),
+    readFile("test.txt"),
+    putStrLn(...)
+)();
+
+```
+
 #### Helpers for your tests
 
 ```php
