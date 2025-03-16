@@ -42,7 +42,7 @@ class IO implements
      * This is effectively (<-)
      * @return ReturnType
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return ($this->action)();
     }
@@ -50,9 +50,9 @@ class IO implements
     /**
      * @return ReturnType
      */
-    public function __invoke()
+    public function __invoke(mixed ...$xs): mixed
     {
-        return ($this->action)();
+        return ($this->action)(...$xs);
     }
 
     /*
@@ -152,9 +152,25 @@ class IO implements
             $x = ($action)();
 
             // todo: could add a type check here? that return type is indeed m b ?
-            return (partial ($f) ($x))
+            return (partial ($f, $x))
                 ->getValue(); // unIO
         };
         return new IO($do);
+    }
+
+    public function then(MonadInstance $b): MonadInstance
+    {
+        /**
+         * Haskell's implementation is:
+         *
+         * -- | Sequentially compose two actions, discarding any value produced
+         * -- by the first, like sequencing operators (such as the semicolon)
+         * -- in imperative languages.
+         * (>>)        :: forall a b. m a -> m b -> m b
+         * m >> k = m >>= \_ -> k -- See Note [Recursive bindings for Applicative/Monad]
+         * {-# INLINE (>>) #-}
+         */
+
+        return $this->bind(fn () => $b);
     }
 }

@@ -53,6 +53,15 @@ interface MonadInstance
     //public function sequenceAndDiscardFirst(): MonadInstance;
 
     /**
+     * (>>) :: m a -> m b -> m b
+     *
+     * @template B
+     * @param MonadInstance<B> $b
+     * @return MonadInstance<B>
+     */
+    public function then(MonadInstance $b): MonadInstance;
+
+    /**
      * @return MonadInstance<A>
      * @todo This has moved to MonadFail now in Haskell. Not sure yet to include
      * or not.

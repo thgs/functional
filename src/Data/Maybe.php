@@ -186,4 +186,9 @@ class Maybe implements
             ?  new Maybe($this->x) // no need for new really
             : c ($f) ($this->x->getValue());
     }
+
+    public function then(MonadInstance $b): MonadInstance
+    {
+        return $this->bind(fn () => $b);
+    }
 }

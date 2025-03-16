@@ -135,7 +135,36 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
 
 
 /**
- * A draft implementation of do-notation
+ * A draft implementation of do-notation. Use \Closure to indicate
+ * (>>) `then` sequence and MonadInstance to indicate (>>=) `bind`
+ * sequence.
+ *
+ * @template A
+ * @template B
+ * @param MonadInstance<A> $ma
+ * @param callable(A):MonadInstance<B>|MonadInstance<B>|Composition $fs
+ * @return MonadInstance<*>
+ *
+ * @see https://en.wikibooks.org/wiki/Haskell/do_notation
+ */
+function dn(MonadInstance $ma, MonadInstance|callable|Composition ...$fs)
+{
+    $last = $ma;
+    foreach ($fs as $k => $new) {
+        $last = $new instanceof \Closure || $new instanceof Composition
+            ? $last->bind($new)
+            : $last->then($new);
+
+        // Pedantic type check below
+        if (!$last instanceof MonadInstance) {
+            throw new \TypeError('Result is not a monad instance');
+        }
+    }
+    return $last;
+}
+
+/**
+ * A older bind-only implementation of do-notation
  *
  * @template A
  * @template B
@@ -143,7 +172,7 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
  * @param callable(A):MonadInstance<B> $fs
  * @return MonadInstance<*>
  */
-function dn(MonadInstance $ma, callable ...$fs)
+function dnBindOnly(MonadInstance $ma, callable ...$fs)
 {
     $last = $ma;
     foreach ($fs as $new) {
@@ -156,7 +185,6 @@ function dn(MonadInstance $ma, callable ...$fs)
     }
     return $last;
 }
-
 
 /**
  * @template A
