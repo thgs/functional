@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [5/28]
+* Todo [6/28]
 ** TODO Improve partial function
 Write tests for the actual usage, see that it works passing one
 argument at a time. Somewhere had to pass both at one call.
@@ -52,10 +52,6 @@ The adapters
 Implementations of the interfaces + test helpers for the laws
 
 Write the above in the docs.
-** TODO Make `fmap` accept ~F|callable~
-Now it is ~fmap(Composition|callable $f, F $g): F~ But as the argument $g has to
-be a functor, we can accept a callable if we wrap it in composition (that will
-also apply partial).
 ** TODO Improve types in partial / composition
 Also rethink and add any aliases/names. Partial might need an object instead of returning an anonymous function.
 ** TODO Some things can be implemented lazy
@@ -109,6 +105,10 @@ https://hackage.haskell.org/package/categories-1.0.7/docs/Control-Categorical-Fu
 ** TODO Add missing law helpers for testing
 ** TODO Add tests & docs for Wrapper and clean up older tries
 ** ----- DONE ----
+** DONE Make `fmap` accept ~F|callable~
+Now it is ~fmap(Composition|callable $f, F $g): F~ But as the argument $g has to
+be a functor, we can accept a callable if we wrap it in composition (that will
+also apply partial).
 ** DONE Contravariant could be used for the wrappers
 See https://stackoverflow.com/questions/38034077/what-is-a-contravariant-functor
 specially https://stackoverflow.com/a/56150133
