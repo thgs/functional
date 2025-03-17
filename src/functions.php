@@ -211,3 +211,48 @@ function t3(mixed $a, mixed $b, mixed $c): Tuple3
 {
     return new Tuple3($a, $b, $c);
 }
+
+/**
+ * Draft implementation of memoize.
+ *
+ * Issues:
+ * 1. Supports only memoizing the first argument and only single argument functions.
+ *    Maybe through an object storage we could abstract over the multiple arguments,
+ *    if "abstract" is the right word here, ie use a tuple and implement what is
+ *    mentioned in Issue 2.
+ *
+ * 2. Restricts first argument to be a scalar (must be able to form array key).
+ *    Could reflect and have a few versions that support other types of arguments.
+ *    However this gets harder and harder if we consider cases like objects as
+ *    keys that need to implement EqInstance and define a way to lookup that
+ *    array/storage through EqInstance equality. Otherwise it will not memoize
+ *    effectively in all cases (ie when the instanceid is not the desired equality)
+ *
+ * 3. Returning function loses runtime type checks on the argument.
+ *    This is not 100% true as we call the function at least once per argument
+ *    so the initial wrapped function, if it carries type checks we will run them
+ *    then and only successful calls will be memoized. Static analysis can help
+ *    to pick up a wrong construction.
+ *
+ * 4. More? Must be more
+ *
+ * @see https://bartoszmilewski.com/2014/11/24/types-and-functions/ Challenge 1
+ *
+ * @template A
+ * @template B
+ * @param callable(A):B $f
+ * @return Composition<A,B>
+ */
+function memoize(callable $f): Composition
+{
+    /** @var callable(A):B $wrapped */
+    $wrapped = static function ($x) use ($f) {
+        static $memoization = [];
+
+        if (!isset($memoization[$x])) {
+            $memoization[$x] = partial ($f, $x);
+        }
+        return $memoization[$x];
+    };
+    return c($wrapped);
+}

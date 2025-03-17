@@ -7,6 +7,7 @@ use thgs\Functional\Testing\FunctorLawsAssertions;
 
 use function thgs\Functional\c;
 use function thgs\Functional\fmap;
+use function thgs\Functional\memoize;
 
 class FunctionsTest extends TestCase
 {
@@ -66,5 +67,77 @@ class FunctionsTest extends TestCase
         $this->expectException(TypeError::class);
 
         (string) $data;
+    }
+
+    /**
+     * This is just a preliminary test with the very basic functionality.
+     */
+    public function testMemoizeCanMemoize(): void
+    {
+        $callsCounter = [];
+        $memoized = memoize(function (int $x) use (&$callsCounter) : int {
+            $callsCounter[$x] = isset($callsCounter[$x])
+                ? $callsCounter[$x] + 1
+                : 1;
+            
+            return $x * $x;
+        });
+        
+        foreach (range(0,4) as $i) {
+            $memoized($i);
+        }
+
+        foreach (range(0,4) as $i) {
+            $memoized($i);
+        }
+
+        $this->assertEquals([1,1,1,1,1], $callsCounter);
+    }
+
+    /**
+     * This is just to check that the memoization storage is separate
+     * for each call to create a memoized function (call to memoize()).
+     * Hopefully the test is correct.
+     */
+    public function testMemoizeCanMemoizeTwoFunctions(): void
+    {
+        $callsCounter1 = [];
+        $memoized1 = memoize(function (int $x) use (&$callsCounter1) : int {
+            $callsCounter1[$x] = isset($callsCounter1[$x])
+                ? $callsCounter1[$x] + 1
+                : 1;
+            
+            return $x * $x;
+        });
+        
+        $callsCounter2 = [];
+        $memoized2 = memoize(function (int $x) use (&$callsCounter2) : int {
+            $callsCounter2[$x] = isset($callsCounter2[$x])
+                ? $callsCounter2[$x] + 1
+                : 1;
+            
+            return $x * $x;
+        });
+
+
+        foreach (range(0,4) as $i) {
+            $memoized1($i);
+        }
+
+        foreach (range(0,4) as $i) {
+            $memoized1($i);
+        }
+
+        $this->assertEquals([1,1,1,1,1], $callsCounter1);
+
+        foreach (range(0,4) as $i) {
+            $memoized2($i);
+        }
+
+        foreach (range(0,4) as $i) {
+            $memoized2($i);
+        }
+
+        $this->assertEquals([1,1,1,1,1], $callsCounter2);
     }
 }
