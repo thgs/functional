@@ -219,7 +219,15 @@ function t3(mixed $a, mixed $b, mixed $c): Tuple3
  * 1. Supports only memoizing the first argument and only single argument functions.
  *    Maybe through an object storage we could abstract over the multiple arguments,
  *    if "abstract" is the right word here, ie use a tuple and implement what is
- *    mentioned in Issue 2.
+ *    mentioned in Issue 2. It feels like currying here might be the way to go. Below
+ *    already does some form of it with `partial`.
+ *
+ *    Two ways (at least) to see a -> a -> a
+ *    - takes 2 arguments and returns type a
+ *    - function that takes a single argument of type a and returns a function
+ *      that takes another single argument of type a and returns type a
+ *      ie. a -> (a -> a)
+ *    - Finally, (a -> a) -> a IS our actual type signature here already.
  *
  * 2. Restricts first argument to be a scalar (must be able to form array key).
  *    Could reflect and have a few versions that support other types of arguments.
