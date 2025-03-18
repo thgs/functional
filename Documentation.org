@@ -393,7 +393,8 @@ and commented version below.
 
 * References and Reading material
 
-** Blog Articles
+** Blogs and Articles
+[[https://bartoszmilewski.com/][Bartosz Milewski's Programming Cafe]] - Specially the Category Theory for Programmers
 [[https://www.haskellforall.com/2012/09/the-functor-design-pattern.html][Functor design pattern - HaskellForAll]]
 ** Books
 [[https://learnyouahaskell.com][Learn You a Haskell for Great Good!]]
