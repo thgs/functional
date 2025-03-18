@@ -9,6 +9,7 @@ use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Tuple;
 use thgs\Functional\Data\Tuple3;
 use thgs\Functional\Expression\Composition;
+use thgs\Functional\Instance\CategoryOfFunctions;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 use thgs\Functional\Typeclass\MonadInstance;
@@ -264,3 +265,26 @@ function memoize(callable $f): Composition
     };
     return c($wrapped);
 }
+
+
+function comp(callable $f, callable $g): callable
+{
+    return CategoryOfFunctions::compose() ($f, $g);
+}
+
+/**
+ * Usage:
+ *
+ *   rlc() ($f , $g)
+ *
+ * @todo I think here could assume multiple parameters and perform some
+ * inlining, ie make a single closure that calls them all in order.
+ * @todo define lrc
+ */
+function rlc(): callable
+{
+    // this is just a synonym for (.) which is right above.
+    // for fun we can define it "point free"
+    return CategoryOfFunctions::compose();
+}
+

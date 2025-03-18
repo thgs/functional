@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [6/28]
+* Todo [6/29]
 ** TODO Improve partial function
 Write tests for the actual usage, see that it works passing one
 argument at a time. Somewhere had to pass both at one call.
@@ -104,6 +104,12 @@ https://hackage.haskell.org/package/categories-1.0.7/docs/Control-Categorical-Fu
 
 ** TODO Add missing law helpers for testing
 ** TODO Add tests & docs for Wrapper and clean up older tries
+** TODO Definition Dependency diagram for composition & typeclasses
+I think after looking around at typeclasses and different definitions
+of composition, I need a diagram. Maybe it is actually a category!
+
+Something like this https://wiki.haskell.org/index.php?title=Foldable_and_Traversable#What_do_these_classes_all_mean?_A_brief_tour:
+
 ** ----- DONE ----
 ** DONE Make `fmap` accept ~F|callable~
 Now it is ~fmap(Composition|callable $f, F $g): F~ But as the argument $g has to
