@@ -168,6 +168,10 @@ When implementing fmap for an instance, we can always ~fmap()~ over a
 partial application or other `utilities`. It is however slightly more
 expensive as it wraps things again and again and does a few extra
 calls.
+** Random ideas
+*** Is there a any tricky/hacky way to use variable variables?
+Ie for creating something with "referential transparency"
+See https://wiki.haskell.org/index.php?title=Referential_transparency
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
