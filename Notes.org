@@ -172,6 +172,39 @@ calls.
 *** Is there a any tricky/hacky way to use variable variables?
 Ie for creating something with "referential transparency"
 See https://wiki.haskell.org/index.php?title=Referential_transparency
+
+Or list comprehension? Some snippets that could be inspirational.
+
+#+begin_src php
+
+  $some = 123456;
+  $var1 = $var2 = 'some';
+
+  foreach (['var1', 'var2'] as $k => $outer)
+      foreach (['new value', 'next value'] as $$outer)
+          funcWithTwoArgs($var1, $var2);
+
+  print "\n" . $var1;
+  print "\n" . $var2;
+
+#+end_src
+
+#+begin_src php
+
+  function funcWithTwoArgs($var1, $var2) {
+      print_r ( compact('var1', 'var2') );
+  }
+
+  function listComp(iterable $variables, iterable $values) {
+      foreach ($variables as $k => $outer)
+          foreach ($values as $$outer)
+              funcWithTwoArgs($var1, $var2);
+  }
+
+  listComp(['var1', 'var2'], ['one', 'two']);
+
+#+end_src
+
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
