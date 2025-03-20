@@ -16,7 +16,9 @@ class ClosureBench
      */
     public function benchCallable()
     {
-        callable_(fn ($x) => $x);
+        $i = 1000;
+        while ($i--)
+            callable_(fn ($x) => $x);
     }
 
     /**
@@ -25,7 +27,9 @@ class ClosureBench
      */
     public function benchClosure()
     {
-        closure_(fn ($x) => $x);
+        $i = 1000;
+        while ($i--)
+            closure_(fn ($x) => $x);
     }
 
     /**
@@ -34,7 +38,9 @@ class ClosureBench
      */
     public function benchFromPrivateWithCallable()
     {
-        callable_(self::class . '::' . 'f');
+        $i = 1000;
+        while ($i--)
+            callable_(self::class . '::' . 'f');
     }
 
     /**
@@ -43,7 +49,9 @@ class ClosureBench
      */
     public function benchFromCallableWithClosure()
     {
-        closure_(\Closure::fromCallable([self::class, 'f']));
+        $i = 1000;
+        while ($i--)
+            closure_(\Closure::fromCallable([self::class, 'f']));
     }
 
     /**
@@ -56,7 +64,9 @@ class ClosureBench
         if (!$callable) {
             $callable = \Closure::fromCallable([self::class, 'f']);
         }
-        closure_($callable);
+        $i = 1000;
+        while ($i--)
+            closure_($callable);
     }
 
     public static function f($x)
