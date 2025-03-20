@@ -205,6 +205,21 @@ Or list comprehension? Some snippets that could be inspirational.
 
 #+end_src
 
+*** Could avoid func(...) notation
+Could avoid func(...) notation if every function (ie in ~Composition::__invoke~) we check
+how many arguments we have been given and either return a function or call the function.
+Isn't that essentially what we already do with ~partial~ ? Yes.. So this code:
+
+#+begin_src php
+
+  function f($a, $b) { return $a + $b };
+
+  $f = c('f');
+  $partiallyApplied = $f(); // does not need to be c('f')(...) because `partial` returns a function now
+  $partiallyAppliedA = $f(123) // again partial returns a function but with one arg
+
+#+end_src
+
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
