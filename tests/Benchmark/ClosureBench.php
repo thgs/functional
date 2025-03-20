@@ -11,7 +11,8 @@ function callable_(callable $f) {
 class ClosureBench
 {
     /**
-     * @Iterations(10)
+     * @Iterations(20)
+     * @Revs(100)
      */
     public function benchCallable()
     {
@@ -19,7 +20,8 @@ class ClosureBench
     }
 
     /**
-     * @Iterations(10)
+     * @Iterations(20)
+     * @Revs(100)
      */
     public function benchClosure()
     {
@@ -27,22 +29,37 @@ class ClosureBench
     }
 
     /**
-     * @Iterations(10)
+     * @Iterations(20)
+     * @Revs(100)
      */
     public function benchFromPrivateWithCallable()
     {
-        callable_(self::f(...));
+        callable_(self::class . '::' . 'f');
     }
 
     /**
-     * @Iterations(10)
+     * @Iterations(20)
+     * @Revs(100)
      */
     public function benchFromCallableWithClosure()
     {
-        closure_(\Closure::fromCallable(self::f(...)));
+        closure_(\Closure::fromCallable([self::class, 'f']));
     }
 
-    private static function f($x)
+    /**
+     * @Iterations(20)
+     * @Revs(100)
+     */
+    public function benchFromCallableWithClosureWithStatic()
+    {
+        static $callable;
+        if (!$callable) {
+            $callable = \Closure::fromCallable([self::class, 'f']);
+        }
+        closure_($callable);
+    }
+
+    public static function f($x)
     {
         return $x;
     }
