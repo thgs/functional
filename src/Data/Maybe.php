@@ -76,7 +76,7 @@ class Maybe implements
      * fmap :: (a -> b) -> f a -> f b
 
      * @template B1
-     * @param callable(A1):B1 $f
+     * @param \Closure(A1):B1 $f
      * @return Maybe<B1>
      */
     public function fmap(\Closure $f): Maybe
@@ -157,6 +157,8 @@ class Maybe implements
             return new Maybe(new Nothing());
         }
 
+        /** @phpstan-assert Just<A> $this->x */
+
         // for now this will do, until it is more clear
         $callable = $this->x->getValue();
         // todo: keep callable here? Could be a Maybe<callable> ?
@@ -164,9 +166,9 @@ class Maybe implements
             throw new \TypeError('Cannot sequence as Maybe instance contains a non callable value.');
         }
 
-        $callable = !$callable instanceof \Closure ? \Closure::fromCallable($callable) : $callable;
+        $closure = !$callable instanceof \Closure ? \Closure::fromCallable($callable) : $callable;
         // todo: psalm is telling us off because of `pure-callable` instead of `callable`
-        return fmap($callable, $fa); // alternatively could write $this->fmap($fab);
+        return fmap($closure, $fa); // alternatively could write $this->fmap($fab);
     }
 
     /**
