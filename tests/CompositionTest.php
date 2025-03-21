@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 
+use function thgs\Functional\c;
 use function thgs\Functional\fmap;
 use function thgs\Functional\show;
 
@@ -132,8 +133,8 @@ class CompositionTest extends TestCase
 
     public function testCanComposeWithPHPFunctions(): void
     {
-        $result = (new Composition('array_filter'))
-            ->fmap ('min')
+        // todo: I think this makes sense to not enforce \Closure?
+        $result = fmap('min', c('array_filter'))
             ([0, 2, 3, 4]);
 
         $this->assertEquals(2, $result);

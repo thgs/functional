@@ -43,24 +43,18 @@ class Wrapper implements
     ContravariantInstance,
     FunctorInstance
 {
-    /** @var callable(A):mixed */
-    private $wrapped;
-    
-    /**
-     * @param callable(A):mixed $a
-     */
-    protected function __construct(callable $a)
-    {
-        $this->wrapped = $a;
-    }
+    protected function __construct(
+        /** @var \Closure(A):mixed */
+        private \Closure $wrapped
+    ) {}
 
     /**
-     * @param callable(A):mixed $a
+     * @param \Closure(A):mixed $a
      * @template B
-     * @param null|callable(B):A $input
+     * @param null|\Closure(B):A $input
      * @return Wrapper<A>|Wrapper<B>
      */
-    public static function withAdjustedInput(callable $a, ?callable $input = null): self
+    public static function withAdjustedInput(\Closure $a, ?\Closure $input = null): self
     {
         $noOfParameters = reflectNoOfArguments($a);
 
@@ -88,10 +82,10 @@ class Wrapper implements
      * Use this method to adjust the input.
      *
      * @template B
-     * @param callable(B):A $fba
+     * @param \Closure(B):A $fba
      * @return Wrapper<B>
      */
-    public function contramap(callable $fba): ContravariantInstance
+    public function contramap(\Closure $fba): ContravariantInstance
     {
         /** @var Wrapper<B> */
         $new = new self(
@@ -107,10 +101,10 @@ class Wrapper implements
 
     /**
      * @template B
-     * @param callable(B):A $fba
+     * @param \Closure(B):A $fba
      * @return Wrapper<B>
      */
-    public function adjustInput(callable $fba): ContravariantInstance
+    public function adjustInput(\Closure $fba): ContravariantInstance
     {
         if (reflectNoOfArguments($fba) > 1) {
             throw new \TypeError("Callable with more than one arguments passed");
@@ -134,10 +128,10 @@ class Wrapper implements
 
     /**
      * @template B
-     * @param callable(A):B $f
+     * @param \Closure(A):B $f
      * @return Wrapper<A>
      */
-    public function fmap(callable $f): FunctorInstance
+    public function fmap(\Closure $f): FunctorInstance
     {
         return new self(
             fn ($x) => $f (partial ($this->wrapped) ($x))
@@ -146,10 +140,10 @@ class Wrapper implements
 
     /**
      * @template B
-     * @param callable(A):B $f
+     * @param \Closure(A):B $f
      * @return Wrapper<A>
      */
-    public function adjustOutput(callable $f): FunctorInstance
+    public function adjustOutput(\Closure $f): FunctorInstance
     {
         if (reflectNoOfArguments($f) > 1) {
             throw new \TypeError("Callable with more than one arguments passed");

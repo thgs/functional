@@ -17,8 +17,8 @@ interface FunctorInstance
      * but changes from a -> b
      *
      * @template B
-     * @psalm-param callable(A):B $f
+     * @psalm-param \Closure(A):B $f
      * @return FunctorInstance<B>
      */
-    public function fmap(callable $f): FunctorInstance;
+    public function fmap(\Closure $f): FunctorInstance;
 }

@@ -41,10 +41,10 @@ interface MonadInstance
      * one.
      *
      * @template B
-     * @param callable(A):MonadInstance<B> $f
+     * @param \Closure(A):MonadInstance<B> $f
      * @return MonadInstance<B>
      */
-    public function bind(callable $f): MonadInstance;
+    public function bind(\Closure $f): MonadInstance;
 
     /**
      * @todo need default implementation

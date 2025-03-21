@@ -25,18 +25,12 @@ class IO implements
     ApplicativeInstance,
     MonadInstance
 {
-    /**
-     * @var \Closure():ReturnType
-     */
-    private \Closure $action;
-
-    /**
-     * @param callable():ReturnType $action
-     */
-    public function __construct(callable $action)
-    {
-        $this->action = \Closure::fromCallable($action);
-    }
+    public function __construct(
+        /**
+         * @var \Closure():ReturnType
+         */
+        private \Closure $action
+    ) {}
 
     /**
      * This is effectively (<-)
@@ -64,10 +58,10 @@ class IO implements
 
     /**
      * @template B1
-     * @param callable(ReturnType):B1 $f
+     * @param \Closure(ReturnType):B1 $f
      * @return IO<B1>
      */
-    public function fmap(callable $f): FunctorInstance
+    public function fmap(\Closure $f): FunctorInstance
     {
         /**
          * This should not run the action.
@@ -145,7 +139,7 @@ class IO implements
      * @param callable(ReturnType):IO<B> $f
      * @return IO<B>
      */
-    public function bind(callable $f): MonadInstance
+    public function bind(\Closure $f): MonadInstance
     {
         $action = $this->action;
         $do = function () use ($f, $action) {

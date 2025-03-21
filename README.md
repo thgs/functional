@@ -94,7 +94,7 @@ dn(
 
 class MyType implements FunctorInstance
 {
-    public function fmap(callable $f): FunctorInstance
+    public function fmap(\Closure $f): FunctorInstance
     {
         // your code here
     }

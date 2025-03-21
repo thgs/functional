@@ -29,13 +29,11 @@ function equals(EqInstance $a, EqInstance $b): bool
  * @template A
  * @template B
  *
- * @param Composition<A,B>|callable(A):B $f
- * @psalm-param Composition<A,B>|callable(A):B $f
- *
- * @param F<A>|callable(A):B $g
+ * @param Composition<A,B>|\Closure(A):B|callable(A):B $f
+ * @param F<A>|\Closure(A):mixed|callable(A):mixed $g
  * @return F<B>
  */
-function fmap(Composition|callable $f, F|callable $g): F {
+function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
     /**
      * @todo Since $f is callable, we can wrap it in Composition? And
      * that gives fmap(callable, F|callable) and possibly opens up the
@@ -54,7 +52,9 @@ function fmap(Composition|callable $f, F|callable $g): F {
      *
      * @var callable(A):B $f
      */
-    $f = $f instanceof Composition ? unwrapC ($f) : $f;
+    $f = $f instanceof Composition
+        ? unwrapC ($f)
+        : ($f instanceof \Closure ? $f : \Closure::fromCallable($f));
 
     /**
      * Ensure $g has fmap
@@ -79,12 +79,12 @@ function unwrapC(Composition $composition): callable
  *
  * @template R
  * @template A
- * @param callable(R):A $f
+ * @param \Closure(R):A|callable(R):A $f
  * @return Composition<R,A>
  */
-function c(callable $f): Composition
+function c(\Closure|callable $f): Composition
 {
-    return new Composition($f);
+    return new Composition($f instanceof \Closure ? $f : \Closure::fromCallable($f));
 }
 
 function show(mixed $x): string
@@ -288,3 +288,12 @@ function rlc(): callable
     return CategoryOfFunctions::compose();
 }
 
+/**
+ * This is a utility function. It is probably always better to do this
+ * manually if you can. This is provided in case you need to turn a
+ * list of callables to \Closure for example.
+ */
+function ensureClosure(callable $f): \Closure
+{
+    return $f instanceof \Closure ? $f : \Closure::fromCallable($f);
+}

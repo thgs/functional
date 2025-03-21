@@ -11,8 +11,8 @@ interface ContravariantInstance
      *  (a' -> a) -> f a -> f a'
      *
      * @template B
-     * @param callable(B):A $fba
+     * @param \Closure(B):A $fba
      * @return ContravariantInstance<B>
      */
-    public function contramap(callable $fba): ContravariantInstance;
+    public function contramap(\Closure $fba): ContravariantInstance;
 }

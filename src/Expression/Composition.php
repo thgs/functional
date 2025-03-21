@@ -33,16 +33,13 @@ class Composition implements
     FunctorInstance,
     ContravariantInstance
 {
-    /** @var callable(R): A */
-    private $g;
-
     /**
-     * @param callable(R):A $g
+     * Use `c` if you want to create a Composition for a callable
      */
-    public function __construct(callable $g)
-    {
-        $this->g = $g;
-    }
+    public function __construct(
+        /** @var \Closure(R):A $g */
+        private \Closure $g
+    ) {}
 
     /**
      * @return A
@@ -62,10 +59,10 @@ class Composition implements
      * As the (r -> a) is $this->g
      *
      * @template B
-     * @param callable(A):B $f
+     * @param \Closure(A):B $f
      * @return Composition<R,B>
      */
-    public function fmap(callable $f): Composition
+    public function fmap(\Closure $f): Composition
     {
         // todo: is $x really needed?
 
@@ -90,10 +87,10 @@ class Composition implements
      * (>$$<) :: Contravariant f => f a -> (b -> a) -> f b
      *
      * @template B
-     * @param callable(B):R $fba
+     * @param \Closure(B):R $fba
      * @return Composition<B,A>
      */
-    public function contramap(callable $fba): ContravariantInstance
+    public function contramap(\Closure $fba): ContravariantInstance
     {
         // manually flipped, the definition is really `contramap = flip (.)`
         return new Composition(
@@ -107,9 +104,7 @@ class Composition implements
 
     public function getReflectionFunction(): \ReflectionFunction
     {
-        return new \ReflectionFunction(
-            $this->g instanceof \Closure ? $this->g : \Closure::fromCallable($this->g)
-        );
+        return new \ReflectionFunction($this->g);
     }
 
     /**
@@ -124,9 +119,9 @@ class Composition implements
      * @template R1
      * @template A1
      * @param Composition<R1,A1> $composition
-     * @return callable(R1):A1
+     * @return \Closure(R1):A1
      */
-    public static function unwrap(Composition $composition): callable
+    public static function unwrap(Composition $composition): \Closure
     {
         return $composition->g;
     }

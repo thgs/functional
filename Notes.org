@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [7/32]
+* Todo [8/32]
 ** TODO Improve partial function
 Write tests for the actual usage, see that it works passing one
 argument at a time. Somewhere had to pass both at one call.
@@ -110,7 +110,11 @@ of composition, I need a diagram. Maybe it is actually a category!
 
 Something like this https://wiki.haskell.org/index.php?title=Foldable_and_Traversable#What_do_these_classes_all_mean?_A_brief_tour:
 
-** TODO Change callable to \Closure
+** TODO Allow multiple functions composition
+And inline them all in a single Closure rather than one on top of the
+other. Would that be possible?
+** ----- DONE ----
+** DONE Change callable to \Closure
 TimWolla and Edorian helped my understand that callable is scope
 specific and how to benchmark a little better.
 
@@ -121,10 +125,6 @@ performant \Closure.
 
 There's more for performance but this is a little start.
 
-** TODO Allow multiple functions composition
-And inline them all in a single Closure rather than one on top of the
-other. Would that be possible?
-** ----- DONE ----
 ** DONE Monoid
 ** DONE Make `fmap` accept ~F|callable~
 Now it is ~fmap(Composition|callable $f, F $g): F~ But as the argument $g has to

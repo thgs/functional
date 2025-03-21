@@ -79,7 +79,7 @@ class Maybe implements
      * @param callable(A1):B1 $f
      * @return Maybe<B1>
      */
-    public function fmap(callable $f): Maybe
+    public function fmap(\Closure $f): Maybe
     {
         if ($this->x instanceof Nothing) {
             return $this;
@@ -159,10 +159,12 @@ class Maybe implements
 
         // for now this will do, until it is more clear
         $callable = $this->x->getValue();
+        // todo: keep callable here? Could be a Maybe<callable> ?
         if (!is_callable($callable)) {
             throw new \TypeError('Cannot sequence as Maybe instance contains a non callable value.');
         }
 
+        $callable = !$callable instanceof \Closure ? \Closure::fromCallable($callable) : $callable;
         // todo: psalm is telling us off because of `pure-callable` instead of `callable`
         return fmap($callable, $fa); // alternatively could write $this->fmap($fab);
     }
@@ -177,7 +179,7 @@ class Maybe implements
         return self::pure($a);
     }
 
-    public function bind(callable $f): MonadInstance
+    public function bind(\Closure $f): MonadInstance
     {
         // todo: is this implementation an "unsafe" bind? Could bind
         // with a function that injects into a different monad.

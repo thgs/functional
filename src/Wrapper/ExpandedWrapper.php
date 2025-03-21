@@ -48,16 +48,10 @@ class ExpandedWrapper implements
     ContravariantInstance,
     FunctorInstance
 {
-    /** @var callable(A):mixed */
-    private $wrapped;
-    
-    /**
-     * @param callable(A):mixed $a
-     */
-    public function __construct(callable $a)
-    {
-        $this->wrapped = $a;
-    }
+    public function __construct(
+        /** @var \Closure (A):mixed */
+        private \Closure $wrapped
+    ) {}
 
     /**
      * This is implemented like this because we cannot use $this in static context.
@@ -78,12 +72,12 @@ class ExpandedWrapper implements
     }
 
     /**
-     * @param callable(A):mixed $a
+     * @param \Closure(A):mixed $a
      * @template B
-     * @param null|callable(B):A $input
+     * @param null|\Closure(B):A $input
      * @return Wrapper<A>|Wrapper<B>
      */
-    public static function withAdjustedInput(callable $a, ?callable $input = null): self
+    public static function withAdjustedInput(\Closure $a, ?\Closure $input = null): self
     {
         $instance = new self($a);
         if (!$input) {
@@ -115,10 +109,10 @@ class ExpandedWrapper implements
      * Use this method to adjust the input.
      *
      * @template B
-     * @param callable(B):A $fba
+     * @param \Closure(B):A $fba
      * @return Wrapper<B>
      */
-    public function contramap(callable $fba): ContravariantInstance
+    public function contramap(\Closure $fba): ContravariantInstance
     {
         /** @var Wrapper<B> */
         $new = new self(
@@ -132,7 +126,7 @@ class ExpandedWrapper implements
         return $new;
     }
 
-    public function adjustInput(callable $fba): ContravariantInstance
+    public function adjustInput(\Closure $fba): ContravariantInstance
     {
         return $this->contramap($fba);
     }
@@ -157,7 +151,7 @@ class ExpandedWrapper implements
      * we initially defined for Contravariant. The end result
      * is not different input but different output
      */
-    public function fmap(callable $f): FunctorInstance
+    public function fmap(\Closure $f): FunctorInstance
     {
         return new self(
             fn (...$xs) => $f (partial ($this->wrapped, ...$xs))
@@ -170,7 +164,7 @@ class ExpandedWrapper implements
         );
     }
 
-    public function adjustOutput(callable $f): FunctorInstance
+    public function adjustOutput(\Closure $f): FunctorInstance
     {
         return $this->fmap($f);
     }

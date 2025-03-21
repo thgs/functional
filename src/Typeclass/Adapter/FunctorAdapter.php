@@ -30,7 +30,7 @@ class FunctorAdapter implements FunctorInstance
      * @template B
      * @return FunctorInstance<B>
      */
-    public function fmap(callable $f): FunctorInstance
+    public function fmap(\Closure $f): FunctorInstance
     {
         // the redundant type check is missing here, adapter relies completely on static analysis.
 
