@@ -28,12 +28,12 @@ class Maybe implements
     ApplicativeInstance,
     MonadInstance
 {
-    /**
-     * @param Nothing|Just<A1> $x
-     */
-    public function __construct(private readonly Nothing|Just $x)
-    {
-    }
+    public function __construct(
+        /**
+         * @var Nothing|Just<A1> $x
+         */
+        private readonly Nothing|Just $x
+    ) {}
 
     /**
      * @return Nothing|Just<A1>
@@ -61,20 +61,12 @@ class Maybe implements
     }
 
     /**
-     * instance Functor Maybe where
-     *      fmap f (Just x) = Just (f x)
-     *      fmap f Nothing = Nothing
+     * The instance of Maybe plays the role of `f a` in
      *
-     * Here we need to implement fmap :: (a -> b) -> f b
-     * as the `f a` we are.
+     *   fmap :: (a -> b) -> f a -> f b
      *
-     * (Int -> Bool) -> f Int -> f Bool
+     * Therefore given a (a -> b) this will return a `f b`
      *
-     * This class is Maybe Int. WE have a func (Int -> Bool)
-     * result of fmap will be a Maybe Bool
-     *
-     * fmap :: (a -> b) -> f a -> f b
-
      * @template B1
      * @param \Closure(A1):B1 $f
      * @return Maybe<B1>
@@ -159,15 +151,15 @@ class Maybe implements
 
         /** @phpstan-assert Just<A> $this->x */
 
-        // for now this will do, until it is more clear
         $callable = $this->x->getValue();
-        // todo: keep callable here? Could be a Maybe<callable> ?
+        /**
+         * `callable` is allowed here to support Maybe<callable>
+         */
         if (!is_callable($callable)) {
             throw new \TypeError('Cannot sequence as Maybe instance contains a non callable value.');
         }
 
         $closure = !$callable instanceof \Closure ? \Closure::fromCallable($callable) : $callable;
-        // todo: psalm is telling us off because of `pure-callable` instead of `callable`
         return fmap($closure, $fa); // alternatively could write $this->fmap($fab);
     }
 
