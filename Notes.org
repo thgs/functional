@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [6/31]
+* Todo [7/32]
 ** TODO Improve partial function
 Write tests for the actual usage, see that it works passing one
 argument at a time. Somewhere had to pass both at one call.
@@ -13,7 +13,7 @@ the static analysis errors.
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
 I think "Composition" became natural because of partial application.
-** TODO Monoid
+** TODO Semigroup and Monoid in terms of Semigroup
 ** TODO Curry?
 ** TODO List comprehension?
 ** TODO How we handle ~newtype~ ?
@@ -125,6 +125,7 @@ There's more for performance but this is a little start.
 And inline them all in a single Closure rather than one on top of the
 other. Would that be possible?
 ** ----- DONE ----
+** DONE Monoid
 ** DONE Make `fmap` accept ~F|callable~
 Now it is ~fmap(Composition|callable $f, F $g): F~ But as the argument $g has to
 be a functor, we can accept a callable if we wrap it in composition (that will

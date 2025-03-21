@@ -69,6 +69,8 @@ class ClosureBench
             closure_($callable);
     }
 
+    // todo: try Composition too
+
     public static function f($x)
     {
         return $x;

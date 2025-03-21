@@ -26,6 +26,8 @@ use function thgs\Functional\partial;
  *
  * Function composition is provided by implementing Functor ((r ->)),
  * see fmap.
+ *
+ * @todo this only supports single argument functions (for the type hinting)
  */
 class Composition implements
     FunctorInstance,
