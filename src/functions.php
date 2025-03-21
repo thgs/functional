@@ -143,12 +143,12 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
  * @template A
  * @template B
  * @param MonadInstance<A> $ma
- * @param callable(A):MonadInstance<B>|MonadInstance<B>|Composition $fs
+ * @param \Closure(A):MonadInstance<B>|MonadInstance<B>|Composition $fs
  * @return MonadInstance<*>
  *
  * @see https://en.wikibooks.org/wiki/Haskell/do_notation
  */
-function dn(MonadInstance $ma, MonadInstance|callable|Composition ...$fs)
+function dn(MonadInstance $ma, MonadInstance|\Closure|Composition ...$fs)
 {
     $last = $ma;
     foreach ($fs as $k => $new) {
@@ -170,10 +170,10 @@ function dn(MonadInstance $ma, MonadInstance|callable|Composition ...$fs)
  * @template A
  * @template B
  * @param MonadInstance<A> $ma
- * @param callable(A):MonadInstance<B> $fs
+ * @param \Closure(A):MonadInstance<B> ...$fs
  * @return MonadInstance<*>
  */
-function dnBindOnly(MonadInstance $ma, callable ...$fs)
+function doBind(MonadInstance $ma, \Closure ...$fs)
 {
     $last = $ma;
     foreach ($fs as $new) {
