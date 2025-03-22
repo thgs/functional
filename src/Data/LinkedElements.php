@@ -70,7 +70,7 @@ class LinkedElements
     {
         $return = [];
         foreach ($this->elements as $elem) {
-            $return[] = $f($b, $elem)
+            $return[] = $f($b, $elem);
         }
         return $return;
     }
