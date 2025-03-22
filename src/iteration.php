@@ -37,14 +37,6 @@ function sendFrom(iterable $from, \Generator $receiver): void
     }
 }
 
-function makeYieldApply(\Generator $it, \Closure $f): \Closure
-{
-    return function (...$xs) use ($it, $f): \Generator {
-        $value = yield $it;
-        yield $f ($value, ...$xs);
-    };
-}
-
 /**
  * This also could be called `toArray`
  *
