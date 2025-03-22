@@ -62,6 +62,15 @@ everything else is written in a non-functional way how one can interface with
 it. The essence of this is to be able to express functionally and reuse other
 code in a functional programming way; rather than switching paradigms.
 
+*** White - Generate PHP code out of compositions
+The use of multiple functions and closures can get expensive and sub-optimal
+from a direct implementation that does not use the constructs introduced by this
+library. However, it is, at least theoretically, possible to generate a more
+optimised version of the code.
+
+This goal targets using this library from IDEs to generate quickly prefabricated
+code or trying to optimise an implementation's performance.
+
 * Usage
 ** Maybe
 A Maybe tries to replicate Haskell's data type Maybe. As per
