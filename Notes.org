@@ -228,8 +228,8 @@ Isn't that essentially what we already do with ~partial~ ? Yes.. So this code:
 
 #+end_src
 
-** Journeys [0/2]
-*** TODO Safety journey
+** Journeys [1/2]
+*** DONE Safety journey
 It is a little vague how "safety" is defined. There is type safety or
 safe from side-effects.
 
@@ -253,7 +253,22 @@ providing a way to not only safely run something but also handle one
 or multiple catch cases.
 
 There must be some intuition from Haskell and/or monads that do the
-same, or partial functions.
+same, or partial functions. See Control.Exception.
+
+However, the level of generalisation is not something you can choose
+for all cases. Different generalisation is chosen depending on
+different solutions or implementations. One cannot say X
+implementation is all you need and captures all your possible
+scenarios and use-cases. This seems like an obvious observation now
+but maybe put some things into perspective.
+
+The meaning of this last paragraphs concludes this journey, meaning
+that all different ways may or may not be interesting for some
+use-case or scenario therefore different approaches are still
+interesting to be implemented in this lib and it is up to the user to
+decide as they are the one controlling the level of generalisation in
+their "safety" choices that is desired each time.
+
 *** TODO Partial application improvement journey
 On partial application currently there is a single function that sorts
 out the situation, however this seems to be hard to deal with the
