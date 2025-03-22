@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
+use function thgs\Functional\applyReceiver;
 use function thgs\Functional\consume;
 use function thgs\Functional\sendFrom;
 use function thgs\Functional\storageReceiver;
@@ -63,11 +64,23 @@ class IterationFunctionsTest extends TestCase
         $this->assertEquals(range(1,3), $storage);
     }
 
-    public function testCanReceiveAndProcess(): void
+    public function testCanReceiveAndStore(): void
     {
         $storage = [];
         $receiver = applyStorageReceiver(bin2hex(...), $storage);
         sendFrom(range(1,3), $receiver);
         $this->assertEquals(['31', '32', '33'], $storage);
+    }
+
+    public function testCanReceiveAndApply(): void
+    {
+        $receiver = applyReceiver(bin2hex(...));
+        $processed = [];
+        foreach (range(1, 5) as $i) {
+            $processed[] = $receiver->send($i);
+            $receiver->next();
+        }
+
+        $this->assertEquals(['31', '32', '33', '34', '35'], $processed);
     }
 }

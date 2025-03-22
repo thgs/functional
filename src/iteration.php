@@ -65,10 +65,13 @@ function receiveOne(): \Generator
     yield $value;
 }
 
-function applyRepeater(\Closure $f): \Generator
+function applyReceiver(\Closure $f): \Generator
 {
     $value = yield;
-    yield $f ($value);
+    while (true) {
+        yield $f ($value);
+        $value = yield;
+    }
 }
 
 /**
