@@ -12,6 +12,10 @@ function yieldFrom(iterable $it): \Generator
     yield from $it;
 }
 
+/**
+ * This essentially defines an interaction between two generators
+ * using send. Effectively will consume the $from generator.
+ */
 function sendFrom(iterable $from, \Generator $receiver): void
 {
     foreach ($from as $toSend) {
