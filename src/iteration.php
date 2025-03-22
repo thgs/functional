@@ -67,10 +67,9 @@ function receiveOne(): \Generator
 
 function applyReceiver(\Closure $f): \Generator
 {
-    $value = yield;
-    while (true) {
-        yield $f ($value);
+   while (true) {
         $value = yield;
+        yield $f ($value);
     }
 }
 
