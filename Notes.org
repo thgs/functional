@@ -1,14 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/32]
-** TODO Improve partial function
-Write tests for the actual usage, see that it works passing one
-argument at a time. Somewhere had to pass both at one call.
-Would an object help rather than a closure for the types?
-
-I think fixing partial in respect to the types will help a lot with
-the static analysis errors.
+* Todo [8/31]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -234,6 +227,49 @@ Isn't that essentially what we already do with ~partial~ ? Yes.. So this code:
   $partiallyAppliedA = $f(123) // again partial returns a function but with one arg
 
 #+end_src
+
+** Journeys [0/2]
+*** TODO Safety journey
+It is a little vague how "safety" is defined. There is type safety or
+safe from side-effects.
+
+Concentrating on the second, side-effects safety, one can define a
+function that wraps a given function call in a try-catch
+block. Generalising a little bit, one can define a "control" structure
+for the same.
+
+Generalising even further, a type class for things that safely do
+something. This is a bit reverse from the idea of Maybe and Either on
+their face value.
+
+Generalising to a different direction, if that even makes sense, one
+could say that anything that can be called can be called safely or
+unsafely. Therefore a control structure could capture all cases,
+allowing to opt-in for safety? More or less the implementation of
+try-catch is doing that.
+
+One could also go sideways, defining towards the direction of Catch,
+providing a way to not only safely run something but also handle one
+or multiple catch cases.
+
+There must be some intuition from Haskell and/or monads that do the
+same, or partial functions.
+*** TODO Partial application improvement journey
+On partial application currently there is a single function that sorts
+out the situation, however this seems to be hard to deal with the
+types. Would a more elaborate implementation, one that analyses the
+terms help with the types or even provide more features?
+
+Previous notes from the todo item that turned into a journey:
+
+#+BEGIN_QUOTE
+Write tests for the actual usage, see that it works passing one
+argument at a time. Somewhere had to pass both at one call.
+Would an object help rather than a closure for the types?
+
+I think fixing partial in respect to the types will help a lot with
+the static analysis errors.
+#+END_QUOTE
 
 * Feedback
 ** Discord
