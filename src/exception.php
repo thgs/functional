@@ -16,9 +16,14 @@ use thgs\Functional\Data\Nothing;
 function safe(\Closure $f, mixed ...$xs): Maybe
 {
     try {
-        return new Maybe(new Just($f(...$xs)));
+        $value = new Maybe(new Just($f(...$xs)));
     } catch (\Throwable $e) {
-        return new Maybe(new Nothing());
+        /**
+         * Type hint because of Nothing
+         * @var Maybe<R> $value
+         */
+        $value = new Maybe(new Nothing());
     }
+    return $value;
 }
 
