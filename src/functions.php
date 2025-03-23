@@ -26,12 +26,12 @@ function equals(EqInstance $a, EqInstance $b): bool
 }
 
 /**
- * @template A
- * @template B
+ * @template AF
+ * @template BF
  *
- * @param Composition<A,B>|\Closure(A):B|callable(A):B $f
- * @param F<A>|\Closure(A):mixed|callable(A):mixed $g
- * @return F<B>
+ * @param Composition<AF,BF>|\Closure(AF):BF|callable(AF):BF $f
+ * @param F<AF>|\Closure(AF):mixed|callable(AF):mixed $g
+ * @return F<BF>
  */
 function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
     /**
@@ -50,7 +50,7 @@ function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
      * callable is indeed a Composition or not, we handle it here. Implementations
      * can opt-in/out of using a composition during their fmap() though.
      *
-     * @var callable(A):B $f
+     * @var callable(AF):BF $f
      */
     $f = $f instanceof Composition
         ? unwrapC ($f)
@@ -60,6 +60,7 @@ function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
      * Ensure $g has fmap
      */
     $g = $g instanceof F ? $g : c ($g);
+
     return $g ->fmap ($f);
 }
 
@@ -143,16 +144,18 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
  * @template A
  * @template B
  * @param MonadInstance<A> $ma
- * @param \Closure(A):MonadInstance<B>|MonadInstance<B>|Composition $fs
+ * @param \Closure(A):MonadInstance<B>|MonadInstance<B> $fs
  * @return MonadInstance<*>
  *
  * @see https://en.wikibooks.org/wiki/Haskell/do_notation
+ *
+ * @todo support Composition
  */
-function dn(MonadInstance $ma, MonadInstance|\Closure|Composition ...$fs)
+function dn(MonadInstance $ma, MonadInstance|\Closure/*|Composition*/ ...$fs)
 {
     $last = $ma;
     foreach ($fs as $k => $new) {
-        $last = $new instanceof \Closure || $new instanceof Composition
+        $last = $new instanceof \Closure // || $new instanceof Composition
             ? $last->bind($new)
             : $last->then($new);
 
@@ -205,7 +208,7 @@ function t(mixed $a, mixed $b): Tuple
  * @template C
  * @param A $a
  * @param B $b
- * @param C $b
+ * @param C $c
  * @return Tuple3<A,B,C>
  */
 function t3(mixed $a, mixed $b, mixed $c): Tuple3
@@ -249,12 +252,12 @@ function t3(mixed $a, mixed $b, mixed $c): Tuple3
  *
  * @template A
  * @template B
- * @param callable(A):B $f
+ * @param \Closure(A):B $f
  * @return Composition<A,B>
  */
-function memoize(callable $f): Composition
+function memoize(\Closure $f): Composition
 {
-    /** @var callable(A):B $wrapped */
+    /** @var \Closure(A):B $wrapped */
     $wrapped = static function ($x) use ($f) {
         static $memoization = [];
 
