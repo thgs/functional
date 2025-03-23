@@ -6,11 +6,11 @@ use thgs\Functional\Data\IO;
 use thgs\Functional\Instance\Composition;
 
 /**
- * @return IO<string>
+ * @return IO<string|false>
  */
 function getLine(): IO
 {
-    return IO::inject(fn (): string => fgets(\STDIN));
+    return IO::inject(fn (): string|false => fgets(\STDIN));
 }
 
 /**
@@ -19,16 +19,23 @@ function getLine(): IO
  */
 function putStrLn(\Stringable|string $message): IO
 {
-    return IO::inject(fn () => print $message . PHP_EOL);
+    return IO::inject(function () use ($message): void {
+        print $message . PHP_EOL;
+    });
 }
 
 /**
- * @param Composition|callable $f
+ * @param \Closure(string):string $f
  * @return IO<void>
+ *
+ * @todo can we not have Composition as $f ?
  */
-function interact(Composition|callable $f): IO
+function interact(\Closure $f): IO
 {
-    return getLine()->bind(fn ($contents) => putStrLn ($f ($contents)));
+    return getLine()
+        ->bind(function (string $contents) use ($f): IO {
+            return putStrLn ($f ($contents));
+        });
 }
 
 
@@ -44,19 +51,19 @@ function readFile(\Stringable|string $filename): IO
 /**
  * @param \Stringable|string $filename
  * @param \Stringable|string $contents
- * @return IO<int|false>
+ * @return IO<int<0,max>|false>
  */
 function writeFile(\Stringable|string $filename, \Stringable|string $contents): IO
 {
-    return IO::inject(fn () => file_put_contents($filename, $contents));
+    return IO::inject(fn (): int|false => file_put_contents($filename, $contents));
 }
 
 /**
  * @param \Stringable|string $filename
  * @param \Stringable|string $contents
- * @return IO<int|false>
+ * @return IO<int<0,max>|false>
  */
 function appendFile(\Stringable|string $filename, \Stringable|string $contents): IO
 {
-    return IO::inject(fn () => file_put_contents($filename, $contents, \FILE_APPEND));
+    return IO::inject(fn (): int|false => file_put_contents($filename, $contents, \FILE_APPEND));
 }

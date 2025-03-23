@@ -120,13 +120,20 @@ class IO implements
 
     /**
      * @template R
-     * @param R $a
+     * @param R|\Closure():R $a
      * @return IO<R>
      */
     public static function inject($a): MonadInstance
     {
-        return new self(is_callable($a) ? fn () => $a() : fn() => $a);
-        // return is_callable($a) ? new self($a) : new self(fn () => $a);
+        if ($a instanceof \Closure) {
+            /**
+             * @todo here we override static analysis, given closure might not be Closure():R
+             * @var \Closure():R $a
+             */
+            return new self(fn () => $a());
+        }
+
+        return new self(fn () => $a);
     }
 
     /**
@@ -136,7 +143,7 @@ class IO implements
      * bindIO (IO m) k = IO (\ s -> case m s of (# new_s, a #) -> unIO (k a) new_s)
      *
      * @template B
-     * @param callable(ReturnType):IO<B> $f
+     * @param \Closure(ReturnType):IO<B> $f
      * @return IO<B>
      */
     public function bind(\Closure $f): MonadInstance
