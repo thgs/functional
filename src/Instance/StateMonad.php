@@ -7,7 +7,6 @@ use thgs\Functional\Data\Tuple;
 use thgs\Functional\Typeclass\MonadInstance;
 
 use function thgs\Functional\partial;
-use function thgs\Functional\reflectNoOfArguments;
 use function thgs\Functional\t;
 
 /**
