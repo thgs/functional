@@ -123,6 +123,16 @@ something more abstract? Ie. Morphisms in Kleisli are the embelished
 version, separating an implementation from the abstraction. Bridge
 pattern rings a bell here.
 
+Trying to better explain, in a Kleisli category one will define two
+things when defining the composition function of the category. How the
+non-embelished functions compose and how you `mappend`. So the
+question here is, is this all we need to generalise the mapping from
+Category to some implementation of it (ie Haskell / PHP)? The
+non-embelished functions will provide the mapping to the
+implementation and the `mappend` operation will provide the way to
+add/append/combine those together (sequentially?).
+
+
 Could touch on this, at least?
 ** ----- DONE ----
 ** DONE Change callable to \Closure
