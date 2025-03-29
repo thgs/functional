@@ -130,7 +130,9 @@ question here is, is this all we need to generalise the mapping from
 Category to some implementation of it (ie Haskell / PHP)? The
 non-embelished functions will provide the mapping to the
 implementation and the `mappend` operation will provide the way to
-add/append/combine those together (sequentially?).
+add/append/combine those together (sequentially?). Essentially giving
+better semantics, or better API to work with these things (as
+"implementation" details have been now abstracted).
 
 
 Could touch on this, at least?
