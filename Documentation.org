@@ -407,4 +407,6 @@ and commented version below.
 [[https://www.haskellforall.com/2012/09/the-functor-design-pattern.html][Functor design pattern - HaskellForAll]]
 ** Books
 [[https://learnyouahaskell.com][Learn You a Haskell for Great Good!]]
+[[https://en.wikibooks.org/wiki/Haskell][Haskell Wikibook]]
+[[https://github.com/BartoszMilewski/DaoFP][Dao of Functional Programming]]
 
