@@ -118,8 +118,10 @@ one abstract concept of our understanding into the structures defined
 in the language, with varying success and precision / abstraction as
 we see fit.
 
-Kleisli categories might be interesting? Or we are looking to
-something more abstract?
+Kleisli categories mapping might be interesting? Or we are looking to
+something more abstract? Ie. Morphisms in Kleisli are the embelished
+version, separating an implementation from the abstraction. Bridge
+pattern rings a bell here.
 
 Could touch on this, at least?
 ** ----- DONE ----
