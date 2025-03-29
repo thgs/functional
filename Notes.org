@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/31]
+* Todo [8/33]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -106,6 +106,22 @@ Something like this https://wiki.haskell.org/index.php?title=Foldable_and_Traver
 ** TODO Allow multiple functions composition
 And inline them all in a single Closure rather than one on top of the
 other. Would that be possible?
+** TODO Consider generalising the wrappers
+** TODO Consider analysing the mapping between Category -> Haskell | PHP or Haskell -> PHP
+So there are things that are functional and are written
+elsewhere. These things have a different mapping from Concepts to
+Implementations of those concepts. For example a type class might be
+mapped with an interface and each instance as a class implementing
+that interface. Alternatively might be mapped from an abstract class
+or a simple function. As programmers, we do that daily, we map from
+one abstract concept of our understanding into the structures defined
+in the language, with varying success and precision / abstraction as
+we see fit.
+
+Kleisli categories might be interesting? Or we are looking to
+something more abstract?
+
+Could touch on this, at least?
 ** ----- DONE ----
 ** DONE Change callable to \Closure
 TimWolla and Edorian helped my understand that callable is scope
