@@ -17,6 +17,26 @@ class TupleTest extends TestCase
         $this->assertTupleIs(123, "hello world", $tuple);
     }
 
+    public function testCanUnwrap(): void
+    {
+        // todo: is there a better implementation instead of ArrayAccess here?
+        $tuple = Tuple::new(123, "hello world");
+        [$fst, $snd] = $tuple;
+
+        $this->assertEquals(123, $fst);
+        $this->assertEquals("hello world", $snd);
+    }
+
+    public function testCanGetNewTuple(): void
+    {
+        // todo: no remove this. just make new tuples.
+        $tuple = Tuple::new(123, "hello world");
+        $tuple[0] = 'one';
+        $tuple[1] = 'two';
+        
+        $this->assertTupleIs('one', 'two', $tuple);
+    }
+
     public function testCanSwapTupleValues(): void
     {
         $tuple = Tuple::new(123, "hello world")->swap();

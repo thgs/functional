@@ -12,7 +12,8 @@ use function thgs\Functional\partial;
  * @implements EqInstance<Tuple<A,B>>
  */
 class Tuple implements
-    EqInstance
+    EqInstance,
+    \ArrayAccess
 {
     /**
      * (,) :: a -> b -> (a, b)
@@ -154,5 +155,41 @@ class Tuple implements
     public function notEquals(EqInstance $other): bool
     {
         return !$this->equals($other);
+    }
+
+    public function offsetExists($offset)
+    {
+        return $offset == 0 || $offset == 1;
+    }
+
+    public function offsetGet($offset)
+    {
+        if ($offset === 0) {
+            return $this->fst();
+        }
+
+        if ($offset === 1) {
+            return $this->snd();
+        }
+
+        return null;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if ($offset == 0) {
+            $this->a = $value;
+        }
+
+        if ($offset == 1) {
+            $this->b = $value;
+        }
+
+        throw new \Exception('Unknown offset');
+    }
+
+    public function offsetUnset($offset)
+    {
+        throw new \Exception('Cannot unset!');
     }
 }
