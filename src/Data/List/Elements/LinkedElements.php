@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Data\List;
+namespace thgs\Functional\Data\List\Elements;
 
 use function thgs\Functional\t;
 
