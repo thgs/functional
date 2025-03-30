@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Data;
+namespace thgs\Functional\Data\List;
 
 use Closure;
 use thgs\Functional\Typeclass\FunctorInstance;

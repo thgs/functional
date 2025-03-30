@@ -1,9 +1,8 @@
 <?php
 
-namespace thgs\Functional\Data;
+namespace thgs\Functional\Data\List;
 
 use function thgs\Functional\t;
-
 
 /**
  * @template A
