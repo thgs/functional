@@ -1,0 +1,133 @@
+<?php
+
+use thgs\Functional\Data\List\Cons\LinkedList as ConsLinkedList;
+use thgs\Functional\Data\List\Generator\LinkedList as GeneratorLinkedList;
+
+class LinkedListBench
+{
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchArrayCreate100(): void
+    {
+        $array = range(1,100);
+    }
+    
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchConsListCreate100(): void
+    {
+        $list = ConsLinkedList::fromArray(range(1,100));
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchGeneratorListCreate100(): void
+    {
+        $list = GeneratorLinkedList::fromArray(range(1,100));
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchArrayAppend(): void
+    {
+        $array = range(1,100);
+        $appended = array_merge($array, range(101, 201));
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchConsListAppend(): void
+    {
+        $list = ConsLinkedList::fromArray(range(1,100));
+        $appended = $list->append(ConsLinkedList::fromArray(range(101, 201)));
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchGeneratorListAppend(): void
+    {
+        $list = GeneratorLinkedList::fromArray(range(1,100));
+        $appended = $list->append(GeneratorLinkedList::fromArray(range(101, 201)));
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchArrayPrepend(): void
+    {
+        $array = range(101,201);
+        // this would be the way but let's try to make it one item at a time to be "same" as the list implementation
+        // $prepended = array_unshift($array, range(1, 100));
+        foreach (range(1, 100) as $i) {
+            array_unshift($array, $i);
+        }
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchConsListPrepend(): void
+    {
+        $list = ConsLinkedList::fromArray(range(101,201));
+        foreach (range(1, 100) as $i) {
+            $list = $list->cons($i);
+        }
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchGeneratorListPrepend(): void
+    {
+        $list = GeneratorLinkedList::fromArray(range(101,201));
+        foreach (range(1, 100) as $i) {
+            $list = $list->cons($i);
+        }
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchArrayCount(): void
+    {
+        $array = range(1,100);
+        $length = count($array);
+        
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchConsListCount(): void
+    {
+        $list = ConsLinkedList::fromArray(range(1,100));
+        $length = $list->length();
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchGeneratorListCount(): void
+    {
+        $list = GeneratorLinkedList::fromArray(range(1,100));
+        $length = $list->length();
+    }
+}
