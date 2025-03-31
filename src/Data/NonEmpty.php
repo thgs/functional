@@ -30,6 +30,8 @@ class NonEmpty
         // todo: add the typeclass check here, if $a implements it.
     }
 
+    // todo: define fromNonEmptyArray where we lift `NonEmpty` into the list/array
+
     /**
      * @return A
      */
