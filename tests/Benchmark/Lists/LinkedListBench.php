@@ -1,6 +1,7 @@
 <?php
 
 use thgs\Functional\Data\List\Cons\LinkedList as ConsLinkedList;
+use thgs\Functional\Data\List\Elements\LinkedList as ElementsLinkedList;
 use thgs\Functional\Data\List\Generator\LinkedList as GeneratorLinkedList;
 
 class LinkedListBench
@@ -14,6 +15,15 @@ class LinkedListBench
         $array = range(1,100);
     }
     
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchElementsListCreate100(): void
+    {
+        $list = ElementsLinkedList::fromArray(range(1,100));
+    }
+
     /**
      * @Iterations(10)
      * @Revs(500)
@@ -32,6 +42,8 @@ class LinkedListBench
         $list = GeneratorLinkedList::fromArray(range(1,100));
     }
 
+    // -----
+
     /**
      * @Iterations(10)
      * @Revs(500)
@@ -40,6 +52,16 @@ class LinkedListBench
     {
         $array = range(1,100);
         $appended = array_merge($array, range(101, 201));
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchElementsListAppend(): void
+    {
+        $list = ElementsLinkedList::fromArray(range(1,100));
+        $appended = $list->append(ElementsLinkedList::fromArray(range(101,201)));
     }
 
     /**
@@ -62,6 +84,8 @@ class LinkedListBench
         $appended = $list->append(GeneratorLinkedList::fromArray(range(101, 201)));
     }
 
+    // -----
+
     /**
      * @Iterations(10)
      * @Revs(500)
@@ -73,6 +97,18 @@ class LinkedListBench
         // $prepended = array_unshift($array, range(1, 100));
         foreach (range(1, 100) as $i) {
             array_unshift($array, $i);
+        }
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchElementsListPrepend(): void
+    {
+        $list = ElementsLinkedList::fromArray(range(101,201));
+        foreach (range(1, 100) as $i) {
+            $list = $list->cons($i);
         }
     }
 
@@ -100,6 +136,8 @@ class LinkedListBench
         }
     }
 
+    // -----
+
     /**
      * @Iterations(10)
      * @Revs(500)
@@ -115,6 +153,20 @@ class LinkedListBench
 
         // just to be closer to the other two, instead could do a foreach here
         array_map(fn ($x) => $x, $array);
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchElementsListPrependAndIterate(): void
+    {
+        $list = ElementsLinkedList::fromArray(range(101,201));
+        foreach (range(1, 100) as $i) {
+            $list = $list->cons($i);
+        }
+
+        $list->fmap(fn ($x) => $x); // fmap id
     }
 
     /**
@@ -145,6 +197,8 @@ class LinkedListBench
         $list->fmap(fn ($x) => $x); // fmap id
     }
 
+    // -----
+
     /**
      * @Iterations(10)
      * @Revs(500)
@@ -154,6 +208,16 @@ class LinkedListBench
         $array = range(1,100);
         $length = count($array);
         
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchElementsListCount(): void
+    {
+        $list = ElementsLinkedList::fromArray(range(1,100));
+        $length = $list->length();
     }
 
     /**

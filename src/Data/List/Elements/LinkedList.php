@@ -5,6 +5,8 @@ namespace thgs\Functional\Data\List\Elements;
 use Closure;
 use thgs\Functional\Typeclass\FunctorInstance;
 
+use function thgs\Functional\c;
+
 
 /**
  * Haskell implements `List a` as a singly linked list.  This
@@ -38,9 +40,54 @@ class LinkedList implements
         private EmptyList|LinkedElements $elements
     ) {}
 
+    /**
+     * @template A1
+     * @param array<A1> $elements
+     * @return LinkedList<A1>
+     */
+    public static function fromArray(array $elements): self
+    {
+        if (empty($elements)) {
+            return self::empty();
+        }
+        return new self(new LinkedElements($elements));
+    }
+
+    /**
+     * @template A1
+     * @return LinkedList<A1>
+     */
+    public static function empty(): self
+    {
+        /** @var EmptyList<A1> */
+        $empty = new EmptyList();
+        return new self($empty);
+    }
+
+    /**
+     * @template A1
+     * @return LinkedList<A1>
+     */
+    public static function inject(mixed $a): self
+    {
+        /** @var LinkedElements<A1> */
+        $elements = new LinkedElements([$a]);
+        return new self($elements);
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->elements instanceof EmptyList;
+    }
+
     public function cons(mixed $a)
     {
-        return new LinkedList(new LinkedElements([$a, $elements->toArray()]));
+        if ($this->elements instanceof EmptyList) {
+            return self::inject($a);
+        }
+
+        $tail = $this->elements->toArray();
+        return new self(new LinkedElements(array_merge([$a], $tail)));
     }
 
     public function append(self $other): self
@@ -54,12 +101,43 @@ class LinkedList implements
             return $this; // could return a copy
         }
 
-        // todo: for now just unpack all of them, but would that help
-        // iteration?  this will need to adapt.
-        return new self(new LinkedElements(...$this->elements, ...$other->elements));
+        return new self(new LinkedElements(
+            array_merge($this->elements->toArray(), $other->elements->toArray())
+        ));
+    }
+
+    public function fmap(Closure $f): FunctorInstance
+    {
+        if ($this->elements instanceof EmptyList) {
+            return $this;
+        }
+
+        $c = c ($f);
+        return new self(new LinkedElements(
+            array_map(fn ($x) => $c($x), $this->elements->toArray())
+        ));
+    }
+
+    public function toArray(): array
+    {
+        if ($this->elements instanceof EmptyList) {
+            return [];
+        }
+
+        return $this->elements->toArray();
+    }
+
+    public function length(): int
+    {
+        if ($this->elements instanceof EmptyList) {
+            return 0;
+        }
+
+        return count($this->elements->toArray());
     }
 
     // todo: consider the head,tail,init,last partial variations 
+
 
     /**
      * @return Maybe<Tuple<LinkedList<A>, A>>>
@@ -82,34 +160,6 @@ class LinkedList implements
         }
 
         return new self($this->elements->reverse());
-    }
-
-    public function isEmpty(): bool
-    {
-        return $this->elements instanceof EmptyList;
-    }
-
-    public function length(): int
-    {
-        return $this->elements instanceof EmptyList
-            ? 0
-            : $this->elements->length();
-    }
-
-    public function map(\Closure $f): LinkedList
-    {
-        if ($this->elements instanceof EmptyList) {
-            return $this; // could return a new copy
-        }
-
-        // for now, to allow any other implementations of LinkedElements
-        // (ie lazy) to happen we will delegate
-        return new self($this->elements->map($f));
-    }
-
-    public function fmap(Closure $f): FunctorInstance
-    {
-        return $this->map($f);
     }
 
     /**
