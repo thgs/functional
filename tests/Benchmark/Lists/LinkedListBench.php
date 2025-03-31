@@ -159,6 +159,25 @@ class LinkedListBench
      * @Iterations(10)
      * @Revs(500)
      */
+    public function benchArrayPrependAndIterateWithForeach(): void
+    {
+        $array = range(101,201);
+        // this would be the way but let's try to make it one item at a time to be "same" as the list implementation
+        // $prepended = array_unshift($array, range(1, 100));
+        foreach (range(1, 100) as $i) {
+            array_unshift($array, $i);
+        }
+
+        $id = fn ($x) => $x;
+        foreach ($array as $x) {
+            $id ($x);
+        }
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
     public function benchElementsListPrependAndIterate(): void
     {
         $list = ElementsLinkedList::fromArray(range(101,201));
