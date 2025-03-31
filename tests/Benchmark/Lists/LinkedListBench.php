@@ -104,6 +104,51 @@ class LinkedListBench
      * @Iterations(10)
      * @Revs(500)
      */
+    public function benchArrayPrependAndIterate(): void
+    {
+        $array = range(101,201);
+        // this would be the way but let's try to make it one item at a time to be "same" as the list implementation
+        // $prepended = array_unshift($array, range(1, 100));
+        foreach (range(1, 100) as $i) {
+            array_unshift($array, $i);
+        }
+
+        // just to be closer to the other two, instead could do a foreach here
+        array_map(fn ($x) => $x, $array);
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchConsListPrependAndIterate(): void
+    {
+        $list = ConsLinkedList::fromArray(range(101,201));
+        foreach (range(1, 100) as $i) {
+            $list = $list->cons($i);
+        }
+
+        $list->fmap(fn ($x) => $x); // fmap id
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
+    public function benchGeneratorListPrependAndIterate(): void
+    {
+        $list = GeneratorLinkedList::fromArray(range(101,201));
+        foreach (range(1, 100) as $i) {
+            $list = $list->cons($i);
+        }
+
+        $list->fmap(fn ($x) => $x); // fmap id
+    }
+
+    /**
+     * @Iterations(10)
+     * @Revs(500)
+     */
     public function benchArrayCount(): void
     {
         $array = range(1,100);
