@@ -80,9 +80,13 @@ class LinkedList implements
         }
 
         /** @var \Generator<A> */
-        $generator = function (): \Generator {
-            yield $a;
-            yield from ($this->elements)();
+        $generator = function () use (&$a): \Generator {
+            $key = 0;
+            yield $key++ => $a;
+            foreach (($this->elements)() as $x) {
+                yield $key++ => $x;
+            }
+            //yield from ($this->elements)();
         };
         return new self($generator);
     }
@@ -111,14 +115,16 @@ class LinkedList implements
         }
 
         $generator = function () use ($ys): \Generator {
+            $key = 0;
             foreach (($this->elements)() as $x) {
-                yield $x;
+                yield $key++ => $x;
             }
             foreach (($ys->elements)() as $x) {
-                yield $x;
+                yield $key++ => $x;
             }
 
-            // No idea why the below does not work.
+            // When you yield from it probably messes up the keys?
+            // Then when you toArray it will overwrite keys
             //yield from ($this->elements)();
             //yield from ($ys->elements)();
         };

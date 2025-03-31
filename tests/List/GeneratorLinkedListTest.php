@@ -8,6 +8,13 @@ class GeneratorLinkedListTest extends TestCase
 {
     use FunctorLawsAssertions;
 
+    public function testCanPrepend(): void
+    {
+        $l = LinkedList::inject(2);
+        $l = $l->cons(1);
+        $this->assertEquals([1,2], $l->toArray());
+    }
+
     public function testCanAppend(): void
     {
         $l = LinkedList::inject(1);
