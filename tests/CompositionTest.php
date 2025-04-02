@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 
+use function thgs\Functional\Assert\assertInstanceIsFunctor;
 use function thgs\Functional\c;
 use function thgs\Functional\fmap;
 use function thgs\Functional\show;
@@ -87,16 +88,17 @@ class CompositionTest extends TestCase
 
     public function testIsAFunctor(): void
     {
-        $this->assertInstanceIsFunctor(
-            new Composition(fn ($x) => $x + 2),
-            fn ($x) => $x * 2,
-            fn ($x) => $x + 100
+        $result = assertInstanceIsFunctor(
+            new Composition(fn (int $x): int => $x + 2),
+            fn (int $x): int => $x * 2,
+            fn (int $x): int => $x + 100
         );
+        $this->assertNull($result, (string) $result);
     }
 
     public function testCanComposeWithShow(): void
     {
-        $composition = new Composition(fn ($x) => $x * 3);
+        $composition = new Composition(fn (int $x) => $x * 3);
         $composition = $composition->fmap(show(...));           // show . $g
 
         $result = $composition(100);

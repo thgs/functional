@@ -6,6 +6,7 @@ use thgs\Functional\Data\Maybe;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
+use function thgs\Functional\Assert\assertInstanceIsFunctor;
 
 class IOTest extends TestCase
 {
@@ -50,11 +51,12 @@ class IOTest extends TestCase
 
     public function testIsAFunctor(): void
     {
-        $this->assertInstanceIsFunctor(
+        $result = assertInstanceIsFunctor(
             new IO(function () { /* action would be here */ return 5; }),
-            fn (int $x): bool => $x == 5,
-            fn (bool $x): string => $x == true ? '100' : '500'
+            static fn (int $x): bool => $x == 5,
+            static fn (bool $x): string => $x == true ? '100' : '500'
         );
+        $this->assertNull($result, (string) $result);
     }
 
     public function testCanConstructApplicativeWithPure(): void

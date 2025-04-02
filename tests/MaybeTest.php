@@ -11,11 +11,11 @@ use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\MonadInstance;
 
+use function thgs\Functional\Assert\assertInstanceIsFunctor;
 use function thgs\Functional\fmap;
 
 class MaybeTest extends TestCase
 {
-    use FunctorLawsAssertions;
     use EqAssertions;
 
     public function testFmap(): void
@@ -31,11 +31,12 @@ class MaybeTest extends TestCase
 
     public function testIsAFunctor(): void
     {
-        $this->assertInstanceIsFunctor(
+        $result = assertInstanceIsFunctor(
             new Maybe(new Just(5)),
-            fn (int $x): bool => $x == 5,
-            fn (bool $x): string => $x == true ? '100' : '500'
+            static fn (int $x): bool => $x == 5,
+            static fn (bool $x): string => $x == true ? '100' : '500'
         );
+        $this->assertNull($result, (string) $result);
     }
 
     public function testImplementsEqCorrectly(): void

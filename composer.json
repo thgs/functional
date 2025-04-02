@@ -18,7 +18,8 @@
             "src/io.php",
             "src/iteration.php",
             "src/partial.php",
-            "src/reflection.php"
+            "src/reflection.php",
+            "src/Assert/functors.php"
         ]
     },
     "authors": [

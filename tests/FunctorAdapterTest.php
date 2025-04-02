@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\Adapter\FunctorAdapter;
+use function thgs\Functional\Assert\assertInstanceIsFunctor;
 
 class FunctorAdapterTest extends TestCase
 {
@@ -31,11 +32,12 @@ class FunctorAdapterTest extends TestCase
     {
         $subject = new FunctorAdapter($this->getDummy(), 'transformData');
 
-        $this->assertInstanceIsFunctor(
+        $result = assertInstanceIsFunctor(
             $subject,
             fn (int $x): int => $x + 2,
             fn (int $x): int => $x + 2
         );
+        $this->assertNull($result, (string) $result);
     }
 
     public function testCanAdapt(): void

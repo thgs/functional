@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\List\Cons\LinkedList;
 use thgs\Functional\Testing\FunctorLawsAssertions;
+use function thgs\Functional\Assert\assertInstanceIsFunctor;
 
 class ConsLinkedListTest extends TestCase
 {
@@ -19,11 +20,12 @@ class ConsLinkedListTest extends TestCase
     {
         $list = LinkedList::fromArray([1,2,3]);
 
-        $this->assertInstanceIsFunctor(
+        $result = assertInstanceIsFunctor(
             $list,
             fn (int $x): int => $x * 2,
             fn (int $x): int => $x + 4
         );
+        $this->assertNull($result, (string) $result);
     }
 
     public function testCanReturnItsLength(): void
