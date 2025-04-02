@@ -50,7 +50,7 @@ function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
      * callable is indeed a Composition or not, we handle it here. Implementations
      * can opt-in/out of using a composition during their fmap() though.
      *
-     * @var callable(AF):BF $f
+     * @var \Closure(AF):BF $f
      */
     $f = $f instanceof Composition
         ? unwrapC ($f)
@@ -69,8 +69,9 @@ function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
  * @template R
  * @template A
  * @param Composition<R,A> $composition
+ * @return \Closure(R):A
  */
-function unwrapC(Composition $composition): callable
+function unwrapC(Composition $composition): \Closure
 {
     return Composition::unwrap($composition);
 }
