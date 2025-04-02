@@ -1,7 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use thgs\Functional\Instance\StateMonad;
+use thgs\Functional\Control\StateMonad;
+
 use function thgs\Functional\dn;
 use function thgs\Functional\partial;
 use function thgs\Functional\t;

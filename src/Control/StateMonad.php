@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Instance;
+namespace thgs\Functional\Control;
 
 use Closure;
 use thgs\Functional\Control\Typeclass\MonadInstance;
