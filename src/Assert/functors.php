@@ -30,20 +30,25 @@ function assertInstanceIsFunctor(
  * @template A1
  * @param FunctorInstance<A1> $subject
  * @todo is this enough to prove associativity?
+ *
+ * Identity law : fmap id = id
  */
 function assertFunctorInstanceMapsId(FunctorInstance $subject): ?string
 {
-    $result = $subject->fmap(fn ($x) => $x);
+    $id = fn ($x) => $x;
+    $result = fmap($id, $subject);
 
     $class = get_class($subject);
     if (!$result instanceof $class) {
         return 'result is not of the same class';
     }
 
+    $idResult = $id ($subject);
+
     // todo: redefine equality here. It is expected not to be the same object
     // or have the same internal structure in most cases of a functor.
-    if ($subject != $result) {
-        return 'result is not the same after fmap';
+    if ($result != $idResult) {
+        return 'result of applying `id` and fmap with `id` are not the same';
     }
 
     return null;
