@@ -33,7 +33,9 @@ function putStrLn(\Stringable|string $message): IO
 function interact(\Closure $f): IO
 {
     return getLine()
-        ->bind(function (string $contents) use ($f): IO {
+        ->bind(function (string|false $contents) use ($f): IO {
+            // todo: fix the below, maybe this handling should not be here but in getLine.
+            $contents = $contents === false ? 'no contents' : $contents;
             return putStrLn ($f ($contents));
         });
 }
