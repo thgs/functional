@@ -41,6 +41,15 @@ class LinkedList implements
     }
 
     /**
+     * @return self<string>
+     */
+    public static function fromString(string $s): self
+    {
+        $generator = fn (): \Generator => yield from str_split($s, 1);
+        return new self($generator);
+    }
+
+    /**
      * @template A1
      * @return LinkedList<A1>
      * @todo did a silly trick with EmptyList having the type too so it can pass it.

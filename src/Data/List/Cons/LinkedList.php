@@ -55,6 +55,14 @@ class LinkedList implements
     }
 
     /**
+     * @return self<string>
+     */
+    public static function fromString(string $s): self
+    {
+        return self::fromArray(str_split($s, 1));
+    }
+
+    /**
      * @template A1
      * @return LinkedList<A1>
      * @todo did a silly trick with EmptyList having the type too so it can pass it.
