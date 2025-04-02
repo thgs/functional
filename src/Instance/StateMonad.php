@@ -3,8 +3,8 @@
 namespace thgs\Functional\Instance;
 
 use Closure;
+use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Data\Tuple;
-use thgs\Functional\Typeclass\MonadInstance;
 
 use function thgs\Functional\partial;
 use function thgs\Functional\t;

@@ -1,10 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use thgs\Functional\Control\Typeclass\ApplicativeInstance;
 use thgs\Functional\Data\IO;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Testing\FunctorLawsAssertions;
-use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
 
 class IOTest extends TestCase

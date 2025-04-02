@@ -2,11 +2,11 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Control\Typeclass\ApplicativeInstance;
+use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Expression\Composition;
-use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
-use thgs\Functional\Typeclass\MonadInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
 use function thgs\Functional\c;

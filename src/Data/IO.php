@@ -2,9 +2,9 @@
 
 namespace thgs\Functional\Data;
 
-use thgs\Functional\Typeclass\ApplicativeInstance;
+use thgs\Functional\Control\Typeclass\ApplicativeInstance;
+use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
-use thgs\Functional\Typeclass\MonadInstance;
 
 use function thgs\Functional\partial;
 

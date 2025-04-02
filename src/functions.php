@@ -2,17 +2,17 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Data\Either;
 use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
-use thgs\Functional\Data\Tuple;
 use thgs\Functional\Data\Tuple3;
+use thgs\Functional\Data\Tuple;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Instance\CategoryOfFunctions;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
-use thgs\Functional\Typeclass\MonadInstance;
 
 /**
  * @template A of EqInstance

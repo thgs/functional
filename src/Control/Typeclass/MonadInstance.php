@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Typeclass;
+namespace thgs\Functional\Control\Typeclass;
 
 /**
  * Prelude now defines Monad with a type constraint to be an Applicative.

@@ -1,15 +1,15 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use thgs\Functional\Control\Typeclass\ApplicativeInstance;
+use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Data\IO;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
 use thgs\Functional\Testing\EqAssertions;
 use thgs\Functional\Testing\FunctorLawsAssertions;
-use thgs\Functional\Typeclass\ApplicativeInstance;
 use thgs\Functional\Typeclass\EqInstance;
-use thgs\Functional\Typeclass\MonadInstance;
 
 use function thgs\Functional\fmap;
 

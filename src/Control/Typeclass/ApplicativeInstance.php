@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Typeclass;
+namespace thgs\Functional\Control\Typeclass;
 
 /**
  * @template A
