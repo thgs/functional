@@ -1,6 +1,6 @@
 <?php
 
-namespace thgs\Functional\Data;
+namespace thgs\Functional\Control;
 
 use thgs\Functional\Control\Typeclass\ApplicativeInstance;
 use thgs\Functional\Control\Typeclass\MonadInstance;

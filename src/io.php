@@ -2,7 +2,7 @@
 
 namespace thgs\Functional;
 
-use thgs\Functional\Data\IO;
+use thgs\Functional\Control\IO;
 use thgs\Functional\Instance\Composition;
 
 /**

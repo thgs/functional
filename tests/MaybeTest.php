@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use thgs\Functional\Control\IO;
 use thgs\Functional\Control\Typeclass\ApplicativeInstance;
 use thgs\Functional\Control\Typeclass\MonadInstance;
-use thgs\Functional\Data\IO;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
