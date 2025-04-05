@@ -60,4 +60,40 @@ class OutputBufferingTest extends TestCase
         $this->assertEquals($previousLevel, ob_get_level());
         // todo: why this is a risky test?
     }
+
+    public function testCanBind(): void
+    {
+        /** @var \Closure():int */
+        $action = function () {
+            print "123\n";
+            return 4;
+        };
+        $ob = new OutputBuffering(
+            /** @var IO<int> */
+            $io = new IO($action)
+        );
+
+        /**
+         * @var \Closure(int):OutputBuffering<string>
+         */
+        $a_to_mb = function (int $a): OutputBuffering {
+            $action = function () use ($a) {
+                print "Previously: $a";
+                return number_format((float) $a, 2);
+            };
+            return new OutputBuffering(new IO($action));
+        };
+
+        $newOb = $ob->bind($a_to_mb);
+        $result = $newOb();
+
+        $bufferedOutput = $result->fst();
+        $this->assertIsString($bufferedOutput);
+        // todo: monoid? missing previous output?
+        $this->assertEquals("Previously: 4", $bufferedOutput, 'buffered output does not match expectation');
+
+        $obReturns = $result->snd();
+        $this->assertIsString($obReturns);
+        $this->assertEquals('4.00', $obReturns, 'return value does not match expectation');
+    }
 }
