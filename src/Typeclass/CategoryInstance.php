@@ -11,6 +11,8 @@ namespace thgs\Functional\Typeclass;
  * @phpstan-type CatAC callable(A):C
  *
  * @todo phpstan does not allow `phpstan-type` annotations in methods?
+ * @see https://hackage.haskell.org/package/ghc-internal-9.1201.0/docs/src/GHC.Internal.Control.Category.html#Category
+ * @todo see https://hackage.haskell.org/package/data-category-0.4/docs/src/Data-Category.html#Obj
  */
 interface CategoryInstance
 {
