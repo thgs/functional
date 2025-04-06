@@ -33,6 +33,15 @@ class IO implements
     ) {}
 
     /**
+     * Just a convenience static constructor.
+     * @return IO<null>
+     */
+    public static function unit(): self
+    {
+        return new self(fn () => null);
+    }
+
+    /**
      * This is effectively (<-)
      * @return ReturnType
      */
