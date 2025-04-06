@@ -2,9 +2,11 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Typeclass\BifunctorInstance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
+use function thgs\Functional\c;
 use function thgs\Functional\show;
 
 /**
@@ -13,12 +15,14 @@ use function thgs\Functional\show;
  *
  * @implements EqInstance<Either<A,B>>
  * @implements ShowInstance<Either<A,B>>
+ * @implements BifunctorInstance<A,B>
  *
  * implements FunctorInstance<Either<A,B>>
  */
 class Either implements
     EqInstance,
-    ShowInstance
+    ShowInstance,
+    BifunctorInstance
     /*FunctorInstance*/
 {
     /**
@@ -66,6 +70,22 @@ class Either implements
     public function __toString(): string
     {
         return ($this->x instanceof Left ? 'Left ' : 'Right ') . show($this->x->getValue());
+    }
+
+    /**
+     * @template C
+     * @template D
+     * @param \Closure(A):C $f
+     * @param \Closure(B):D $f
+     * @return Either<C,D>
+     */
+    public function bimap(\Closure $f, \Closure $g): BifunctorInstance
+    {
+        if ($this->x instanceof Left) {
+            return new self(new Left(c ($f) ($this->x)));
+        }
+
+        return new self(new Right(c ($g) ($this->x)));
     }
 
     /**

@@ -2,7 +2,10 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Typeclass\BifunctorInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
+
+use function thgs\Functional\c;
 
 /**
  * @template C
@@ -11,7 +14,8 @@ use thgs\Functional\Typeclass\FunctorInstance;
  * @implements FunctorInstance<Constant<C,*>>
  */
 class Constant implements
-    FunctorInstance
+    FunctorInstance,
+    BifunctorInstance
 {
     public function __construct(
         /** @var C */
@@ -27,5 +31,10 @@ class Constant implements
     public function fmap(\Closure $f): FunctorInstance
     {
         return new self($this->c);
+    }
+
+    public function bimap(\Closure $f, \Closure $g): BifunctorInstance
+    {
+        return new self(c ($f) ($this->c));
     }
 }

@@ -2,7 +2,9 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Typeclass\BifunctorInstance;
 use thgs\Functional\Typeclass\EqInstance;
+use function thgs\Functional\c;
 use function thgs\Functional\partial;
 
 /**
@@ -10,9 +12,11 @@ use function thgs\Functional\partial;
  * @template B
  *
  * @implements EqInstance<Tuple<A,B>>
+ * @implements BifunctorInstance<A,B>
  */
 class Tuple implements
-    EqInstance
+    EqInstance,
+    BifunctorInstance
 {
     /**
      * (,) :: a -> b -> (a, b)
@@ -154,5 +158,13 @@ class Tuple implements
     public function notEquals(EqInstance $other): bool
     {
         return !$this->equals($other);
+    }
+
+    public function bimap(\Closure $f, \Closure $g): BifunctorInstance
+    {
+        return new self(
+            c ($f) ($this->fst()),
+            c ($g) ($this->snd())
+        );
     }
 }

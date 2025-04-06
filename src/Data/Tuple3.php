@@ -2,6 +2,9 @@
 
 namespace thgs\Functional\Data;
 
+use thgs\Functional\Typeclass\BifunctorInstance;
+
+use function thgs\Functional\c;
 use function thgs\Functional\partial;
 
 /**
@@ -9,7 +12,8 @@ use function thgs\Functional\partial;
  * @template B
  * @template C
  */
-class Tuple3
+class Tuple3 implements
+    BifunctorInstance
 {
     /**
      * @param A $a
@@ -58,5 +62,14 @@ class Tuple3
     public function uncurry3(callable $f, Tuple3 $p): callable
     {
         return partial ($f) ($p->fst3()) ($p->snd3()) ($p->thd3());
+    }
+
+    public function bimap(\Closure $f, \Closure $g): BifunctorInstance
+    {
+        return new self(
+            $this->fst3(),
+            c ($f) ($this->snd3()),
+            c ($g) ($this->thd3()),
+        );
     }
 }

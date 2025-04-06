@@ -7,7 +7,18 @@ namespace thgs\Functional\Typeclass;
  *
  * class (forall a. Functor (p a)) => Bifunctor p where
  *
- * We use 2 templates for simplicity, for now.
+ * We use 2 templates for --simplicity--, for now.  In truth makes
+ * things more complicated because when we implement we need to write
+ * something like:
+ *
+ * implements BifunctorInstance<A,B>
+ *
+ * Instead of:
+ *
+ * implements BifunctorInstance<Either<A,B>>
+ *
+ * But I am not entirely sure how to do it yet with the templates
+ * correctly because 'p' is only forming a Functor with all 'a'.
  *
  * @template A
  * @template C
