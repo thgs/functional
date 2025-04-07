@@ -36,9 +36,9 @@ use function thgs\Functional\c;
  *
  * @todo Type hinting this will be challenging.
  *
- * @return mixed|callable|Composition
+ * @return mixed|\Closure|Composition
  */
-function partial(callable|Composition $f)
+function partial(\Closure|Composition $f)
 {
     $isComposition = $f instanceof Composition;
     

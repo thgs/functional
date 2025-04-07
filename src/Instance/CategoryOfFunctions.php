@@ -15,24 +15,32 @@ use function thgs\Functional\partial;
  *
  * Which is the Category of functions
  *
- * @template A
- * @template B
- * @template C
- * @implements CategoryInstance<A,B,C>
+ * @implements CategoryInstance<\Closure>
  */
 class CategoryOfFunctions implements CategoryInstance
 {
-    /**
-     * @todo this feels like something is missing.
-     * @return callable(A):A
-     */
-    public static function id(): callable
+    public static function id(): mixed
     {
-        return fn ($x) => $x;
+        /**
+         * @template A
+         * @param A $x
+         * @return A
+         */
+        $id = fn ($x) => $x;
+        return $id;
     }
 
-    public static function compose(): callable
+    /**
+     * @template A
+     * @template B
+     * @template C
+     *
+     * @param \Closure(A):B $a
+     * @param \Closure(B):C $b
+     * @return \Closure(A):C
+     */
+    public static function compose(mixed $a, mixed $b): mixed
     {
-        return fn ($f, $g) => fn ($x) => partial($f (partial($g, $x)));
+        return fn ($x) => partial($a, partial($b, $x));
     }
 }

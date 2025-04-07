@@ -271,12 +271,13 @@ function memoize(\Closure $f): Composition
 }
 
 
-function comp(callable $f, callable $g): callable
+function comp(\Closure $f, \Closure $g): \Closure
 {
-    return CategoryOfFunctions::compose() ($f, $g);
+    return CategoryOfFunctions::compose ($f, $g);
 }
 
 /**
+ * @todo this is broken
  * Usage:
  *
  *   rlc() ($f , $g)
