@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/37]
+* Todo [8/38]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -369,7 +369,7 @@ Isn't that essentially what we already do with ~partial~ ? Yes.. So this code:
 I think there is inlining you can do on function composition but there
 is also inlining you can do on types, since types can be represented
 by functions, right?
-** Journeys [1/2]
+** Journeys [1/3]
 *** DONE Safety journey
 It is a little vague how "safety" is defined. There is type safety or
 safe from side-effects.
@@ -427,6 +427,55 @@ I think fixing partial in respect to the types will help a lot with
 the static analysis errors.
 #+END_QUOTE
 
+*** TODO What do I miss if..
+Instead of Either a b we use the union types: a|b (sum types) And instead of
+Tuple<a,b> we use a&b (intersection types).  This way we have some native
+support from PHP for product and coproduct (product and sum types).  One thing I
+miss is that I cannot really make "new types" and define functions on them? Like
+I have to go write a function for every combination I want to use, as we do not
+have generics. But we did not have generics anyway. However let's consider
+Maybe.
+
+Maybe is Nothing | Just x, therefore a sum type, therefore coproduct. So I could
+write null|int (for Maybe Int) and null|object (for Maybe object) okay, and this
+also transforms to the more convenient nullable type ?int or ?object. Fine.
+
+So let's say I want to make a functor on that "Maybe" type. We need to define fmap.
+
+fmap :: (a -> b) -> f a -> f b
+
+Taking arbitrary types for a (int) and b (bool) we could have:
+
+#+begin_src php
+
+  function fmap (\Closure(int):bool $f, ?int $a): ?bool {
+      return $a === null ? null : $f ($a);
+  }
+
+#+end_src
+
+Let's generalise wherever we still can and use type annotations
+
+#+begin_src php
+
+   /**
+    * @template A1
+    * @template A2
+    * @template B1
+    * @template B2
+    * @param \Closure(A1|A2):B1|B2 $f
+    * @param A1|A2 $a
+    * @return B1|B2
+    */
+  function fmap (\Closure $f, mixed $a): mixed {
+      return $a === null ? null : $f ($a);
+  }
+
+#+end_src
+
+Now that is nice and good for something that only has two constructors, what if
+it had 3 ? Also notice the implementation cannot handle anything but "null" as
+one of the two types, as we do not know the types!
 * Feedback
 ** Discord
 adrian.2688 — i'd stick those utility methods into the associated
