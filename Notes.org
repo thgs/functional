@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/33]
+* Todo [8/37]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -136,6 +136,113 @@ better semantics, or better API to work with these things (as
 
 
 Could touch on this, at least?
+** TODO Writer?
+** TODO Reader?
+** TODO Continuation?
+** TODO Abstract notations
+Like do notation for example.  In PHP (or anywhere) we could abstract
+a notation to a function if we project the elements/parts as arguments
+of the function and then define how they compose.  For example imagine
+the below types:
+
+runNotation :: [a] -> b
+
+Takes a list of "a"s and runs them and produces a b (which also could be again an "a" but just to signify the difference).
+
+So the `dn` function we have now is like:
+
+dn in php:  (MonadInstance $ma, MonadInstance|\Closure/*|Composition*/ ...$fs)
+enforcing the first argument to be a MonadInstance, fine, lets add this restriction for a second
+
+runNotation :: a' -> [a] -> b
+
+Where a' is a "restricted" part of what a is.
+
+dn :: a' -> [a] -> b
+dn :: MonadInstance -> [MonadInstance|Closure] -> MonadInstance
+
+a "then" (or notation for (>>)) would look like this:
+
+notationForThen :: a' -> [a] -> b
+notationForThen :: MonadInstance -> [MonadInstance] -> MonadInstance
+
+So we could really generalise here and write even:
+notationForThen :: [MonadInstance] -> MonadInstance
+
+However in general for notations, we could project the elements into the argument list and decide how these compose:
+
+#+begin_src php
+
+  someNotation(
+      $element1,
+      $element2,
+      $element3
+  );
+
+#+end_src
+
+So we need 2 things: 
+1. what the type of the elements is
+2. how to compose those
+3. (optionally) how you fold the list of elements (for more flexibility in expression) - ie foldr or foldl
+
+So with CategoryInstance we could define notations as long as we
+define those two above. Restrictions can go in the helper function.
+
+So do-notation could be
+
+doNotationDefinition :: [elementsType] -> result
+doNotationDefinition :: [m a | (a -> m b)] -> m b
+
+A notation for function composition (right-to-left, if I am correct), ie:
+
+#+begin_src php
+
+  // g after f
+  // g . f
+  // = \x -> g ( f x )
+  //
+  functionComposition(
+      $g = fn ($x) => $x + 3,
+      $f = fn ($x) => $x * 3,
+  );
+
+#+end_src
+
+Would be in types:
+
+functionCompositionNotation :: [(a -> b)|(b -> c)] -> (a -> c)
+
+Could use orders to make sure they come correctly instead of "any"
+from the sum type above, although this would still work but a list of
+[(a->b)] would just -> (a -> a) basically making all type variables
+the same (because in this case they actually are), but just in the
+case of function composition maybe?
+
+Nevertheless, it is still true:
+
+functionCompositionNotation :: [(a -> b)|(b -> c)] -> (a -> c)
+functionCompositionNotation xs = foldTheListSomehow (myCompositionFunction) xs
+myCompositionFunction = (.)
+foldTheListSomehow = <define the fold from right to left, i guess, or generally how we iterate and consume>
+
+So could make it a type-class thing.
+
+This makes a lot of more sense now:
+https://www.haskellforall.com/2012/08/the-category-design-pattern.html
+in the "lens" of making notations. It is just that haskell allows
+infix functions, in PHP we do not have the ability to define infix
+functions ourselves, however we can "project" this infix notation to
+an list of arguments, as if we were composing them with the infix
+operator. Might actually seem trivial, now.
+
+Additionally you could say also apply "Foldable" after "Category", but
+probably is better to "inline" it for performance.
+
+Ie: Some notation would be implemented by folding a list (right to
+left) and composing according to the composition function assigned to
+the Category of those elements.
+
 ** ----- DONE ----
 ** DONE Change callable to \Closure
 TimWolla and Edorian helped my understand that callable is scope
@@ -258,6 +365,10 @@ Isn't that essentially what we already do with ~partial~ ? Yes.. So this code:
 
 #+end_src
 
+*** On inlining
+I think there is inlining you can do on function composition but there
+is also inlining you can do on types, since types can be represented
+by functions, right?
 ** Journeys [1/2]
 *** DONE Safety journey
 It is a little vague how "safety" is defined. There is type safety or
