@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/38]
+* Todo [8/39]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -243,6 +243,8 @@ Ie: Some notation would be implemented by folding a list (right to
 left) and composing according to the composition function assigned to
 the Category of those elements.
 
+** TODO Add Kleisli category
+Now that we have notations, so that we can re-implement dn on top of it.
 ** ----- DONE ----
 ** DONE Change callable to \Closure
 TimWolla and Edorian helped my understand that callable is scope
