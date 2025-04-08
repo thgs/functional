@@ -118,6 +118,49 @@ function either(callable $f, callable $g, Either $either)
     return c ($eitherValue instanceof Left ? $f : $g) ($eitherValue->getValue());
 }
 
+function lefts(Either ...$eithers): iterable
+{
+    foreach ($eithers as $either) {
+        if ($either->isRight()) {
+            continue;
+        }
+        yield $either;
+    }
+}
+
+function rights(Either ...$eithers): iterable
+{
+    foreach ($eithers as $either) {
+        if ($either->isRight()) {
+            yield $either;
+        }
+    }
+}
+
+/**
+ * @template A
+ * @template B
+ * @param A $default
+ * @param Either<A,B> $either
+ * @return A
+ */
+function fromLeft($default, Either $either): mixed
+{
+    return $either->isRight() ? $default : $either->getValue()->getValue();
+}
+
+/**
+ * @template A
+ * @template B
+ * @param B $default
+ * @param Either<A,B> $either
+ * @return B
+ */
+function fromRight($default, Either $either): mixed
+{
+    return $either->isRight() ? $either->getValue()->getValue() : $default;
+}
+
 /**
  * @template A
  * @template B

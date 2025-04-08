@@ -4,6 +4,7 @@ namespace thgs\Functional\Data;
 
 use thgs\Functional\Typeclass\BifunctorInstance;
 use thgs\Functional\Typeclass\EqInstance;
+use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
 use function thgs\Functional\c;
@@ -16,14 +17,13 @@ use function thgs\Functional\show;
  * @implements EqInstance<Either<A,B>>
  * @implements ShowInstance<Either<A,B>>
  * @implements BifunctorInstance<A,B>
- *
- * implements FunctorInstance<Either<A,B>>
+ * @implements FunctorInstance<Either<A,B>>
  */
 class Either implements
     EqInstance,
     ShowInstance,
-    BifunctorInstance
-    /*FunctorInstance*/
+    BifunctorInstance,
+    FunctorInstance
 {
     /**
      * @param Left<A>|Right<B> $x
@@ -82,21 +82,30 @@ class Either implements
     public function bimap(\Closure $f, \Closure $g): BifunctorInstance
     {
         if ($this->x instanceof Left) {
-            return new self(new Left(c ($f) ($this->x)));
+            return new self(new Left(
+                c ($f) ($this->x->getValue())
+            ));
         }
 
-        return new self(new Right(c ($g) ($this->x)));
+        return new self(new Right(
+            c ($g) ($this->x->getValue())
+        ));
     }
 
     /**
-     * @todo correct this, Either is : Functor (Either a)
-     *
-    public function fmap(callable $f): FunctorInstance
+     * @template X of B
+     * @template Y
+     * @param \Closure(X):Y $f
+     * @return Either<A,Y>
+     */
+    public function fmap(\Closure $f): FunctorInstance
     {
-        return match (\true) {
-            $this->x instanceof Left => new self(clone $this->x),
-            $this->x instanceof Right => new self(new Right( c ($f) ($this->x->getValue()) ))
-        };
+        if ($this->x instanceof Left) {
+            return new self(clone $this->x);
+        }
+
+        return new self(new Right(
+            c ($f) ($this->x->getValue())
+        ));
     }
-    */
 }
