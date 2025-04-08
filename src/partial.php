@@ -38,10 +38,10 @@ use function thgs\Functional\c;
  *
  * @todo Type hinting this will be challenging.
  *
+ * @template ZR
  * @template ZA
- * @template ZB
- * @param \Closure(ZB):ZA|Composition<ZA,ZB> $f
- * @return ZA|mixed|\Closure|Composition
+ * @param \Closure(ZR):ZA|Composition<ZR,ZA> $f
+ * @return mixed|\Closure|Composition
  */
 function partial(\Closure|Composition $f)
 {
