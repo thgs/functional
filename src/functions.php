@@ -11,6 +11,7 @@ use thgs\Functional\Data\Tuple3;
 use thgs\Functional\Data\Tuple;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Instance\CategoryOfFunctions;
+use thgs\Functional\Instance\LeftToRightNotation;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 
@@ -291,6 +292,12 @@ function rlc(): callable
     // this is just a synonym for (.) which is right above.
     // for fun we can define it "point free"
     return CategoryOfFunctions::compose();
+}
+
+function functionComposition(\Closure ...$functions): \Closure
+{
+    $notation = new LeftToRightNotation(new CategoryOfFunctions());
+    return $notation->composeMany(...$functions);
 }
 
 /**
