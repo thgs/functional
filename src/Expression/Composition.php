@@ -44,9 +44,9 @@ class Composition implements
     /**
      * @return A
      */
-    public function __invoke()
+    public function __invoke(): mixed
     {
-        return partial ($this->g) (...func_get_args());
+        return partial ($this->g, ...func_get_args());
     }
 
     /**
@@ -65,14 +65,17 @@ class Composition implements
     public function fmap(\Closure $f): Composition
     {
         // todo: is $x really needed?
-
-        return new Composition(
+        // todo: last-resort type-hint below
+        /** @var Composition<R,B> */
+        $r = new Composition(
             /**
              * @param R $x
              * @return B
              */
-            fn ($x) => partial ($f) /*$*/ (partial ($this->g) ($x))
+            fn ($x) => partial ($f, /*$*/
+                                partial ($this->g, $x))
         );
+        return $r;
     }
 
     /**
@@ -93,13 +96,17 @@ class Composition implements
     public function contramap(\Closure $fba): ContravariantInstance
     {
         // manually flipped, the definition is really `contramap = flip (.)`
-        return new Composition(
+        // todo: last-resort type-hint below
+        /** @var Composition<B,A> */
+        $r = new Composition(
             /**
              * @param R $x
              * @return B
              */
-            fn ($x) => partial ($this->g) /*$*/ (partial ($fba) ($x))
+            fn ($x) => partial ($this->g, /*$*/
+                                partial ($fba, $x))
         );
+        return $r;
     }
 
     public function getReflectionFunction(): \ReflectionFunction
@@ -108,11 +115,11 @@ class Composition implements
     }
 
     /**
-     * @return callable(R):A
+     * @return \Closure(R):A
      */
-    public function getInnerCallable(): callable
+    public function getInnerCallable(): \Closure
     {
-        return self::unwrap($this);
+        return $this->g;
     }
 
     /**
@@ -125,5 +132,4 @@ class Composition implements
     {
         return $composition->g;
     }
-
 }
