@@ -87,7 +87,10 @@ function unwrapC(Composition $composition): \Closure
  */
 function c(\Closure|callable $f): Composition
 {
-    return new Composition($f instanceof \Closure ? $f : \Closure::fromCallable($f));
+    // todo: last resort type-hint below
+    /** @var Composition<R,A> */
+    $r = new Composition($f instanceof \Closure ? $f : \Closure::fromCallable($f));
+    return $r;
 }
 
 function show(mixed $x): string

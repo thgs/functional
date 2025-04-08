@@ -3,8 +3,6 @@
 namespace thgs\Functional;
 
 use thgs\Functional\Expression\Composition;
-use function PHPStan\dumpPhpDocType;
-use function PHPStan\dumpType;
 use function thgs\Functional\c;
 
 /**
