@@ -309,3 +309,16 @@ function ensureClosure(callable $f): \Closure
 {
     return $f instanceof \Closure ? $f : \Closure::fromCallable($f);
 }
+
+
+/**
+ * @template A
+ * @template B
+ * @param \Closure(A):B $f
+ * @return \Closure(B):A
+ * This is like a contramap with Op
+ */
+function flip(\Closure $f): \Closure
+{
+    return fn ($x, $y) => $f($y, $x);
+}
