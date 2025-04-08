@@ -4,7 +4,6 @@ namespace thgs\Functional\Instance;
 
 use thgs\Functional\Typeclass\CategoryInstance;
 use thgs\Functional\Typeclass\NotationInstance;
-use function PHPStan\dumpType;
 
 /**
  * @template Elements
