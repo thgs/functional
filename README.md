@@ -92,6 +92,28 @@ dn(
 
 ```
 
+Generalised Notations
+
+By defining the composition between the "elements"
+
+```php
+
+function myNotation(mixed ...$elements) {
+    return (new LeftToRightNotation(new CategoryOfFunctions()))->composeMany(...$elements);
+}
+
+// this will compose a function that first will evaluate the last passed "element"
+$composedFunction = myNotation(
+     fn (int $x): bool => $x == 16,
+     fn (int $x): int  => (int) ($x / 2),
+     fn (int $x): int => pow($x, 5),
+     fn (array $items): int => count($items),
+     array_filter(...)
+);
+
+$composedFunction(["one", "two", ""]); // true
+```
+
 #### Helpers for your tests
 
 ```php
