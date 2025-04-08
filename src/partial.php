@@ -3,6 +3,8 @@
 namespace thgs\Functional;
 
 use thgs\Functional\Expression\Composition;
+use function PHPStan\dumpPhpDocType;
+use function PHPStan\dumpType;
 use function thgs\Functional\c;
 
 /**
@@ -36,7 +38,10 @@ use function thgs\Functional\c;
  *
  * @todo Type hinting this will be challenging.
  *
- * @return mixed|\Closure|Composition
+ * @template ZA
+ * @template ZB
+ * @param \Closure(ZB):ZA|Composition<ZA,ZB> $f
+ * @return ZA|mixed|\Closure|Composition
  */
 function partial(\Closure|Composition $f)
 {
@@ -44,7 +49,7 @@ function partial(\Closure|Composition $f)
     
     $reflectionFunction = $isComposition
         ? $f->getReflectionFunction()
-        : new \ReflectionFunction($f instanceof \Closure ? $f : \Closure::fromCallable($f));
+        : new \ReflectionFunction($f);
 
     // Fetch the initial parameters on initialization
     $startParameters = array_slice(func_get_args(), 1);
@@ -52,9 +57,13 @@ function partial(\Closure|Composition $f)
 
     // When we have enough arguments to evaluate the function, the edge-case.
     if (sizeof($startParameters) >= $requiredSize) {
+        return ($isComposition ? unwrapC($f) : $f) (...$startParameters);
+        /*
         return call_user_func_array(
-            $isComposition ? unwrapC($f) : $f, $startParameters
+            ($isComposition ? unwrapC($f) : $f),
+            $startParameters
         );
+        */
     }
 
     $partialFunction = function() use ($startParameters, $f) {
@@ -63,7 +72,7 @@ function partial(\Closure|Composition $f)
         // Join the current parameters with the newly received parameters
         $allParams = array_merge($startParameters, $restParameters);
 
-        /** @var callable $f */
+        /** @var \Closure $f */
         // Append the function as the first item and call partialization again
         return partial($f, ...$allParams);
     };
