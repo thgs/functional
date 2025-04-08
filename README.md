@@ -8,6 +8,10 @@ and very quickly realised that a very very similar approach was used in
 [marcosh/lamphpda](https://github.com/marcosh/lamphpda). That is a more complete
 library.
 
+From then on, I have deviated considerably and certain decisions are
+quite different, for reasons that either I still explore and I am not
+certain about or for different goals and priorities.
+
 ### Highlight features
 
 #### Basic structures from Haskell
