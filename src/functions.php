@@ -16,6 +16,16 @@ use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 
 /**
+ * @template A
+ * @param A $a
+ * @return A
+ */
+function id(mixed $a): mixed
+{
+    return $a;
+}
+
+/**
  * @template A of EqInstance
  * @template B of EqInstance
  * @param A $a
