@@ -64,6 +64,11 @@ class OutputBuffering implements
         return new self(new IO($action));
     }
 
+    /**
+     * @template B1
+     * @param OutputBuffering<B1> $b
+     * @return OutputBuffering<B1>
+     */
     public function then(MonadInstance $b): MonadInstance
     {
         return $this->bind(fn () => $b);
