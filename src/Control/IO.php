@@ -10,6 +10,10 @@ use function thgs\Functional\partial;
 
 
 /**
+ * This gives a context of IO for anything deemed as such. It is up to
+ * the user to decide what should be treated as a side-effect and what
+ * should not.
+ *
  * @template ReturnType
  *
  * Here we care more for the result of that action, rather than the action itself.
