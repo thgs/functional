@@ -58,15 +58,15 @@ class Tuple implements
      *
      * @template A1
      * @template B1
-     * @param callable(A1):B1 $f
+     * @param \Closure(A1):B1 $f
      * @param Tuple<A1,A1> $p
      * @return Tuple<B1,B1>
      */
-    public static function both(callable $f, Tuple $p): self
+    public static function both(\Closure $f, Tuple $p): self
     {
         /**
          * Type override here for now.
-         * @var callable(A1):B1 $g
+         * @var \Closure(A1):B1 $g
          */
         $g = partial ($f);
         return new self($g ($p->fst()), $g ($p->snd()));
@@ -88,14 +88,14 @@ class Tuple implements
      * @template A1
      * @template B1
      * @template C1
-     * @param callable(Tuple<A1,B1>):C1 $f
+     * @param \Closure(Tuple<A1,B1>):C1 $f
      * @return C1
      */
     public static function curry(callable $f, mixed $a, mixed $b): mixed
     {
         /**
          * Temporary type override here and assignment.
-         * @var callable(Tuple<A1,B1>):C1 $partialF
+         * @var \Closure(Tuple<A1,B1>):C1 $partialF
          */
         $partialF = partial ($f);
         return $partialF (new self($a, $b));
