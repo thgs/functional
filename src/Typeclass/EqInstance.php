@@ -3,17 +3,17 @@
 namespace thgs\Functional\Typeclass;
 
 /**
- * @template A of EqInstance
+ * @template A
  */
 interface EqInstance
 {
     /**
-     * @param A $other
+     * @param EqInstance<A> $other
      */
     public function equals(EqInstance $other): bool;
 
     /**
-     * @param A $other
+     * @param EqInstance<A> $other
      */
     public function notEquals(EqInstance $other): bool;
 }
