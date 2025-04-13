@@ -2,6 +2,9 @@
 
 namespace thgs\Functional\Testing;
 
+/**
+ * @todo need to fix this
+ */
 trait MonoidWithMemptyLawsAssertions
 {
     protected function assertIsMonoidWithMempty($memptyValue, \Closure $associative, mixed $x, mixed $y, mixed $z): void

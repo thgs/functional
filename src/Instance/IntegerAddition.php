@@ -4,20 +4,19 @@ namespace thgs\Functional\Instance;
 
 use thgs\Functional\Typeclass\MonoidInstance;
 
-
 /**
- * @implements MonoidInstance<int>
+ * @implements MonoidInstance<IntegerAddition, int>
  */
 class IntegerAddition implements
     MonoidInstance
 {
-    public static function mempty(): int
+    public function mempty(): int
     {
         return 0;
     }
 
-    public static function mappend(): \Closure
+    public function mappend(mixed $a, mixed $b): int
     {
-        return fn (int $a, int $b): int => $a + $b;
+        return $a + $b;
     }
 }

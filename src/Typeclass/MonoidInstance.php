@@ -4,6 +4,7 @@ namespace thgs\Functional\Typeclass;
 
 /**
  * @template M
+ * @template A
  *
  * @todo implement MonoidInstance in terms of Semigroup.
  * Haskell's interface to making a Monoid is to define types and
@@ -16,9 +17,9 @@ namespace thgs\Functional\Typeclass;
 interface MonoidInstance
 {
     /**
-     * @return M
+     * @return A
      */
-    public static function mempty(): mixed;
+    public function mempty(): mixed;
 
     /**
      * Returns the associative function of the monoid, to allow type
@@ -32,9 +33,11 @@ interface MonoidInstance
      *
      * MonoidInstance::mappend ("Hello", " world!");
      *
-     * @return \Closure(M,M):M
+     * @param A $a
+     * @param A $b
+     * @return A
      */
-    public static function mappend(): \Closure;
+    public function mappend(mixed $a, mixed $b): mixed;
 
     // todo: define mconcat -- needs list (OR Foldable?)
 }
