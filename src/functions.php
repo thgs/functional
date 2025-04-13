@@ -141,6 +141,12 @@ function either(callable $f, callable $g, Either $either)
     return c ($eitherValue instanceof Left ? $f : $g) ($eitherValue->getValue());
 }
 
+/**
+ * @template A1
+ * @template B1
+ * @param Either<A1,B1> ...$eithers
+ * @return \Generator<array-key, Either<A1,B1>>
+ */
 function lefts(Either ...$eithers): iterable
 {
     foreach ($eithers as $either) {
@@ -151,6 +157,12 @@ function lefts(Either ...$eithers): iterable
     }
 }
 
+/**
+ * @template A1
+ * @template B1
+ * @param Either<A1,B1> ...$eithers
+ * @return \Generator<array-key, Either<A1,B1>>
+ */
 function rights(Either ...$eithers): iterable
 {
     foreach ($eithers as $either) {
@@ -328,6 +340,7 @@ function memoize(\Closure $f): Composition
 {
     /** @var \Closure(A):B $wrapped */
     $wrapped = static function ($x) use ($f) {
+        /** @var mixed[] */
         static $memoization = [];
 
         if (!isset($memoization[$x])) {
@@ -339,6 +352,16 @@ function memoize(\Closure $f): Composition
 }
 
 
+/**
+ * @template A
+ * @template B
+ * @template C
+ *
+ * @param \Closure(A):B $f
+ * @param \Closure(B):C $g
+ * @return \Closure(A):C
+ * @todo is the type-hint correct always?
+ */
 function comp(\Closure $f, \Closure $g): \Closure
 {
     return CategoryOfFunctions::compose ($f, $g);
@@ -381,11 +404,12 @@ function ensureClosure(callable $f): \Closure
 /**
  * @template A
  * @template B
- * @param \Closure(A):B $f
- * @return \Closure(B):A
+ * @template C
+ * @param \Closure(A,B):C $f
+ * @return \Closure(B,A):C
  * This is like a contramap with Op
  */
 function flip(\Closure $f): \Closure
 {
-    return fn ($x, $y) => $f($y, $x);
+    return fn ($x, $y) => $f ($y, $x);
 }

@@ -43,6 +43,8 @@ class Either implements
     /**
      * @phpstan-assert-if-true Right<B> $this->x
      * @phpstan-assert-if-true Right<B> $this->getValue()
+     * @phpstan-assert-if-false Left<A> $this->x
+     * @phpstan-assert-if-false Left<A> $this->getValue()
      */
     public function isRight(): bool
     {
