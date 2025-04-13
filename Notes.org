@@ -1,12 +1,19 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/40]
+* Todo [10/43]
 ** TODO Fix IO
+What needs to be fixed here??
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
 I think "Composition" became natural because of partial application.
 ** TODO Semigroup and Monoid in terms of Semigroup
+ Implement MonoidInstance in terms of Semigroup.  Haskell's interface to making
+ a Monoid is to define types and override defaults of either mempty or
+ mconcat. mappend is defined in terms of Semigroup. I think `template M of
+ SemigroupInstance` would be what we are looking for here so that mappend can
+ have a default implementation of returning the associative function from the
+ Semigroup.
 ** TODO Curry?
 ** TODO List comprehension?
 ** TODO How we handle ~newtype~ ?
@@ -38,6 +45,9 @@ Example for : x -: f = f x
 #+end_src
 
 First two do not look much of a helper really.
+
+This could be implemented in terms of notations.
+
 ** TODO Explore use cases
 Haskell is good with constructing hexagons. What aspects of haskell do that? Are they included?
 Just providing a base to work with the given structures (ie extending Maybe or reusing it)
@@ -82,8 +92,6 @@ I suppose so. Does it work now?
 
 Should be it.
 
-** TODO Implement Category
-** TODO Implement Op
 ** TODO Separate data and control functors
 https://www.tweag.io/blog/2020-01-16-data-vs-control/
 
@@ -103,9 +111,11 @@ of composition, I need a diagram. Maybe it is actually a category!
 
 Something like this https://wiki.haskell.org/index.php?title=Foldable_and_Traversable#What_do_these_classes_all_mean?_A_brief_tour:
 
-** TODO Allow multiple functions composition
+** TODO Inline multiple functions composition
 And inline them all in a single Closure rather than one on top of the
 other. Would that be possible?
+
+Notations can do multiple composition but not with inline as per above.
 ** TODO Consider generalising the wrappers
 ** TODO Consider analysing the mapping between Category -> Haskell | PHP or Haskell -> PHP
 So there are things that are functional and are written
@@ -251,7 +261,15 @@ See https://github.com/ihor/NSPL/blob/master/nspl/f.php#L135
 ** TODO Improve memoize implementation
 In Haskell, you might memoize with recursion. See https://wiki.haskell.org/index.php?title=Memoization
 It's worth looking into this.
+** TODO Fix phpstan errors
+** TODO Test coverage & tests improvements
+** TODO Add more type class laws
+Many instances do not have helper assertions for their laws.
 ** ----- DONE ----
+** DONE Implement Category
+Calling this Done and if there is an issue will solve it there.
+** DONE Implement Op
+Calling this Done and if there is an issue will solve it there.
 ** DONE Change callable to \Closure
 TimWolla and Edorian helped my understand that callable is scope
 specific and how to benchmark a little better.
