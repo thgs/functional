@@ -12,6 +12,7 @@ use function thgs\Functional\c;
  * @template A
  *
  * @implements FunctorInstance<Constant<C,*>>
+ * @implements BifunctorInstance<C,A>
  */
 class Constant implements
     FunctorInstance,
