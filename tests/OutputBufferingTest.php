@@ -65,7 +65,7 @@ class OutputBufferingTest extends TestCase
     {
         /** @var \Closure():int */
         $action = function () {
-            print "123\n";
+            print "First one\n";
             return 4;
         };
         $ob = new OutputBuffering(
@@ -78,8 +78,8 @@ class OutputBufferingTest extends TestCase
          */
         $a_to_mb = function (int $a): OutputBuffering {
             $action = function () use ($a) {
-                print "Previously: $a";
-                return number_format((float) $a, 2);
+                print "Second one: $a";
+                return number_format((float) $a * 4, 2);
             };
             return new OutputBuffering(new IO($action));
         };
@@ -89,11 +89,10 @@ class OutputBufferingTest extends TestCase
 
         $bufferedOutput = $result->fst();
         $this->assertIsString($bufferedOutput);
-        // todo: monoid? missing previous output?
-        $this->assertEquals("Previously: 4", $bufferedOutput, 'buffered output does not match expectation');
+        $this->assertEquals("First one\nSecond one: 4", $bufferedOutput, 'buffered output does not match expectation');
 
         $obReturns = $result->snd();
         $this->assertIsString($obReturns);
-        $this->assertEquals('4.00', $obReturns, 'return value does not match expectation');
+        $this->assertEquals('16.00', $obReturns, 'return value does not match expectation');
     }
 }

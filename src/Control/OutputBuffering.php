@@ -49,17 +49,15 @@ class OutputBuffering implements
      */
     public function bind(Closure $f): MonadInstance
     {
-        $current = $this;
-        $action = function () use ($f, $current) {
-            $result = ($current)();
-            $result_a_to_mb = $f($result->snd())
-                // like unIO, we extact the return value of `m b`
-                ->__invoke();
+        $action = function () use ($f) {
+            $currentIoResult = ($this->io)(); // todo: support ...$xs ?
 
-            // todo: we need to print again? alternative is to access the IO action from inside `mb` instead of
-            // invoking the whole `mb`.
-            print $result_a_to_mb->fst();
-            return $result_a_to_mb->snd();
+            $mb = $f($currentIoResult);
+            if (!$mb instanceof OutputBuffering) {
+                throw new \TypeError('Bound closure does not return instance of ' . self::class);
+            }
+
+            return ($mb->io)();
         };
         return new self(new IO($action));
     }
