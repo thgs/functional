@@ -26,6 +26,16 @@ function id(mixed $a): mixed
 }
 
 /**
+ * @template A
+ * @param A $a
+ * @return null
+ */
+function unit(mixed $a = null): null
+{
+    return null;
+}
+
+/**
  * @template A of EqInstance
  * @template B of EqInstance
  * @param A $a
