@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [8/39]
+* Todo [8/40]
 ** TODO Fix IO
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
@@ -245,9 +245,12 @@ the Category of those elements.
 
 ** TODO Add Kleisli category
 Now that we have notations, so that we can re-implement dn on top of it.
-** TODO Consts can be used to simplify passing functions around
+** TODO Consider consts can be used to simplify passing functions around
 Consts or defines.
 See https://github.com/ihor/NSPL/blob/master/nspl/f.php#L135
+** TODO Improve memoize implementation
+In Haskell, you might memoize with recursion. See https://wiki.haskell.org/index.php?title=Memoization
+It's worth looking into this.
 ** ----- DONE ----
 ** DONE Change callable to \Closure
 TimWolla and Edorian helped my understand that callable is scope
