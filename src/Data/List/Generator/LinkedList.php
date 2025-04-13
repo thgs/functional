@@ -2,20 +2,24 @@
 
 namespace thgs\Functional\Data\List\Generator;
 
-use Closure;
+use thgs\Functional\Data\ListInterface;
 use thgs\Functional\Typeclass\FunctorInstance;
 
 use function thgs\Functional\c;
 
 /**
  * @todo Add type checking
- * @todo Use "Rewindable" generators here, but for now to see the impact it is without.
+ * @todo Use "Rewindable" generators here, but for now to see the impact it is
+ * without.  Problem with those is that if they actually contain side-effects,
+ * rewinding them does not guarantee same results.
  *
  * @template A
  * @implements FunctorInstance<A>
+ * @implements ListInterface<A>
  */
 class LinkedList implements
-    FunctorInstance
+    FunctorInstance,
+    ListInterface
 {
     /**
      * @param EmptyList<A>|\Closure():\Generator<A> $generator
@@ -73,6 +77,9 @@ class LinkedList implements
         return new self($generator);
     }
 
+    /**
+     * @phpstan-assert-if-true EmptyList $this->elements
+     */
     public function isEmpty(): bool
     {
         return $this->elements instanceof EmptyList;
@@ -110,10 +117,10 @@ class LinkedList implements
      * (++) (x:xs) ys = x : xs ++ ys
      * (++) (x:xs) ys = (:) x ((++) xs ys)
      *
-     * @param LinkedList<A> $ys
+     * @param ListInterface<A> $ys
      * @return LinkedList<A>
      */
-    public function append(self $ys): self
+    public function append(ListInterface $ys): self
     {
         if ($this->elements instanceof EmptyList) {
             return $ys;
@@ -128,7 +135,12 @@ class LinkedList implements
             foreach (($this->elements)() as $x) {
                 yield $key++ => $x;
             }
-            foreach (($ys->elements)() as $x) {
+
+            /**
+             * To support ListInterface as parameter, we iterate from
+             * \IteratorAggregate.
+             */
+            foreach ($ys as $x) {
                 yield $key++ => $x;
             }
 
@@ -166,7 +178,7 @@ class LinkedList implements
 
     /**
      * @todo for now
-     * @return array<A>
+     * @return list<A>
      */
     public function toArray(): array
     {
@@ -190,5 +202,13 @@ class LinkedList implements
             $length++;
         }
         return $length;
+    }
+
+    public function getIterator(): \Traversable
+    {
+        if ($this->elements instanceof EmptyList) {
+            return [];
+        }
+        yield from ($this->elements)();
     }
 }
