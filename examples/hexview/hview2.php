@@ -29,11 +29,6 @@ $formattedHexView = fn (Tuple $p) => $p->bimap(
 
 // rendering
 /**
- * zip :: [a] -> [b] -> [(a,b)]
- * zip []     _bs    = []
- * zip _as    []     = []
- * zip (a:as) (b:bs) = (a,b) : zip as bs
- *
  * @template A
  * @template B
  * @param array<A> $a

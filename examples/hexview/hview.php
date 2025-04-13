@@ -24,14 +24,6 @@ $formattedHexView = $hexView->bimap(
     fn ($ascii) => explode("\n", wordwrap($ascii, $bytesPerLine, "\n", true))
 );
 
-// render
-/**
-  
-zip :: [a] -> [b] -> [(a,b)]
-zip []     _bs    = []
-zip _as    []     = []
-zip (a:as) (b:bs) = (a,b) : zip as bs
-*/
 /**
  * @template A
  * @template B
