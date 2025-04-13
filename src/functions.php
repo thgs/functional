@@ -317,6 +317,7 @@ function t3(mixed $a, mixed $b, mixed $c): Tuple3
  * 4. More? Must be more
  *
  * @see https://bartoszmilewski.com/2014/11/24/types-and-functions/ Challenge 1
+ * @todo this may need to be "pure-\Closure", if supported?
  *
  * @template A
  * @template B
