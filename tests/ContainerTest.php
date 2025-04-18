@@ -32,7 +32,7 @@ class ContainerTest extends TestCase
 
         // invoke result : Maybe<Result>
         $this->assertInstanceOf(Maybe::class, $invokeResult);
-        $this->assertInstanceOf(Just::class, $invokeResult->getValue(), 'typeclass not found');
+        $this->assertInstanceOf(Just::class, $invokeResult->getValue(), 'method not found');
 
         $fmapResult = $invokeResult->getValue()->getValue();
         // fmap invocation result : fmap (*3) (Just 3)
@@ -41,5 +41,28 @@ class ContainerTest extends TestCase
 
         // actual result of : 3*3 = 9
         $this->assertEquals(9, $justResult->getValue());
+    }
+
+    public function testCanCreateSingleton(): void
+    {
+        $type = new Type(fn ($x) => $x instanceof Maybe, 'Maybe');
+        $functorInstanceForMaybe = new Instance($type,
+                                                function (\Closure $f, Maybe $fa) {
+                                                    $maybe = $fa->getValue();
+                                                    if ($maybe instanceof Nothing) {
+                                                        return new Maybe(new Nothing());
+                                                    }
+                                                    $result = partial($f, $maybe->getValue());
+                                                    return new Maybe(new Just($result));
+                                                });
+        $container = Container::singleton();
+        $fa = new Maybe(new Just(3));
+        /* discard return */ $container->registerInstance('fmap', $functorInstanceForMaybe);
+
+        $maybeInstance = Container::singleton()->getInstance('fmap', $fa);
+
+        $this->assertInstanceOf(Maybe::class, $maybeInstance);
+        $this->assertInstanceOf(Just::class, $maybeInstance->getValue());
+        $this->assertInstanceOf(Instance::class, $maybeInstance->getValue()->getValue());
     }
 }

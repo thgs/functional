@@ -18,6 +18,18 @@ class Container
         private array $map = []
     ) {}
 
+    /** @param array<string, Instance[]> $map */
+    public static function singleton(
+        array $map = []
+    ): self {
+        /** @var Container|null */
+        static $instance;
+        if (!$instance) {
+            $instance = new Container($map);
+        }
+        return $instance;
+    }
+
     /**
      * @return Maybe<Instance>
      */
