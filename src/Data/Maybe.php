@@ -46,6 +46,7 @@ class Maybe implements
     /**
      * @phpstan-assert-if-true Just<A1> $this->x
      * @phpstan-assert-if-true Just<A1> $this->getValue()
+     * @phpstan-assert-if-false Nothing $this->x
      */
     public function isJust(): bool
     {
