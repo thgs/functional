@@ -2,6 +2,7 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Container\Container;
 use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Data\Either;
 use thgs\Functional\Data\Left;
@@ -36,14 +37,50 @@ function unit(mixed $a = null): null
 }
 
 /**
- * @template A of EqInstance
- * @template B of EqInstance
+ * @template A
+ * @template B
  * @param A $a
  * @param B $b
  */
-function equals(EqInstance $a, EqInstance $b): bool
+function equals(mixed $a, mixed $b): bool
 {
-    return $a->equals($b);
+    // todo: type check between a and b ? Container should allow multiple values check?
+    // might still allow users to not opt-in for strict equality ? would it work?
+    // maybe just move it out of equals and put it to something like "isomorphicEquals"
+    // Does haskell allows instance Eq Num String for example? Could be a guide.
+
+    if ($a instanceof EqInstance && $b instanceof EqInstance) {
+        return $a->equals($b);
+    }
+    $foundInstance = Container::singleton()->getInstance('equals', $a);
+
+    // todo: maybe the container can throw this instead, otherwise we will keep doing it
+    if (!$foundInstance->isJust()) {
+        throw new \TypeError('Unknown EqInstance' /* for..? */);
+    }
+    return $foundInstance->unwrap()->invoke($a, $b);
+}
+
+/**
+ * @template A
+ * @template B
+ * @param A $a
+ * @param B $b
+ */
+function notEquals(mixed $a, mixed $b): bool
+{
+    if ($a instanceof EqInstance && $b instanceof EqInstance) {
+        return $a->notEquals($b);
+    }
+
+    // todo: Container + TypeClasses should be able to provide default
+    // implementation for notEquals, if given the equals one
+    $foundInstance = Container::singleton()->getInstance('notEquals', $a);
+    if (!$foundInstance->isJust()) {
+        throw new \TypeError('Unknown EqInstance' /* for..? */);
+    }
+    // todo: how you solve the below issue with phpstan ? return type will always be mixed.
+    return $foundInstance->unwrap()->invoke($a, $b);
 }
 
 /**
