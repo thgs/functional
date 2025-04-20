@@ -10,48 +10,33 @@ use thgs\Functional\Data\Nothing;
  * Idea here is to have a quick and small inlined container rather than a
  * feature full or extensible one, for now until we know we really need one like
  * that.
- *
- * @todo rename this to TypeContainer or TypeClassContainer, its very annoying
- * hitting other "Container" classes.
  */
-class Container
+class MethodContainer
 {
     public function __construct(
-        /** @var array<string, Instance[]> */
+        /** @var array<string, Method[]> */
         private array $map = []
     ) {}
 
-    /** @param array<string, Instance[]> $map */
-    public static function singleton(
-        array $map = []
-    ): self {
-        /** @var Container|null */
-        static $instance;
-        if (!$instance) {
-            $instance = new Container($map);
-        }
-        return $instance;
-    }
-
     /**
-     * @return Maybe<Instance>
+     * @return Maybe<Method>
      */
-    public function getInstance(string $method, mixed $ofType): Maybe
+    public function getMethodImplementation(string $method, mixed $ofType): Maybe
     {
-        $typeClassInstances = $this->map[$method] ?? [];
-        if (empty($typeClassInstances)) {
-            /** @var Maybe<Instance> */
+        $typeClassMethods = $this->map[$method] ?? [];
+        if (empty($typeClassMethods)) {
+            /** @var Maybe<Method> */
             $return = new Maybe(new Nothing());
             return $return;
         }
 
-        /** @phpstan-assert non-empty-array<Instance> $typeClassInstances */
+        /** @phpstan-assert non-empty-array<Method> $typeClassInstances */
 
-        foreach ($typeClassInstances as $instance)
-                if ($instance->predicate($ofType))
-                    return new Maybe(new Just($instance));
+        foreach ($typeClassMethods as $method)
+                if ($method->predicate($ofType))
+                    return new Maybe(new Just($method));
 
-        /** @var Maybe<Instance> */
+        /** @var Maybe<Method> */
         $return = new Maybe(new Nothing());
         return $return;
     }
@@ -66,7 +51,11 @@ class Container
          * fmap (invokeWithArguments args) (getInstance method ofType)
          */
 
-        $maybeInstance = $this->getInstance($method, $ofType);
+        /**
+         * @todo Support multiple $ofType here and in the predicate?
+         */
+
+        $maybeInstance = $this->getMethodImplementation($method, $ofType);
 
         // todo: fix maybe::unwrap or remove it -- its a mapping to nullable type
 
@@ -91,35 +80,35 @@ class Container
      * If the instance has been set before to a definition then it will be re-set.
      * This returns Container however it mutates the same object.
      */
-    public function registerInstance(string $method, Instance $instance): Container
+    public function registerMethod(Method $method): self
     {
         // todo: add type checking for type-class
-        $this->map[$method] = $this->addIfNotExists(
-            $this->map[$method] ?? [],
-            $instance);
+        $this->map[$method->name] = $this->addIfNotExists(
+            $this->map[$method->name] ?? [],
+            $method);
         return $this;
     }
 
     /**
-     * @param Instance[] $instances
-     * @return Instance[]
+     * @param Method[] $methods
+     * @return Method[]
      */
-    private function addIfNotExists(array $instances, Instance $instance): array
+    private function addIfNotExists(array $methods, Method $method): array
     {
         $replaced = false;
-        $newInstances = [];
-        foreach ($instances as $current) {
-            if ($current->equals($instance)) {
-                $newInstances[] = $instance;
+        $newMethods = [];
+        foreach ($methods as $current) {
+            if ($current->equals($method)) {
+                $newMethods[] = $method;
                 $replaced = true;
                 continue;
             }
-            $newInstances[] = $current;
+            $newMethods[] = $current;
         }
 
         if (!$replaced) {
-            $newInstances[] = $instance;
+            $newMethods[] = $method;
         }
-        return $newInstances;
+        return $newMethods;
     }
 }

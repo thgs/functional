@@ -14,6 +14,8 @@ use thgs\Functional\Expression\Composition;
 use thgs\Functional\Instance\CategoryOfFunctions;
 use thgs\Functional\Instance\LeftToRightNotation;
 use thgs\Functional\Typeclass\EqInstance;
+use thgs\Functional\Typeclass\Eq;
+use thgs\Functional\Typeclass\Functor;
 use thgs\Functional\Typeclass\FunctorInstance as F;
 
 /**
@@ -49,16 +51,7 @@ function equals(mixed $a, mixed $b): bool
     // maybe just move it out of equals and put it to something like "isomorphicEquals"
     // Does haskell allows instance Eq Num String for example? Could be a guide.
 
-    if ($a instanceof EqInstance && $b instanceof EqInstance) {
-        return $a->equals($b);
-    }
-    $foundInstance = Container::singleton()->getInstance('equals', $a);
-
-    // todo: maybe the container can throw this instead, otherwise we will keep doing it
-    if (!$foundInstance->isJust()) {
-        throw new \TypeError('Unknown EqInstance' /* for..? */);
-    }
-    return $foundInstance->unwrap()->invoke($a, $b);
+    return Eq::equals($a, $b);
 }
 
 /**
@@ -69,18 +62,7 @@ function equals(mixed $a, mixed $b): bool
  */
 function notEquals(mixed $a, mixed $b): bool
 {
-    if ($a instanceof EqInstance && $b instanceof EqInstance) {
-        return $a->notEquals($b);
-    }
-
-    // todo: Container + TypeClasses should be able to provide default
-    // implementation for notEquals, if given the equals one
-    $foundInstance = Container::singleton()->getInstance('notEquals', $a);
-    if (!$foundInstance->isJust()) {
-        throw new \TypeError('Unknown EqInstance' /* for..? */);
-    }
-    // todo: how you solve the below issue with phpstan ? return type will always be mixed.
-    return $foundInstance->unwrap()->invoke($a, $b);
+    return Eq::notEquals($a, $b);
 }
 
 /**
@@ -119,7 +101,7 @@ function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
      */
     $g = $g instanceof F ? $g : c ($g);
 
-    return $g ->fmap ($f);
+    return Functor::fmap($f, $g);
 }
 
 /**
