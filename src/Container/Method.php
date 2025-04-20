@@ -8,10 +8,11 @@ use function thgs\Functional\partial;
 /**
  * @implements EqInstance<Instance>
  */
-class Instance implements
+class Method implements
     EqInstance
 {
     public function __construct(
+        public readonly string $name,
         public readonly Type $type,
         /** @var \Closure */
         public readonly \Closure $f
@@ -28,11 +29,19 @@ class Instance implements
     }
 
     /**
-     * @param self $other
+     * Equality is defined in terms of "same type" as given by the
+     * type name, the implementation is ignored.
+     *
+     * @param Method $other
      */
     public function equals(EqInstance $other): bool
     {
-        return $other->type == $this->type;
+        /**
+         * Checking the name name is already handled by the client of
+         * this but for brevity and correctness.
+         */
+        return $other->name == $this->name
+            && $other->type->name == $this->type->name;
     }
 
     /**
