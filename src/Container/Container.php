@@ -10,6 +10,9 @@ use thgs\Functional\Data\Nothing;
  * Idea here is to have a quick and small inlined container rather than a
  * feature full or extensible one, for now until we know we really need one like
  * that.
+ *
+ * @todo rename this to TypeContainer or TypeClassContainer, its very annoying
+ * hitting other "Container" classes.
  */
 class Container
 {
