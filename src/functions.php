@@ -70,10 +70,11 @@ function notEquals(mixed $a, mixed $b): bool
  * @template BF
  *
  * @param Composition<AF,BF>|\Closure(AF):BF|callable(AF):BF $f
- * @param F<AF>|\Closure(AF):mixed|callable(AF):mixed $g
+ * @param F<AF>|\Closure(AF):mixed|callable(AF):mixed|mixed $g
  * @return F<BF>
  */
-function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
+function fmap(Composition|\Closure|callable $f, mixed $g): mixed
+{
     /**
      * @todo Since $f is callable, we can wrap it in Composition? And
      * that gives fmap(callable, F|callable) and possibly opens up the
@@ -97,9 +98,11 @@ function fmap(Composition|\Closure|callable $f, F|\Closure|callable $g): F {
         : ($f instanceof \Closure ? $f : \Closure::fromCallable($f));
 
     /**
-     * Ensure $g has fmap
+     * Support callable
      */
-    $g = $g instanceof F ? $g : c ($g);
+    if (!$g instanceof F && is_callable($g)) {
+        $g = c ($g);
+    }
 
     return Functor::fmap($f, $g);
 }

@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Typeclass\Functor;
+use function thgs\Functional\fmap;
 use function thgs\Functional\partial;
 
 class FunctorTest extends TestCase
@@ -26,7 +27,7 @@ class FunctorTest extends TestCase
             instanceName: 'Wrap'
         );
 
-        $result = Functor::fmap(
+        $result = fmap(
             fn (int $a): int => $a * 3,
             new Wrap(4)
         );
