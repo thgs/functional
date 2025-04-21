@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use thgs\Functional\Typeclass\Eq;
+use function thgs\Functional\equals;
+use function thgs\Functional\notEquals;
 
 class EqTest extends TestCase
 {
@@ -16,10 +18,10 @@ class EqTest extends TestCase
             notEquals: null
         );
 
-        $result = Eq::equals(12.6, 12.1);
+        $result = equals(12.6, 12.1);
         $this->assertTrue($result);
 
-        $result = Eq::notEquals(12.6, 13.1);
+        $result = notEquals(12.6, 13.1);
         $this->assertTrue($result);
     }
 }
