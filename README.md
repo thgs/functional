@@ -177,6 +177,22 @@ $currentTime = $logger (t ("Log message", "context"));
 
 ```
 
+#### Implement typeclass instances for types
+
+```php
+$equalsImplementation = fn (int|float $a, int|float $b): bool  => ((int) $a) == ((int) $b);
+
+Eq::register(
+    instanceName: 'int|float',
+    typePredicate: fn ($x) => is_int($x) || is_float($x),
+    equals: $equalsImplementation,
+    notEquals: null // derived
+);
+
+$result = equals(12.6, 12.1); // true
+$result = notEquals(12.6, 13.1); // true
+```
+
 #### Loads of bugs and inconsistencies
 
 phpstan is complaining, the tests are not yet fully there but I only
