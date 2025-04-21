@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [10/43]
+* Todo [10/44]
 ** TODO Fix IO
 What needs to be fixed here??
 ** TODO Fix Applicative sequence() types
@@ -265,6 +265,18 @@ It's worth looking into this.
 ** TODO Test coverage & tests improvements
 ** TODO Add more type class laws
 Many instances do not have helper assertions for their laws.
+** TODO Refactor or remove the FunctorAdapter now that we have typeclass instances
+It seems FunctorAdapter now have less use, maybe can move it to a
+function that returns an anonymous class?  These "adapters" are not so
+convenient as the typeclass instance registration though but they are
+probably faster unless you keep combining them (magic method ~__call~
+will keep delegating further in this hierarchy of inheritance).
+
+It is a use case decision. For one-off it might be still worth
+it. Nevertheless anyone can implement their own FunctorInstance class
+and be done.
+
+I am just not 100% against it yet.
 ** ----- DONE ----
 ** DONE Implement Category
 Calling this Done and if there is an issue will solve it there.
