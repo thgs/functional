@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [10/44]
+* Todo [10/46]
 ** TODO Fix IO
 What needs to be fixed here??
 ** TODO Fix Applicative sequence() types
@@ -277,6 +277,22 @@ it. Nevertheless anyone can implement their own FunctorInstance class
 and be done.
 
 I am just not 100% against it yet.
+** TODO Phpstan extension for linear types
+** TODO Phpstan extension for construction of types according to some property
+Example in Haskell
+
+#+begin_src haskell
+data State = Unbound | Bound | Listening | …
+data Socket (s :: State)
+
+bind :: Socket Unbound -> IO ()
+listen :: Socket Bound -> IO ()
+#+end_src
+
+I think phpstan documentation implements a "kind".
+
+Essentially implementing "typestates".
+
 ** ----- DONE ----
 ** DONE Implement Category
 Calling this Done and if there is an issue will solve it there.
@@ -322,6 +338,10 @@ I think this actually is easy to solve if we return the ReflectionFunction insta
 After handling the infinite loop.
 ** DONE Partial application
 This seems such a central piece.
+* Roadmap to v1.0 [0/3]
+** TODO Fix all static analysis errors
+** TODO Complete tests
+** TODO Complete assertions and laws
 * Other notes
 ** Trying the pipe operator
 *** Try flipping ~__invoke~ with `fmap` or `bind` at will (some dynamic front object).
@@ -407,6 +427,9 @@ Isn't that essentially what we already do with ~partial~ ? Yes.. So this code:
 I think there is inlining you can do on function composition but there
 is also inlining you can do on types, since types can be represented
 by functions, right?
+** Random links
+https://en.wikipedia.org/wiki/Typestate_analysis
+https://www.tweag.io/blog/tags/linear-types/
 ** Journeys [1/3]
 *** DONE Safety journey
 It is a little vague how "safety" is defined. There is type safety or
