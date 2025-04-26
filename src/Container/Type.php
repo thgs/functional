@@ -4,9 +4,13 @@ namespace thgs\Functional\Container;
 
 class Type
 {
+    public readonly TypeName $name;
+
     public function __construct(
         /** @var \Closure(mixed):bool */
         public readonly \Closure $predicate,
-        public readonly string $name
-    ) {}
+        string $name
+    ) {
+        $this->name = new TypeName($name);
+    }
 }

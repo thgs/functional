@@ -32,9 +32,14 @@ class MethodContainer
 
         /** @phpstan-assert non-empty-array<Method> $typeClassInstances */
 
-        foreach ($typeClassMethods as $method)
-                if ($method->predicate($ofType))
+        if ($ofType instanceof TypeName)
+            foreach ($typeClassMethods as $method)
+                if ($method->type->name == $ofType->name)
                     return new Maybe(new Just($method));
+
+        foreach ($typeClassMethods as $method)
+            if ($method->predicate($ofType))
+                return new Maybe(new Just($method));
 
         /** @var Maybe<Method> */
         $return = new Maybe(new Nothing());
