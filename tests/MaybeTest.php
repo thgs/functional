@@ -47,7 +47,7 @@ class MaybeTest extends TestCase
     public function testCanShow(): void
     {
         $data = new Maybe(new Just(67));
-        $this->assertEquals('Just 67', (string) $data);
+        $this->assertEquals('Just 67', show($data));
     }
 
     public function testEnforcesMaybeTypeConstraintOnEq(): void

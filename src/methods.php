@@ -4,6 +4,7 @@ namespace thgs\Functional;
 
 use thgs\Functional\Typeclass\Eq;
 use thgs\Functional\Typeclass\Functor;
+use thgs\Functional\Typeclass\Show;
 
 
 /**
@@ -78,5 +79,10 @@ function fmap(Composition|\Closure|callable $f, mixed $g): mixed
     }
 
     return Functor::fmap($f, $g);
+}
+
+function show(mixed $a): string
+{
+    return Show::show($a);
 }
 

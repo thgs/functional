@@ -64,18 +64,6 @@ function c(\Closure|callable $f): Composition
     return $r;
 }
 
-function show(mixed $x): string
-{
-    // todo: phpstan says Dead catch here but `(string) $x` would throw
-    // if $x is an object that does not implement ShowInstance/Stringable
-
-    // todo: improve message
-
-    try { return (string) $x; } catch (\Throwable $err) {
-        throw new \TypeError('Cannot show ' . gettype($x));
-    }
-}
-
 /**
  * @template A
  * @template B
