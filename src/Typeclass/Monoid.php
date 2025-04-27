@@ -6,6 +6,7 @@ use thgs\Functional\Container\Method;
 use thgs\Functional\Container\MethodContainer;
 use thgs\Functional\Container\Type;
 use thgs\Functional\Container\TypeName;
+use thgs\Functional\Data\Maybe;
 
 class Monoid
 {
