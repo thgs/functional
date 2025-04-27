@@ -35,6 +35,7 @@ class OutputBuffering implements
 
     /**
      * @template A1
+     * @param A1 $a
      * @return OutputBuffering<A1>
      */
     public static function inject($a): MonadInstance
@@ -53,6 +54,14 @@ class OutputBuffering implements
             $currentIoResult = ($this->io)(); // todo: support ...$xs ?
 
             $mb = $f($currentIoResult);
+            /**
+             * This is not guaranteed and not checked anywhere else
+             * really.  We could let it up to static analysis to error
+             * out when you pass an incorrect Closure. Not entirely
+             * sure if we should check though.
+             *
+             * @phpstan-ignore instanceof.alwaysTrue
+             */
             if (!$mb instanceof OutputBuffering) {
                 throw new \TypeError('Bound closure does not return instance of ' . self::class);
             }
