@@ -34,7 +34,7 @@ class Functor
      *
      * @param \Closure(A1):B1 $f
      * @param FunctorInstance<A1>|Fa $fa
-     * @return FunctorInstance<B1>|Fb
+     * @return ($fa is FunctorInstance<A1> ? FunctorInstance<B1> : Fb)
      */
     public static function fmap(\Closure $f, mixed $fa): mixed
     {

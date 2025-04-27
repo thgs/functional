@@ -3,12 +3,14 @@
 namespace thgs\Functional;
 
 use thgs\Functional\Container\TypeName;
+use thgs\Functional\Control\Typeclass\MonadInstance;
+use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\Contravariant;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\Eq;
 use thgs\Functional\Typeclass\Functor;
+use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\Monad;
-use thgs\Functional\Typeclass\MonadInstance;
 use thgs\Functional\Typeclass\Monoid;
 use thgs\Functional\Typeclass\Show;
 
@@ -49,8 +51,8 @@ function notEquals(mixed $a, mixed $b): bool
  * @template BF
  *
  * @param Composition<AF,BF>|\Closure(AF):BF|callable(AF):BF $f
- * @param F<AF>|\Closure(AF):mixed|callable(AF):mixed|mixed $g
- * @return F<BF>
+ * @param FunctorInstance<AF>|\Closure(AF):mixed|callable(AF):mixed|mixed $g
+ * @return FunctorInstance<BF>
  */
 function fmap(Composition|\Closure|callable $f, mixed $g): mixed
 {
@@ -79,7 +81,7 @@ function fmap(Composition|\Closure|callable $f, mixed $g): mixed
     /**
      * Support callable
      */
-    if (!$g instanceof F && is_callable($g)) {
+    if (!$g instanceof FunctorInstance && is_callable($g)) {
         $g = c ($g);
     }
 
@@ -122,9 +124,10 @@ function mempty(TypeName|string $asType): mixed
  * @template B2
  * @template Ma2
  * @template Mb2
- * @param MonadInstance<A1>|Ma1 $ma
- * @param \Closure(A1):MonadInstance<B1>|Mb1 $f
- * @return ($ma is MonadInstance<A1> ? MonadInstance<B1> : Mb1)
+ *
+ * @param MonadInstance<A2>|Ma2 $ma
+ * @param \Closure(A2):MonadInstance<B2>|\Closure(A2):Mb2 $f
+ * @return ($ma is MonadInstance<A2> ? MonadInstance<B2> : Mb2)
  */
 function bind(mixed $ma, \Closure $f): mixed
 {
