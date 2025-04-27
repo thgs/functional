@@ -69,15 +69,9 @@ class MethodContainer
             return new Maybe(new Nothing());
         }
 
-        $instance = $foundInstance->getValue();
-
-        /**
-         * @phpstan-assert Instance $instance
-         * @var Instance $instance
-         * @todo fix this, is this docblock really needed?
-         */
-        $result = $instance->invoke(...$arguments);
-        return new Maybe(new Just($result));
+        return new Maybe(new Just(
+            $foundInstance->getValue()
+                ->invoke(...$arguments)));
     }
 
     /**
