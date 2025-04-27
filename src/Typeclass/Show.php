@@ -76,8 +76,6 @@ class Show
      * Show::register(show: fn ($x) => "Integer: " . (string) $x, typePredicate: is_int(...), instanceName: 'int')
      *
      * @template A
-     * @template Fa
-     * @template Fb
      *
      * @param \Closure(mixed):bool $typePredicate
      * @param \Closure(A):string $show
