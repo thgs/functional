@@ -2,10 +2,11 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Typeclass\Contravariant;
+use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\Eq;
 use thgs\Functional\Typeclass\Functor;
 use thgs\Functional\Typeclass\Show;
-
 
 /**
  * Here are all type class methods defined by this library.  All of those use
@@ -79,6 +80,22 @@ function fmap(Composition|\Closure|callable $f, mixed $g): mixed
     }
 
     return Functor::fmap($f, $g);
+}
+
+/**
+ * @template A2
+ * @template B2
+ * @template Ca1
+ * @template Cb1
+ * @param \Closure(B2):A2|callable(B2):A2 $f
+ * @param ContravariantInstance<A2>|Ca1 $fa
+ * @return ($fa is ContravariantInstance<A2> ? ContravariantInstance<B2> : Cb1)
+ */
+function contramap(\Closure|callable $f, mixed $fa): mixed
+{
+    /** @var \Closure(B2):A2 */
+    $f = $f instanceof \Closure ? $f : \Closure::fromCallable($f);
+    return Contravariant::contramap($f, $fa);
 }
 
 function show(mixed $a): string
