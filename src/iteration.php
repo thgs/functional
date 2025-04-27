@@ -67,6 +67,10 @@ function receiveOne(): \Generator
 
 function applyReceiver(\Closure $f): \Generator
 {
+    /**
+     * Not sure why phpstan does not like while(true).
+     * @phpstan-ignore while.alwaysTrue
+     */
    while (true) {
         $value = yield;
         yield $f ($value);
@@ -85,6 +89,11 @@ function storageReceiver(array &$storage): \Generator
     // will close, but this could also help to implement a takeWhile
     // but for use with send().
     // a `takeWhile` variation could return the storage in the end?
+
+    /**
+     * Not sure why phpstan does not like while(true).
+     * @phpstan-ignore while.alwaysTrue
+     */
     while (true) {
         $storage[] = yield;
     }
@@ -107,6 +116,11 @@ function applyStorageReceiver(\Closure $f, array &$storage): \Generator
     // todo: while true seems necessary otherwise the generator
     // will close, but this could also help to implement a takeWhile
     // but for use with send().
+
+    /**
+     * Not sure why phpstan does not like while(true).
+     * @phpstan-ignore while.alwaysTrue
+     */
     while (true) {
         $value = yield;
         $storage[] = $f($value);
