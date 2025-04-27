@@ -36,10 +36,9 @@ class Eq
     public static function equals(mixed $a, mixed $b): bool
     {
         /**
-         * This could be a more elaborate check, but let's let it
-         * error out from the interface for now.
+         * This does not really need to check if $b is also EqInstance.
          */
-        if ($a instanceof EqInstance) {
+        if ($a instanceof EqInstance && $b instanceof EqInstance) {
             return $a->equals($b);
         }
 
@@ -63,10 +62,9 @@ class Eq
     public static function notEquals(mixed $a, mixed $b): bool
     {
         /**
-         * This could be a more elaborate check, but let's let it
-         * error out from the interface for now.
+         * This does not really need to check if $b is also EqInstance.
          */
-        if ($a instanceof EqInstance) {
+        if ($a instanceof EqInstance && $b instanceof EqInstance) {
             return $a->notEquals($b);
         }
 
