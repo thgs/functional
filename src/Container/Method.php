@@ -6,7 +6,7 @@ use thgs\Functional\Typeclass\EqInstance;
 use function thgs\Functional\partial;
 
 /**
- * @implements EqInstance<Instance>
+ * @implements EqInstance<Method>
  */
 class Method implements
     EqInstance
