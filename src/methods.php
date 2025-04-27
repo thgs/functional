@@ -2,10 +2,12 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Container\TypeName;
 use thgs\Functional\Typeclass\Contravariant;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\Eq;
 use thgs\Functional\Typeclass\Functor;
+use thgs\Functional\Typeclass\Monoid;
 use thgs\Functional\Typeclass\Show;
 
 /**
@@ -101,5 +103,15 @@ function contramap(\Closure|callable $f, mixed $fa): mixed
 function show(mixed $a): string
 {
     return Show::show($a);
+}
+
+function mappend(mixed $a, mixed $b, ?TypeName $asType = null): mixed
+{
+    return Monoid::mappend($a, $b, $asType);
+}
+
+function mempty(TypeName|string $asType): mixed
+{
+    return Monoid::mempty($asType);
 }
 
