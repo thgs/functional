@@ -7,6 +7,8 @@ use thgs\Functional\Typeclass\Contravariant;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\Eq;
 use thgs\Functional\Typeclass\Functor;
+use thgs\Functional\Typeclass\Monad;
+use thgs\Functional\Typeclass\MonadInstance;
 use thgs\Functional\Typeclass\Monoid;
 use thgs\Functional\Typeclass\Show;
 
@@ -115,3 +117,26 @@ function mempty(TypeName|string $asType): mixed
     return Monoid::mempty($asType);
 }
 
+/**
+ * @template A2
+ * @template B2
+ * @template Ma2
+ * @template Mb2
+ * @param MonadInstance<A1>|Ma1 $ma
+ * @param \Closure(A1):MonadInstance<B1>|Mb1 $f
+ * @return ($ma is MonadInstance<A1> ? MonadInstance<B1> : Mb1)
+ */
+function bind(mixed $ma, \Closure $f): mixed
+{
+    return Monad::bind($ma, $f);
+}
+
+function inject(mixed $a, TypeName $asType): mixed
+{
+    return Monad::inject($a, $asType);
+}
+
+function then(mixed $ma, mixed $mb): mixed
+{
+    return Monad::then($ma, $mb);
+}
