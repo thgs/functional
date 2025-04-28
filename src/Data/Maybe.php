@@ -11,6 +11,7 @@ use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
 use function thgs\Functional\c;
+use function thgs\Functional\equals;
 use function thgs\Functional\fmap;
 use function thgs\Functional\show;
 
@@ -103,7 +104,7 @@ class Maybe implements
         // return true when Maybe Int and Maybe Char are passed with 1 and '1'.
         // At the same time must be able to equal with objects (probably we want `==` and not `===`).
 
-        return $this->getValue() == $other->getValue();
+        return equals($this->getValue(), $other->getValue());
     }
 
     /**
