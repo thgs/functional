@@ -8,6 +8,7 @@ use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\Contravariant;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\Eq;
+use thgs\Functional\Typeclass\Eq1;
 use thgs\Functional\Typeclass\Functor;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\Monad;
@@ -44,6 +45,18 @@ function equals(mixed $a, mixed $b): bool
 function notEquals(mixed $a, mixed $b): bool
 {
     return Eq::notEquals($a, $b);
+}
+
+/**
+ * @template A
+ * @template B
+ * @param \Closure(A,B):bool $eq
+ * @param A $a
+ * @param B $b
+ */
+function liftEq(\Closure $eq, mixed $a, mixed $b): bool
+{
+    return Eq1::liftEq($eq, $a, $b);
 }
 
 /**

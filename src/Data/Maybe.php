@@ -5,6 +5,7 @@ namespace thgs\Functional\Data;
 use thgs\Functional\Control\Typeclass\ApplicativeInstance;
 use thgs\Functional\Control\Typeclass\MonadInstance;
 use thgs\Functional\Expression\Composition;
+use thgs\Functional\Typeclass\Eq1Instance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\ShowInstance;
@@ -17,12 +18,14 @@ use function thgs\Functional\show;
  * @template A1
  * @implements FunctorInstance<A1>
  * @implements EqInstance<Maybe<A1>>
+ * @implements Eq1Instance<Maybe<A1>>
  * @implements ShowInstance<Maybe<A1>>
  * @implements ApplicativeInstance<Maybe<A1>>
  * @implements MonadInstance<Maybe<A1>>
  */
 class Maybe implements
     EqInstance,
+    Eq1Instance,
     ShowInstance,
     FunctorInstance,
     ApplicativeInstance,
@@ -187,5 +190,27 @@ class Maybe implements
     public function then(MonadInstance $b): MonadInstance
     {
         return $this->bind(fn () => $b);
+    }
+
+    /**
+     * @template X
+     * @param \Closure(A1,X):bool $eq
+     * @param Maybe<X> $other
+     */
+    public function liftEq(\Closure $eq, mixed $other): bool
+    {
+        /**
+         * For now we TypeError.
+         * @phpstan-ignore instanceof.alwaysTrue
+         */
+        if (!$other instanceof Maybe) {
+            throw new \TypeError('Expected instance of Maybe');
+        }
+
+        if ($this->isJust() && $other->isJust()) {
+            return $eq($this->getValue()->getValue(), $other->getValue()->getValue());
+        }
+
+        return !$this->isJust() && !$other->isJust();
     }
 }

@@ -13,6 +13,8 @@ use thgs\Functional\Data\Tuple;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Instance\CategoryOfFunctions;
 use thgs\Functional\Instance\LeftToRightNotation;
+use thgs\Functional\Typeclass\Eq1;
+use thgs\Functional\Typeclass\Eq1Instance;
 use thgs\Functional\Typeclass\EqInstance;
 
 /**
@@ -351,4 +353,19 @@ function ensureClosure(callable $f): \Closure
 function flip(\Closure $f): \Closure
 {
     return fn ($x, $y) => $f ($y, $x);
+}
+
+/**
+ * From Eq1
+ */
+
+/**
+ * @template A
+ * @template Fa
+ * @param Eq1Instance<A>|Fa $fa1
+ * @param Eq1Instance<A>|Fa $fa2
+ */
+function eq1(mixed $fa1, mixed $fa2): bool
+{
+    return Eq1::liftEq(fn ($a, $b): bool => $a == $b, $fa1, $fa2);
 }
