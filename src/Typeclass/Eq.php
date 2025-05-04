@@ -47,7 +47,12 @@ class Eq
          */
         $maybe = self::singleton()->container->invoke('equals', $a, $a, $b);
         if (!$maybe->isJust()) {
-            throw new \TypeError('Unknown Functor instance');
+            /**
+             * Allow method container to override but default to use
+             * the `==` operator of PHP.  Is this better than loading
+             * the container with derived functions always?
+             */
+            return $a == $b;
         }
 
         return $maybe->getValue()->getValue();
