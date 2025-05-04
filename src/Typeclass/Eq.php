@@ -78,7 +78,12 @@ class Eq
          */
         $maybe = self::singleton()->container->invoke('notEquals', $a, $a, $b);
         if (!$maybe->isJust()) {
-            throw new \TypeError('Missing Eq instance');
+            /**
+             * Allow method container to override but default to use
+             * the `!=` operator of PHP.  Is this better than loading
+             * the container with derived functions always?
+             */
+            return $a != $b;
         }
 
         return $maybe->getValue()->getValue();
