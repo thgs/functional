@@ -81,6 +81,23 @@ function lr(\Closure|callable ...$xs): \Closure
 
 
 /**
+ * ($) :: (a -> b) -> a -> b
+ *
+ * This is at this point a synonym for partial().
+ *
+ * @template A
+ * @template B
+ * @param \Closure(A):B $f
+ * @param A $a
+ * @return B
+ */
+function apply(\Closure $f, mixed $a): mixed
+{
+    return partial($f, $a);
+}
+
+
+/**
  * Helper to create a Composition, in a possibly cryptic but concise way.
  *
  * @deprecated
