@@ -42,4 +42,30 @@ class MethodContainerTest extends TestCase
         // actual result of : 3*3 = 9
         $this->assertEquals(9, $justResult->getValue());
     }
+
+    public function testCanOverrideRegisteredInstance(): void
+    {
+        $intOrFloatType = new Type(fn ($x) => is_int($x) || is_float($x), 'int|float');
+        $looseEq = new Method('equals', $intOrFloatType, fn (int|float $x, int|float $y) => ((int) $x) == ((int) $y));
+        $strictEq = new Method('equals', $intOrFloatType, fn ($x, $y) => $x === $y);
+
+        $container = new MethodContainer();
+        $container = $container->registerMethod($looseEq);
+        $container = $container->registerMethod($strictEq);
+
+        $x = 1;
+        $y = 1.0;
+
+        $invokeResult = $container->invoke('equals', $x,
+                                     // equals arguments
+                                     $x, $y);
+
+        // invoke result : Maybe<Result>
+        $this->assertInstanceOf(Maybe::class, $invokeResult);
+        $this->assertInstanceOf(Just::class, $invokeResult->getValue(), 'method not found');
+
+        $equalsResult = $invokeResult->getValue()->getValue();
+
+        $this->assertFalse($equalsResult);
+    }
 }

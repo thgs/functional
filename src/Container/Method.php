@@ -46,6 +46,7 @@ class Method implements
 
     /**
      * @param self $other
+     * @codeCoverageIgnore
      */
     public function notEquals(EqInstance $other): bool
     {

@@ -36,6 +36,7 @@ final readonly class TypeName implements
 
     /**
      * @param TypeName $other
+     * @codeCoverageIgnore
      */
     public function notEquals(EqInstance $other): bool
     {

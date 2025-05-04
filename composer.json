@@ -35,7 +35,9 @@
         "phpstan": "./vendor/bin/phpstan analyse src -c phpstan.neon",
         "test": "./vendor/bin/phpunit tests --testdox --display-deprecations",
         "coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-text --strict-coverage --path-coverage",
+        "coverage-no-path": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-text --strict-coverage",
         "coverage-html": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-html coverage --strict-coverage --path-coverage",
+        "coverage-no-path-html": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-html coverage --strict-coverage",
         "bench": "./vendor/bin/phpbench run tests/Benchmark --report=aggregate"
     }
 }
