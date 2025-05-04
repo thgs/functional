@@ -98,6 +98,8 @@ function lr(\Closure|callable ...$xs): \Closure
  *
  * This is at this point a synonym for partial().
  *
+ * @todo consider a notation here? possibly (&) as well?
+ *
  * @template A
  * @template B
  * @param \Closure(A):B $f
