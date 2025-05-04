@@ -30,6 +30,19 @@ function id(mixed $a): mixed
 
 /**
  * @template A
+ * @template B
+ * @param A $a
+ * @param B $b
+ * @return A
+ */
+function const_(mixed $a, mixed $b): mixed
+{
+    return $a;
+}
+
+
+/**
+ * @template A
  * @param A $a
  * @return null
  */
