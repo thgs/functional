@@ -22,7 +22,7 @@ class MaybeTest extends TestCase
     public function testFmap(): void
     {
         $data = new Maybe(new Just(3));
-        $mapped = $data->fmap(fn (int $x) => $x + 2);
+        $mapped = fmap(fn (int $x) => $x + 2, $data);
 
         $value = $mapped->getValue();
         $this->assertInstanceOf(Maybe::class, $mapped, 'result not an instance of Maybe');
