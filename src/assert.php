@@ -14,6 +14,7 @@ function assertCompositionRespectsIdentity(\Closure $compositionFunction, \Closu
     return $left($a) == $right($a);
 }
 
+
 /**
  * This is highly unreliable, might need to see into it later.
  */
@@ -27,19 +28,23 @@ function assertIsTotalFunction(\Closure $f): bool
     return !empty($returnType) && $returnType !== 'never';
 }
 
+
 /**
  * Eq laws
  */
+
 
 function assertEqIsReflective(mixed $a): bool
 {
     return equals($a, $a);
 }
 
+
 function assertEqIsSymmetric(mixed $x, mixed $y): bool
 {
     return equals($x, $y) == equals($y, $x);
 }
+
 
 function assertEqIsTransitive(mixed $x, mixed $y, mixed $z): bool
 {
@@ -51,6 +56,7 @@ function assertEqIsTransitive(mixed $x, mixed $y, mixed $z): bool
     }
     return equals($x, $z);
 }
+
 
 /**
  * @template A
@@ -66,6 +72,7 @@ function assertEqIsExtentable(mixed $x, mixed $y, \Closure $f): bool
     }
     return equals($f($x), $f($y));
 }
+
 
 function assertEqCanNegate(mixed $x, mixed $y): bool
 {
