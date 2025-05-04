@@ -12,6 +12,7 @@ use thgs\Functional\Testing\FunctorLawsAssertions;
 use thgs\Functional\Typeclass\EqInstance;
 
 use function thgs\Functional\fmap;
+use function thgs\Functional\show;
 
 class MaybeTest extends TestCase
 {
