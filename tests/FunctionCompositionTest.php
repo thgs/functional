@@ -1,13 +1,13 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use function thgs\Functional\functionComposition;
+use function thgs\Functional\lr;
 
 class FunctionCompositionTest extends TestCase
 {
     public function testCanCompose2(): void
     {
-        $composed = functionComposition(
+        $composed = lr(
             fn (int $x): bool => $x == 16,
             fn (int $x): int  => (int) ($x / 2),
         );
@@ -17,7 +17,7 @@ class FunctionCompositionTest extends TestCase
 
     public function testCanCompose5(): void
     {
-        $composed = functionComposition(
+        $composed = lr(
             fn (int $x): bool => $x == 16,
             fn (int $x): int  => (int) ($x / 2),
             fn (int $x): int => pow($x, 5),

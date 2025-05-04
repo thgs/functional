@@ -27,6 +27,7 @@ function id(mixed $a): mixed
     return $a;
 }
 
+
 /**
  * @template A
  * @param A $a
@@ -50,8 +51,39 @@ function unwrapC(Composition $composition): \Closure
     return Composition::unwrap($composition);
 }
 
+
+/**
+ * Right to left function composition
+ */
+function rl(\Closure|callable ...$xs): \Closure
+{
+    // @todo improve this, inline the notation, test it
+
+    $xs = array_map(ensureClosure(...), $xs);
+
+    return (new LeftToRightNotation(new CategoryOfFunctions()))
+        ->composeMany(...array_reverse($xs));
+}
+
+
+/**
+ * Left to right function composition
+ */
+function lr(\Closure|callable ...$xs): \Closure
+{
+    // @todo improve this, inline the notation, test it
+
+    $xs = array_map(ensureClosure(...), $xs);
+
+    return (new LeftToRightNotation(new CategoryOfFunctions()))
+        ->composeMany(...$xs);
+}
+
+
 /**
  * Helper to create a Composition, in a possibly cryptic but concise way.
+ *
+ * @deprecated
  *
  * @template R
  * @template A
@@ -65,6 +97,7 @@ function c(\Closure|callable $f): Composition
     $r = new Composition($f instanceof \Closure ? $f : \Closure::fromCallable($f));
     return $r;
 }
+
 
 /**
  * @template A
@@ -82,6 +115,7 @@ function either(callable $f, callable $g, Either $either)
     return c ($eitherValue instanceof Left ? $f : $g) ($eitherValue->getValue());
 }
 
+
 /**
  * @template A1
  * @template B1
@@ -98,6 +132,7 @@ function lefts(Either ...$eithers): iterable
     }
 }
 
+
 /**
  * @template A1
  * @template B1
@@ -113,6 +148,7 @@ function rights(Either ...$eithers): iterable
     }
 }
 
+
 /**
  * @template A
  * @template B
@@ -125,6 +161,7 @@ function fromLeft($default, Either $either): mixed
     return $either->isRight() ? $default : $either->getValue()->getValue();
 }
 
+
 /**
  * @template A
  * @template B
@@ -136,6 +173,7 @@ function fromRight($default, Either $either): mixed
 {
     return $either->isRight() ? $either->getValue()->getValue() : $default;
 }
+
 
 /**
  * @template A
@@ -153,6 +191,7 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
         ? $default
         : c ($f) ($maybeValue->getValue());
 }
+
 
 // todo: define `pure` & `sequence` from Applicative.
 
@@ -187,6 +226,7 @@ function dn(MonadInstance $ma, MonadInstance|\Closure/*|Composition*/ ...$fs)
     }
     return $last;
 }
+
 
 /**
  * A older bind-only implementation of do-notation
@@ -269,44 +309,6 @@ function memoize(\Closure $f): Composition
 
 
 /**
- * @template A
- * @template B
- * @template C
- *
- * @param \Closure(A):B $f
- * @param \Closure(B):C $g
- * @return \Closure(A):C
- * @todo is the type-hint correct always?
- */
-function comp(\Closure $f, \Closure $g): \Closure
-{
-    return CategoryOfFunctions::compose ($f, $g);
-}
-
-/**
- * @todo this is broken
- * Usage:
- *
- *   rlc() ($f , $g)
- *
- * @todo I think here could assume multiple parameters and perform some
- * inlining, ie make a single closure that calls them all in order.
- * @todo define lrc
- */
-function rlc(): callable
-{
-    // this is just a synonym for (.) which is right above.
-    // for fun we can define it "point free"
-    return CategoryOfFunctions::compose();
-}
-
-function functionComposition(\Closure ...$functions): \Closure
-{
-    $notation = new LeftToRightNotation(new CategoryOfFunctions());
-    return $notation->composeMany(...$functions);
-}
-
-/**
  * This is a utility function. It is probably always better to do this
  * manually if you can. This is provided in case you need to turn a
  * list of callables to \Closure for example.
@@ -330,9 +332,11 @@ function flip(\Closure $f): \Closure
     return fn ($x, $y) => $f ($y, $x);
 }
 
+
 /**
  * From Eq1
  */
+
 
 /**
  * @template A

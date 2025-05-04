@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use function thgs\Functional\assertCompositionRespectsIdentity;
-use function thgs\Functional\functionComposition;
+use function thgs\Functional\lr;
 
 class AssertionsTest extends TestCase
 {
@@ -10,7 +10,7 @@ class AssertionsTest extends TestCase
     {
         $this->assertTrue(
             assertCompositionRespectsIdentity(
-                functionComposition(...),
+                lr(...),
                 fn ($x) => $x * 2,
                 7));
     }
