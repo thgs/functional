@@ -1,6 +1,5 @@
 <?php
 
-
 namespace thgs\Functional;
 
 use thgs\Functional\Data\Just;
