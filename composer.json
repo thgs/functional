@@ -14,6 +14,7 @@
         },
         "files": [
             "src/assert.php",
+            "src/constructors.php",
             "src/exception.php",
             "src/functions.php",
             "src/io.php",

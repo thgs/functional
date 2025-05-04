@@ -211,31 +211,6 @@ function doBind(MonadInstance $ma, \Closure ...$fs)
     return $last;
 }
 
-/**
- * @template A
- * @template B
- * @param A $a
- * @param B $b
- * @return Tuple<A,B>
- */
-function t(mixed $a, mixed $b): Tuple
-{
-    return new Tuple($a, $b);
-}
-
-/**
- * @template A
- * @template B
- * @template C
- * @param A $a
- * @param B $b
- * @param C $c
- * @return Tuple3<A,B,C>
- */
-function t3(mixed $a, mixed $b, mixed $c): Tuple3
-{
-    return new Tuple3($a, $b, $c);
-}
 
 /**
  * Draft implementation of memoize.
