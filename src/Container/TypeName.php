@@ -8,6 +8,8 @@ use thgs\Functional\Typeclass\ShowInstance;
 /**
  * This is just a "special" type to convey that it carries a type name
  *
+ * @todo think of SA here, could we have a type that SA can understand?
+ *
  * @implements EqInstance<TypeName>
  * @implements ShowInstance<TypeName>
  */
