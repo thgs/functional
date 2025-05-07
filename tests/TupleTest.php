@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use thgs\Functional\Data\Tuple;
 
 use thgs\Functional\Testing\EqAssertions;
+use thgs\Functional\Typeclass\EqInstance;
 use function thgs\Functional\partial;
 use function thgs\Functional\t;
 
@@ -75,6 +76,36 @@ class TupleTest extends TestCase
     public function testImplementsEq(): void
     {
         $this->assertImplementsEqCorrectly(Tuple::new(1,3), Tuple::new(3,8));
+    }
+
+    public function testCanBimap(): void
+    {
+        $t = t(123, 456);
+        $result = $t->bimap(fn ($x) => $x + 1, fn ($x) => $x - 1);
+        $this->assertTupleIs(124, 455, $result);
+    }
+
+    public function testWillReturnFalseWhenEqInstanceEqualsWithAnotherType(): void
+    {
+        $t = t(123, 456);
+        $anotherInstance = new class implements EqInstance {
+            /**
+             * @param EqInstance<A> $other
+             */
+            public function equals(EqInstance $other): bool
+            {
+                return true;
+            }
+
+            /**
+             * @param EqInstance<A> $other
+             */
+            public function notEquals(EqInstance $other): bool
+            {
+                return !$this->equals($other);
+            }
+        };
+        $this->assertFalse($t->equals($anotherInstance));
     }
 
     /**
