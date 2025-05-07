@@ -184,4 +184,27 @@ class IOTest extends TestCase
         $this->assertEquals(5, $int);
         $this->assertIsInt($int);
     }
+
+    public function testCanReturnIOUnit(): void
+    {
+        $this->assertNull(IO::unit()());
+    }
+
+    public function testCanSequenceWithThen(): void
+    {
+        $sideEffect = 0;
+        $io1 = IO::inject(function () use (&$sideEffect) {
+            $sideEffect++;
+        });
+        $io2 = IO::inject(function () use (&$sideEffect) {
+            $sideEffect++;
+        });
+
+        $io3 = $io1->then($io2);
+        $this->assertEquals(0, $sideEffect);
+
+        ($io3)();
+
+        $this->assertEquals(2, $sideEffect);
+    }
 }
