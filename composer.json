@@ -31,7 +31,6 @@
         }
     ],
     "scripts": {
-        "psalm": "./vendor/bin/psalm --no-cache",
         "phpstan": "./vendor/bin/phpstan analyse src -c phpstan.neon",
         "test": "./vendor/bin/phpunit tests --testdox --display-deprecations",
         "coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-text --strict-coverage --path-coverage",
