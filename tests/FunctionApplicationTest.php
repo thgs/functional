@@ -33,4 +33,18 @@ class FunctionApplicationTest extends TestCase
         $this->assertIsInt($p);
         $this->assertEquals(40, $p);
     }
+
+    public function testCanPartiallyApplyOneArgument(): void
+    {
+        $f = fn (int $x, int $y, int $z) => $x * $y * $z;
+
+        $firstPartial = apply($f, 3);
+
+        $this->assertInstanceOf(\Closure::class, $firstPartial);
+        $this->assertEquals(3*2*2, $firstPartial(2, 2));
+
+        $secondPartial = apply($firstPartial, 4);
+        $this->assertInstanceOf(\Closure::class, $secondPartial);
+        $this->assertEquals(3*4*2, $secondPartial(2));
+    }
 }

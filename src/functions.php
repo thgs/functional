@@ -96,7 +96,8 @@ function lr(\Closure|callable ...$xs): \Closure
 /**
  * ($) :: (a -> b) -> a -> b
  *
- * This is at this point a synonym for partial().
+ * This is at this point a synonym for partial(), however the number
+ * of arguments that can be applied is fixed (1).
  *
  * @todo consider a notation here? possibly (&) as well?
  *
