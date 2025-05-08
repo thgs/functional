@@ -6,8 +6,10 @@ use thgs\Functional\Data\Maybe;
 use thgs\Functional\Testing\FunctorLawsAssertions;
 
 use function thgs\Functional\c;
+use function thgs\Functional\const_;
 use function thgs\Functional\fmap;
 use function thgs\Functional\memoize;
+use function thgs\Functional\unit;
 
 class FunctionsTest extends TestCase
 {
@@ -139,5 +141,15 @@ class FunctionsTest extends TestCase
         }
 
         $this->assertEquals([1,1,1,1,1], $callsCounter2);
+    }
+
+    public function testConst(): void
+    {
+        $this->assertEquals(3, const_(3,4));
+    }
+
+    public function testUnit(): void
+    {
+        $this->assertNull(unit());
     }
 }
