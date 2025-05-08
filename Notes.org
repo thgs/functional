@@ -339,10 +339,12 @@ I think this actually is easy to solve if we return the ReflectionFunction insta
 After handling the infinite loop.
 ** DONE Partial application
 This seems such a central piece.
-* Roadmap to v1.0 [0/3]
+* Roadmap to v1.0 [0/4]
 ** TODO Fix all static analysis errors
 ** TODO Complete tests
 ** TODO Complete assertions and laws
+** TODO Make phpunit tests run with executionOrder=random
+Probably have left some stuff from the containers.
 * Other notes
 ** Trying the pipe operator
 *** Try flipping ~__invoke~ with `fmap` or `bind` at will (some dynamic front object).
