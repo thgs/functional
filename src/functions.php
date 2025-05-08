@@ -379,5 +379,5 @@ function flip(\Closure $f): \Closure
  */
 function eq1(mixed $fa1, mixed $fa2): bool
 {
-    return Eq1::liftEq(fn ($a, $b): bool => $a == $b, $fa1, $fa2);
+    return Eq1::liftEq(equals(...), $fa1, $fa2);
 }

@@ -7,6 +7,7 @@ use thgs\Functional\Testing\FunctorLawsAssertions;
 
 use function thgs\Functional\c;
 use function thgs\Functional\const_;
+use function thgs\Functional\eq1;
 use function thgs\Functional\fmap;
 use function thgs\Functional\memoize;
 use function thgs\Functional\unit;
@@ -151,5 +152,15 @@ class FunctionsTest extends TestCase
     public function testUnit(): void
     {
         $this->assertNull(unit());
+    }
+    public function testEq1(): void
+    {
+        $a = new \stdClass;
+        $a->value = 1;
+
+        $b = new \stdClass;
+        $b->value = '1';
+
+        $this->assertTrue(eq1($a, $b));
     }
 }

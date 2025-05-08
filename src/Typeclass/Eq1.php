@@ -6,6 +6,7 @@ use thgs\Functional\Container\Method;
 use thgs\Functional\Container\MethodContainer;
 use thgs\Functional\Container\Type;
 use thgs\Functional\Data\Maybe;
+use function thgs\Functional\partial;
 
 class Eq1
 {
@@ -44,7 +45,14 @@ class Eq1
          */
         $maybe = self::singleton()->container->invoke('liftEq', $a, $eq, $a, $b);
         if (!$maybe->isJust()) {
-            throw new \TypeError('Unknown Eq1 instance');
+            /**
+             * Allow method container to override but default to use
+             * the $eq that has been supplied to capture PHP primitive
+             * types. However, this allows liftEq's `f a` to be
+             * represented by a primitive type and really is not
+             * better than just calling the $eq like we do below.
+             */
+            return partial($eq, $a, $b);
         }
 
         return $maybe->getValue()->getValue();
