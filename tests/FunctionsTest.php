@@ -8,6 +8,7 @@ use thgs\Functional\Testing\FunctorLawsAssertions;
 use function thgs\Functional\c;
 use function thgs\Functional\const_;
 use function thgs\Functional\eq1;
+use function thgs\Functional\flip;
 use function thgs\Functional\fmap;
 use function thgs\Functional\memoize;
 use function thgs\Functional\unit;
@@ -153,6 +154,14 @@ class FunctionsTest extends TestCase
     {
         $this->assertNull(unit());
     }
+
+    public function testFlip(): void
+    {
+        $f = fn ($x, $y) => $x - $y;
+        $result = flip ($f) (2, 10);
+        $this->assertEquals(8, $result);
+    }
+
     public function testEq1(): void
     {
         $a = new \stdClass;
