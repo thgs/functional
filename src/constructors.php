@@ -2,9 +2,12 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Data\Either;
 use thgs\Functional\Data\Just;
+use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
+use thgs\Functional\Data\Right;
 use thgs\Functional\Data\Tuple;
 use thgs\Functional\Data\Tuple3;
 
@@ -52,4 +55,24 @@ function t(mixed $a, mixed $b): Tuple
 function t3(mixed $a, mixed $b, mixed $c): Tuple3
 {
     return new Tuple3($a, $b, $c);
+}
+
+/**
+ * @template A
+ * @param A $x
+ * @return Either<A,*>
+ */
+function left(mixed $x): Either
+{
+    return new Either(new Left($x));
+}
+
+/**
+ * @template A
+ * @param A $x
+ * @return Either<*,A>
+ */
+function right(mixed $x): Either
+{
+    return new Either(new Right($x));
 }
