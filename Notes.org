@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [10/46]
+* Todo [10/47]
 ** TODO Fix IO
 What needs to be fixed here??
 ** TODO Fix Applicative sequence() types
@@ -293,6 +293,7 @@ I think phpstan documentation implements a "kind".
 
 Essentially implementing "typestates".
 
+** TODO Either could use a union instead of A,B template types?
 ** ----- DONE ----
 ** DONE Implement Category
 Calling this Done and if there is an issue will solve it there.
