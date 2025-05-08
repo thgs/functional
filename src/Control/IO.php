@@ -12,7 +12,9 @@ use function thgs\Functional\partial;
 /**
  * This gives a context of IO for anything deemed as such. It is up to
  * the user to decide what should be treated as a side-effect and what
- * should not.
+ * should not. This should probably be called "Sideeffect" as we do
+ * not implement anything for the global state or fantasy land (if the
+ * term is correct).
  *
  * @template ReturnType
  *
