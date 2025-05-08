@@ -2,6 +2,7 @@
 
 namespace thgs\Functional;
 
+use thgs\Functional\Control\IO;
 use thgs\Functional\Data\Either;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Left;
@@ -10,6 +11,7 @@ use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
 use thgs\Functional\Data\Tuple;
 use thgs\Functional\Data\Tuple3;
+
 
 /**
  * @template X
@@ -21,6 +23,7 @@ function just(mixed $x): Maybe
     return new Maybe(new Just($x));
 }
 
+
 /**
  * @template X
  * @return Maybe<X>
@@ -30,6 +33,7 @@ function nothing(): Maybe
     // @todo SA has an issue here
     return new Maybe(new Nothing());
 }
+
 
 /**
  * @template A
@@ -42,6 +46,7 @@ function t(mixed $a, mixed $b): Tuple
 {
     return new Tuple($a, $b);
 }
+
 
 /**
  * @template A
@@ -57,6 +62,7 @@ function t3(mixed $a, mixed $b, mixed $c): Tuple3
     return new Tuple3($a, $b, $c);
 }
 
+
 /**
  * @template A
  * @param A $x
@@ -67,6 +73,7 @@ function left(mixed $x): Either
     return new Either(new Left($x));
 }
 
+
 /**
  * @template A
  * @param A $x
@@ -75,4 +82,15 @@ function left(mixed $x): Either
 function right(mixed $x): Either
 {
     return new Either(new Right($x));
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @return IO<A>
+ */
+function io(mixed $a): IO
+{
+    return IO::inject($a);
 }

@@ -237,25 +237,35 @@ function maybe(mixed $default, callable $f, Maybe $maybe): mixed
  * @template A
  * @template B
  * @param MonadInstance<A> $ma
- * @param \Closure(A):MonadInstance<B>|MonadInstance<B> $fs
- * @return MonadInstance<*>
+ * @param \Closure(A):MonadInstance<B>|MonadInstance<B> $f
+ * @param \Closure(A):MonadInstance<B>|MonadInstance<B> ...$fs
+ * @return MonadInstance<B>
  *
  * @see https://en.wikibooks.org/wiki/Haskell/do_notation
  *
  * @todo support Composition
  */
-function dn(MonadInstance $ma, MonadInstance|\Closure/*|Composition*/ ...$fs)
+function dn(MonadInstance $ma, MonadInstance|\Closure $f, MonadInstance|\Closure/*|Composition*/ ...$fs)
 {
     $last = $ma;
+    array_unshift($fs, $f);
+
     foreach ($fs as $k => $new) {
         $last = $new instanceof \Closure // || $new instanceof Composition
             ? $last->bind($new)
             : $last->then($new);
 
-        // Pedantic type check below
-        if (!$last instanceof MonadInstance) {
-            throw new \TypeError('Result is not a monad instance');
-        }
+        /**
+         * The MonadInstance's bind() and then() require the return
+         * value to be MonadInstance.
+         *
+         * @todo support dn() through bind() and then() using the
+         * container.
+         *
+         * @todo removing this check from the implementation, we can
+         * bind with a function that returns a different monad
+         * instance.
+         */
     }
     return $last;
 }
@@ -267,19 +277,17 @@ function dn(MonadInstance $ma, MonadInstance|\Closure/*|Composition*/ ...$fs)
  * @template A
  * @template B
  * @param MonadInstance<A> $ma
+ * @param \Closure(A):MonadInstance<B> $f
  * @param \Closure(A):MonadInstance<B> ...$fs
  * @return MonadInstance<*>
  */
-function doBind(MonadInstance $ma, \Closure ...$fs)
+function doBind(MonadInstance $ma, \Closure $f, \Closure ...$fs)
 {
     $last = $ma;
+    array_unshift($fs, $f);
+
     foreach ($fs as $new) {
         $last = $last->bind($new);
-
-        // Pedantic type check below
-        if (!$last instanceof MonadInstance) {
-            throw new \TypeError('Result is not a monad instance');
-        }
     }
     return $last;
 }

@@ -165,8 +165,7 @@ class IO implements
         $do = function () use ($f, $action) {
             $x = ($action)();
 
-            // todo: could add a type check here? that return type is indeed m b ?
-            return (partial ($f, $x))
+            return partial($f, $x)
                 ->getValue(); // unIO
         };
         return new IO($do);
