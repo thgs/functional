@@ -4,6 +4,7 @@ namespace thgs\Functional;
 
 use thgs\Functional\Container\TypeName;
 use thgs\Functional\Control\Typeclass\MonadInstance;
+use thgs\Functional\Data\Ordering;
 use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\Contravariant;
 use thgs\Functional\Typeclass\ContravariantInstance;
@@ -13,6 +14,7 @@ use thgs\Functional\Typeclass\Functor;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\Monad;
 use thgs\Functional\Typeclass\Monoid;
+use thgs\Functional\Typeclass\Ord;
 use thgs\Functional\Typeclass\Show;
 
 
@@ -167,4 +169,83 @@ function inject(mixed $a, TypeName $asType): mixed
 function then(mixed $ma, mixed $mb): mixed
 {
     return Monad::then($ma, $mb);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ */
+function compare(mixed $a, mixed $b): Ordering
+{
+    return Ord::compare($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ */
+function lessOrEqual(mixed $a, mixed $b): bool
+{
+    return Ord::lessOrEqual($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ */
+function less(mixed $a, mixed $b): bool
+{
+    return Ord::less($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ */
+function moreOrEqual(mixed $a, mixed $b): bool
+{
+    return Ord::moreOrEqual($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ */
+function more(mixed $a, mixed $b): bool
+{
+    return Ord::more($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ * @return A
+ */
+function max(mixed $a, mixed $b): mixed
+{
+    return Ord::max($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ * @return A
+ */
+function min(mixed $a, mixed $b): mixed
+{
+    return Ord::min($a, $b);
 }
