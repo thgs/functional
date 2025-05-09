@@ -2,6 +2,7 @@
 
 namespace thgs\Functional;
 
+
 /**
  * @todo phpstan does not seem to like when template arguments are used here
  * @param \Closure(\Closure,\Closure):\Closure $compositionFunction

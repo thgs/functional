@@ -2,10 +2,12 @@
 
 namespace thgs\Functional;
 
+
 /**
  * These might grow into more elaborate structures but for now I add
  * them here as draft examples at least.
  */
+
 
 /**
  * @template A
@@ -17,6 +19,7 @@ function yieldFrom(iterable $it): \Generator
 {
     yield from $it;
 }
+
 
 /**
  * This essentially defines an interaction between two generators
@@ -37,6 +40,7 @@ function sendFrom(iterable $from, \Generator $receiver): void
     }
 }
 
+
 /**
  * This also could be called `toArray`
  *
@@ -55,6 +59,7 @@ function consume(iterable $it): array
     return $result;
 }
 
+
 /**
  * Is this even useful or makes sense? Seems like identity.
  * This is essentially "take first"
@@ -64,6 +69,7 @@ function receiveOne(): \Generator
     $value = yield;
     yield $value;
 }
+
 
 function applyReceiver(\Closure $f): \Generator
 {
@@ -76,6 +82,7 @@ function applyReceiver(\Closure $f): \Generator
         yield $f ($value);
     }
 }
+
 
 /**
  * @template A
@@ -98,6 +105,7 @@ function storageReceiver(array &$storage): \Generator
         $storage[] = yield;
     }
 }
+
 
 /**
  * @todo variations here can grow too much, including an

@@ -2,9 +2,11 @@
 
 namespace thgs\Functional;
 
+
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
+
 
 /**
  * @todo this can probably expand into a type class?

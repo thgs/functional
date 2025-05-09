@@ -15,10 +15,12 @@ use thgs\Functional\Typeclass\Monad;
 use thgs\Functional\Typeclass\Monoid;
 use thgs\Functional\Typeclass\Show;
 
+
 /**
  * Here are all type class methods defined by this library.  All of those use
  * the MethodContainer if a value without an type class interface is not passed.
  */
+
 
 /**
  * @template A
@@ -36,6 +38,7 @@ function equals(mixed $a, mixed $b): bool
     return Eq::equals($a, $b);
 }
 
+
 /**
  * @template A
  * @template B
@@ -46,6 +49,7 @@ function notEquals(mixed $a, mixed $b): bool
 {
     return Eq::notEquals($a, $b);
 }
+
 
 /**
  * @template A
@@ -58,6 +62,7 @@ function liftEq(\Closure $eq, mixed $a, mixed $b): bool
 {
     return Eq1::liftEq($eq, $a, $b);
 }
+
 
 /**
  * @template AF
@@ -101,6 +106,7 @@ function fmap(Composition|\Closure|callable $f, mixed $g): mixed
     return Functor::fmap($f, $g);
 }
 
+
 /**
  * @template A2
  * @template B2
@@ -117,20 +123,24 @@ function contramap(\Closure|callable $f, mixed $fa): mixed
     return Contravariant::contramap($f, $fa);
 }
 
+
 function show(mixed $a): string
 {
     return Show::show($a);
 }
+
 
 function mappend(mixed $a, mixed $b, ?TypeName $asType = null): mixed
 {
     return Monoid::mappend($a, $b, $asType);
 }
 
+
 function mempty(TypeName|string $asType): mixed
 {
     return Monoid::mempty($asType);
 }
+
 
 /**
  * @template A2
@@ -147,10 +157,12 @@ function bind(mixed $ma, \Closure $f): mixed
     return Monad::bind($ma, $f);
 }
 
+
 function inject(mixed $a, TypeName $asType): mixed
 {
     return Monad::inject($a, $asType);
 }
+
 
 function then(mixed $ma, mixed $mb): mixed
 {

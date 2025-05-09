@@ -2,8 +2,10 @@
 
 namespace thgs\Functional;
 
+
 use thgs\Functional\Control\IO;
 use thgs\Functional\Instance\Composition;
+
 
 /**
  * @return IO<string|false>
@@ -12,6 +14,7 @@ function getLine(): IO
 {
     return IO::inject(fn (): string|false => fgets(\STDIN));
 }
+
 
 /**
  * @param string|\Stringable $message
@@ -23,6 +26,7 @@ function putStrLn(\Stringable|string $message): IO
         print $message . PHP_EOL;
     });
 }
+
 
 /**
  * @param \Closure(string):string $f
@@ -50,6 +54,7 @@ function readFile(\Stringable|string $filename): IO
     return IO::inject(fn () => file_get_contents($filename));
 }
 
+
 /**
  * @param \Stringable|string $filename
  * @param \Stringable|string $contents
@@ -59,6 +64,7 @@ function writeFile(\Stringable|string $filename, \Stringable|string $contents): 
 {
     return IO::inject(fn (): int|false => file_put_contents($filename, $contents));
 }
+
 
 /**
  * @param \Stringable|string $filename

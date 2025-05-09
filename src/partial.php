@@ -2,8 +2,10 @@
 
 namespace thgs\Functional;
 
+
 use thgs\Functional\Expression\Composition;
 use function thgs\Functional\c;
+
 
 /**
  * The MIT License (MIT)
