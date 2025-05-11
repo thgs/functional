@@ -28,9 +28,9 @@ class Semigroup
 
     /**
      * @template A
-     * @param A $a
-     * @param A $b
-     * @return A
+     * @param A|SemigroupInstance<A> $a
+     * @param A|SemigroupInstance<A> $b
+     * @return ($a is SemigroupInstance<A> ? SemigroupInstance<A> : A)
      */
     public static function assoc(mixed $a, mixed $b): mixed
     {
@@ -53,15 +53,14 @@ class Semigroup
      * haskell: sconcat :: NonEmpty a -> a
      *
      * @template A
-     * @param A $a
+     * @param iterable<A> $a
+     * @return A
      */
-    public static function sconcat($a): mixed
+    public static function sconcat(iterable $a): mixed
     {
-        /*
-        if ($a instanceof OrdInstance) {
-            return $a->compare($b);
-        }
-        */
+        // here we will have to start iterating to find if the
+        // elements are SemigroupInterface or not
+        throw new \Exception('`sconcat` is not supported yet');
 
         /**
          * @var Maybe<A>
@@ -76,11 +75,9 @@ class Semigroup
 
    /**
      * @template A1
-     * @template Ma1
-     * @template Ma2
      * @param \Closure(mixed):bool $typePredicate
-     * @param \Closure(Ma1, \Closure(A1):Ma2):Ma2 $bind
-     * @param \Closure(A1):Ma1 $inject
+     * @param \Closure(A1,A1):A1|null $assoc
+     * @param \Closure(iterable<A1>):A1|null $sconcat
      */
     public static function register(
         \Closure $typePredicate,
@@ -89,9 +86,16 @@ class Semigroup
         ?\Closure $sconcat = null,
     ): self
     {
-        // todo: minimal is bind? could derive inject and then (although `then` has hard-coded default)
         if ($assoc === null && $sconcat === null) {
             throw new \Exception('Must provide at least one of the two implementations (assoc,sconcat)');
+        }
+
+        if ($assoc === null) {
+            $assoc = fn (mixed $a, mixed $b): mixed => $sconcat ([$a, $b]);
+        }
+
+        if ($sconcat === null) {
+            throw new \Exception('Deriving `sconcat` is not supported yet');
         }
 
         self::singleton()->container
