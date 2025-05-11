@@ -27,6 +27,10 @@ class Monoid
         return $instance;
     }
 
+    /**
+     * As we cannot infer the type from the call site, passing an
+     * explicit type is required.
+     */
     public static function mempty(TypeName|string $asType): mixed
     {
         /**
@@ -40,9 +44,17 @@ class Monoid
         return $maybe->getValue()->getValue();
     }
 
+    /**
+     * @template A
+     * @param A|MonoidInstance<A> $a
+     * @param A|MonoidInstance<A> $b
+     * @return ($a is MonoidInstance<A> ? MonoidInstance<A> : A)
+     */
     public static function mappend(mixed $a, mixed $b, ?TypeName $asType = null): mixed
     {
-        // todo: what is the status of that MonoidInstance? I do not even look.
+        if ($a instanceof MonoidInstance && $b instanceof MonoidInstance) {
+            return $a->mappend($b);
+        }
 
         /**
          * @var Maybe<mixed>
@@ -66,18 +78,6 @@ class Monoid
      */
     public static function register(\Closure $typePredicate, mixed $mempty, \Closure $mappend, string $instanceName): self
     {
-        /**
-         * Here we register each method implementation in the single container
-         * here is where the deriving will happen so if we had a way to derive
-         * Functor implementation from a data type, we could do it here and
-         * register it only if given a class name
-         */
-
-        /**
-         * todo: if instanceName is a class that implements FunctorInstance then
-         * there is no need to register (could support override this way)
-         */
-
         self::singleton()->container
             ->registerMethod(
                 new Method('mempty', new Type($typePredicate, $instanceName), fn () => $mempty)
