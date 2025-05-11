@@ -10,6 +10,8 @@ use thgs\Functional\Typeclass\Contravariant;
 use thgs\Functional\Typeclass\ContravariantInstance;
 use thgs\Functional\Typeclass\Eq;
 use thgs\Functional\Typeclass\Eq1;
+use thgs\Functional\Typeclass\Foldable;
+use thgs\Functional\Typeclass\FoldableInstance;
 use thgs\Functional\Typeclass\Functor;
 use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\Monad;
@@ -321,3 +323,37 @@ function sconcat(iterable $nonEmpty): mixed
 
 
 // todo: add stimes
+
+
+/**
+ * ---------------------------------- Foldable
+ */
+
+
+/**
+ * @template A
+ * @template M
+ * @template Ta2
+ * @param \Closure(A):M $f
+ * @param Ta2|FoldableInstance<A> $foldable
+ * @return ($foldable is FoldableInstance<A> ? FoldableInstance<A> : M)
+ */
+function foldMap(\Closure $f, mixed $foldable): mixed
+{
+    return Foldable::foldMap($f, $foldable);
+}
+
+
+/**
+ * @template A
+ * @template B
+ * @template Ta
+ * @param \Closure(A,B):B $f
+ * @param B $b
+ * @param Ta|FoldableInstance<A> $foldable
+ * @return B
+ */
+function foldr(\Closure $f, mixed $b, mixed $foldable): mixed
+{
+    return Foldable::foldr($f, $b, $foldable);
+}
