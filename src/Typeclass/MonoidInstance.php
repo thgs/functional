@@ -3,10 +3,10 @@
 namespace thgs\Functional\Typeclass;
 
 /**
- * @template M
  * @template A
+ * @extends SemigroupInstance<A>
  */
-interface MonoidInstance
+interface MonoidInstance extends SemigroupInstance
 {
     /**
      * @return A
@@ -14,22 +14,10 @@ interface MonoidInstance
     public function mempty(): mixed;
 
     /**
-     * Returns the associative function of the monoid, to allow type
-     * declarations in the function.
-     *
-     * Usage should be:
-     *
-     * MonoidInstance::mappend() ("Hello", " world!");
-     *
-     * instead of:
-     *
-     * MonoidInstance::mappend ("Hello", " world!");
-     *
-     * @param A $a
-     * @param A $b
-     * @return A
+     * @param MonoidInstance<A> $b
+     * @return MonoidInstance<A>
      */
-    public function mappend(mixed $a, mixed $b): mixed;
+    public function mappend(MonoidInstance $b): MonoidInstance;
 
     // todo: define mconcat -- needs list (OR Foldable?)
 }
