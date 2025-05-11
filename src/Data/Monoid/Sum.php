@@ -23,6 +23,11 @@ class Sum implements
         private int|float $a
     ) {}
 
+    public function getValue(): int|float
+    {
+        return $this->a;
+    }
+
     /**
      * @param Sum $other
      */

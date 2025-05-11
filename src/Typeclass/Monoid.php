@@ -36,7 +36,7 @@ class Monoid
         /**
          * @var Maybe<mixed>
          */
-        $maybe = self::singleton()->container->invoke('mempty', $asType);
+        $maybe = self::singleton()->container->invoke('mempty', is_string($asType) ? new TypeName($asType) : $asType);
         if (!$maybe->isJust()) {
             throw new \TypeError('Unknown Monoid instance');
         }
