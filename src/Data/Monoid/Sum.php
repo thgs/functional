@@ -44,9 +44,9 @@ class Sum implements
         return !$this->equals($other);
     }
 
-    public function mappend(MonoidInstance $b): MonoidInstance
+    public function mappend(MonoidInstance $other): MonoidInstance
     {
-        return $this->assoc($b);
+        return $this->assoc($other);
     }
 
     public function mempty(): mixed
@@ -57,13 +57,13 @@ class Sum implements
     /**
      * @return Sum
      */
-    public function assoc(SemigroupInstance $b): SemigroupInstance
+    public function assoc(SemigroupInstance $other): SemigroupInstance
     {
-        if (!$b instanceof Sum) {
+        if (!$other instanceof Sum) {
             throw new \TypeError('Expected instance of Sum');
         }
 
-        return new Sum($this->a + $b->a);
+        return new Sum($this->a + $other->a);
     }
 
     public static function sconcat(iterable $nonEmpty): mixed

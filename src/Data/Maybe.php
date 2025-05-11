@@ -8,11 +8,16 @@ use thgs\Functional\Expression\Composition;
 use thgs\Functional\Typeclass\Eq1Instance;
 use thgs\Functional\Typeclass\EqInstance;
 use thgs\Functional\Typeclass\FunctorInstance;
+use thgs\Functional\Typeclass\MonoidInstance;
+use thgs\Functional\Typeclass\SemigroupInstance;
 use thgs\Functional\Typeclass\ShowInstance;
 
+use function thgs\Functional\assoc;
 use function thgs\Functional\c;
 use function thgs\Functional\equals;
 use function thgs\Functional\fmap;
+use function thgs\Functional\just;
+use function thgs\Functional\nothing;
 use function thgs\Functional\show;
 
 /**
@@ -23,6 +28,8 @@ use function thgs\Functional\show;
  * @implements ShowInstance<Maybe<A1>>
  * @implements ApplicativeInstance<Maybe<A1>>
  * @implements MonadInstance<Maybe<A1>>
+ * @implements SemigroupInstance<Maybe<A1>>
+ * @implements MonoidInstance<Maybe<A1>>
  */
 class Maybe implements
     EqInstance,
@@ -30,7 +37,9 @@ class Maybe implements
     ShowInstance,
     FunctorInstance,
     ApplicativeInstance,
-    MonadInstance
+    MonadInstance,
+    SemigroupInstance,
+    MonoidInstance
 {
     public function __construct(
         /**
@@ -213,5 +222,55 @@ class Maybe implements
         }
 
         return !$this->isJust() && !$other->isJust();
+    }
+
+    /**
+     * @param Maybe<A1> $other
+     * @return Maybe<A1>
+     */
+    public function assoc(SemigroupInstance $other): SemigroupInstance
+    {
+        /** @phpstan-ignore instanceof.alwaysTrue */
+        if (!$other instanceof Maybe) {
+            throw new \TypeError('Expected instance of Maybe');
+        }
+
+        if (!$this->isJust()) {
+            return $other;
+        }
+
+        if (!$other->isJust()) {
+            return $this;
+        }
+
+        return just(
+            assoc($this->x->getValue(), $other->x->getValue()));
+    }
+
+    /**
+     * @return A1
+     */
+    public static function sconcat($nonEmpty): mixed
+    {
+        throw new \Exception('Not implemented yet, waiting for Foldable/foldr');
+    }
+
+    public function mempty(): mixed
+    {
+        /**
+         * @todo Is this correct? SA does not complain but should we return this?
+         * @var Maybe<A1>
+         */
+        $nothing = nothing();
+        return $nothing;
+    }
+
+    /**
+     * @param Maybe<A1> $other
+     * @return Maybe<A1>
+     */
+    public function mappend(MonoidInstance $other): MonoidInstance
+    {
+        return $this->assoc($other);
     }
 }

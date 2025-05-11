@@ -15,12 +15,18 @@ use thgs\Functional\Typeclass\FunctorInstance;
 use thgs\Functional\Typeclass\Monad;
 use thgs\Functional\Typeclass\Monoid;
 use thgs\Functional\Typeclass\Ord;
+use thgs\Functional\Typeclass\Semigroup;
 use thgs\Functional\Typeclass\Show;
 
 
 /**
  * Here are all type class methods defined by this library.  All of those use
  * the MethodContainer if a value without an type class interface is not passed.
+ */
+
+
+/**
+ * ---------------------------------------- Eq
  */
 
 
@@ -54,6 +60,11 @@ function notEquals(mixed $a, mixed $b): bool
 
 
 /**
+ * --------------------------------------- Eq1
+ */
+
+
+/**
  * @template A
  * @template B
  * @param \Closure(A,B):bool $eq
@@ -64,6 +75,11 @@ function liftEq(\Closure $eq, mixed $a, mixed $b): bool
 {
     return Eq1::liftEq($eq, $a, $b);
 }
+
+
+/**
+ * ----------------------------------- Functor
+ */
 
 
 /**
@@ -110,6 +126,11 @@ function fmap(Composition|\Closure|callable $f, mixed $g): mixed
 
 
 /**
+ * ----------------------------- Contravariant
+ */
+
+
+/**
  * @template A2
  * @template B2
  * @template Ca1
@@ -126,10 +147,20 @@ function contramap(\Closure|callable $f, mixed $fa): mixed
 }
 
 
+/**
+ * -------------------------------------- Show
+ */
+
+
 function show(mixed $a): string
 {
     return Show::show($a);
 }
+
+
+/**
+ * ------------------------------------ Monoid
+ */
 
 
 function mappend(mixed $a, mixed $b, ?TypeName $asType = null): mixed
@@ -142,6 +173,11 @@ function mempty(TypeName|string $asType): mixed
 {
     return Monoid::mempty($asType);
 }
+
+
+/**
+ * ------------------------------------- Monad
+ */
 
 
 /**
@@ -170,6 +206,11 @@ function then(mixed $ma, mixed $mb): mixed
 {
     return Monad::then($ma, $mb);
 }
+
+
+/**
+ * --------------------------------------- Ord
+ */
 
 
 /**
@@ -249,3 +290,34 @@ function min(mixed $a, mixed $b): mixed
 {
     return Ord::min($a, $b);
 }
+
+
+/**
+ * --------------------------------- Semigroup
+ */
+
+
+/**
+ * @template A
+ * @param A $a
+ * @param A $b
+ * @return A
+ */
+function assoc(mixed $a, mixed $b): mixed
+{
+    return Semigroup::assoc($a, $b);
+}
+
+
+/**
+ * @template A
+ * @param iterable<A> $nonEmpty
+ * @return A
+ */
+function sconcat(iterable $nonEmpty): mixed
+{
+    return Semigroup::sconcat($nonEmpty);
+}
+
+
+// todo: add stimes

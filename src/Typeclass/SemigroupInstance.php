@@ -8,10 +8,10 @@ namespace thgs\Functional\Typeclass;
 interface SemigroupInstance
 {
     /**
-     * @param SemigroupInstance<A> $b
+     * @param SemigroupInstance<A> $other
      * @return SemigroupInstance<A>
      */
-    public function assoc(SemigroupInstance $b): SemigroupInstance;
+    public function assoc(SemigroupInstance $other): SemigroupInstance;
 
     /**
      * @todo fix NonEmpty below
