@@ -19,6 +19,7 @@
             "src/functions.php",
             "src/io.php",
             "src/iteration.php",
+            "src/json.php",
             "src/methods.php",
             "src/partial.php",
             "src/reflection.php"

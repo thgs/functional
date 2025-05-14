@@ -273,4 +273,24 @@ class Maybe implements
     {
         return $this->assoc($other);
     }
+
+    /**
+     * @template A
+     * @param A $a
+     * @return Maybe<A>
+     */
+    public static function liftFromNullable(mixed $a): Maybe
+    {
+        return $a === null ? nothing() : just($a);
+    }
+
+    /**
+     * @template A
+     * @param A $a
+     * @return Maybe<A>
+     */
+    public static function liftFromFalsy(mixed $a): Maybe
+    {
+        return $a ? just($a) : nothing();
+    }
 }

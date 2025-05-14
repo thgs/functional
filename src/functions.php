@@ -389,3 +389,4 @@ function eq1(mixed $fa1, mixed $fa2): bool
 {
     return Eq1::liftEq(equals(...), $fa1, $fa2);
 }
+
