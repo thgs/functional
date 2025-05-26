@@ -95,4 +95,23 @@ class OutputBufferingTest extends TestCase
         $this->assertIsString($obReturns);
         $this->assertEquals('16.00', $obReturns, 'return value does not match expectation');
     }
+
+    public function testCanInject(): void
+    {
+        $sideEffect = 0;
+        $ob = OutputBuffering::inject(function () use (&$sideEffect){
+            $sideEffect++;
+            $sideEffect++;
+            print $sideEffect;
+            return $sideEffect;
+        });
+
+        $this->assertEquals(0, $sideEffect);
+
+        $output = $ob();
+
+        $this->assertEquals(2, $sideEffect);
+        $this->assertEquals("2", $output->fst());
+        $this->assertEquals(2, $output->snd());
+    }
 }
