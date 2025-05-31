@@ -1,9 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [10/47]
-** TODO Fix IO
-What needs to be fixed here??
+* Todo [11/47]
 ** TODO Fix Applicative sequence() types
 ** TODO Implement ReverseComposition or swap names
 I think "Composition" became natural because of partial application.
@@ -295,6 +293,8 @@ Essentially implementing "typestates".
 
 ** TODO Either could use a union instead of A,B template types?
 ** ----- DONE ----
+** DONE Fix IO
+What needs to be fixed here?? Will never remember.
 ** DONE Implement Category
 Calling this Done and if there is an issue will solve it there.
 ** DONE Implement Op
