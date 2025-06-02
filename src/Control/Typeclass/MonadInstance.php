@@ -22,7 +22,7 @@ interface MonadInstance
      * Equivalent of Haskell's `return`
      *
      * @template A1
-     * @psalm-param A1 $a
+     * @param A1 $a
      * @return MonadInstance<A1>
      *
      * @todo or maybe use `pure`
@@ -34,8 +34,7 @@ interface MonadInstance
      *
      * m a is the current object that implements this interface.
      *
-     * Therefore we only need to accept (a -> m b)
-     * Could also be named `apply`.
+     * Therefore we only need to accept (a -> m b).
      *
      * The function passed needs to accept a normal value and return a monadic
      * one.
