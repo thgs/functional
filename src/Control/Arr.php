@@ -3,7 +3,7 @@
 namespace thgs\Functional\Control;
 
 use thgs\Functional\Typeclass\FunctorInstance;
-use thgs\Functional\Typeclass\MonadInstance;
+use thgs\Functional\Control\Typeclass\MonadInstance;
 use function thgs\Functional\partial;
 use function thgs\Functional\rl;
 
@@ -59,24 +59,28 @@ class Arr implements
     }
 
     /**
-     * @template R
-     * @template A
-     * @param \Closure(R):A $a
-     * @return Arr<R,A>
+     * return :: a -> m a
+     * return :: a -> (r -> a)
+     * return :: a -> Arr<R1,A1>
+     *
+     * @template A1
+     * @param A1 $a
+     * @return Arr<*,A1>
      */
     public static function inject(mixed $a): MonadInstance
     {
-        if (!$a instanceof \Closure) {
-            // for now will TypeError explicitly. It would error from the constructor though.
-            throw new \TypeError('Expected Closure');
-        }
-        return new self($a);
+        // @todo seems I cannot add R1 and "give it a name" it so I used *
+        return new self(fn ($r) => $a);
     }
 
     /**
      * The function passed needs to accept a normal value and return a monadic
      * one.
      *
+     * (>>=) :: m a -> (a -> m b) -> m b
+     * (>>=) :: (r -> a) -> (a -> (r -> b)) -> (r -> b)
+     * (>>=) :: Arr<R,A> -> (a -> Arr<R,B>) -> Arr<R,B>
+     * 
      * @template B
      * @param \Closure(R):MonadInstance<B> $f
      * @return Arr<R,B>
@@ -102,6 +106,7 @@ class Arr implements
 
     /**
      * (>>) :: m a -> m b -> m b
+     * (>>) :: (r -> a) -> (r -> b) -> (r -> b)
      *
      * @template B
      * @param Arr<R,B> $b
