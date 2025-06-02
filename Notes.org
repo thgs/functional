@@ -1,10 +1,8 @@
 #+TITLE: Project notes
 -----
 
-* Todo [11/47]
+* Todo [16/47]
 ** TODO Fix Applicative sequence() types
-** TODO Implement ReverseComposition or swap names
-I think "Composition" became natural because of partial application.
 ** TODO Semigroup and Monoid in terms of Semigroup
  Implement MonoidInstance in terms of Semigroup.  Haskell's interface to making
  a Monoid is to define types and override defaults of either mempty or
@@ -12,40 +10,12 @@ I think "Composition" became natural because of partial application.
  SemigroupInstance` would be what we are looking for here so that mappend can
  have a default implementation of returning the associative function from the
  Semigroup.
+
+ It might be easier for users to implement just Monoid sometimes?
 ** TODO Curry?
 ** TODO List comprehension?
 ** TODO How we handle ~newtype~ ?
-** TODO Consider single object per typeclass instance or why not
-Lets take for example Maybe. Maybe has 1 type variable `a`. If Maybe
-is implemented in a single class there might be a type `a` that cannot
-be an instance of Show but is Functor for example. Implementing it in
-a single class may be quite restrictive as the type variable `a` will
-have to implement all requirements coming from the PHP interfaces
-(that try to map a typeclass) ? Is this right?
-** TODO (ergonomics) Refine Syntax helpers ?
-
-Example for : x -: f = f x
-
-#+begin_src php
-
-  SyntaxHelper::start(3)
-     ->apply(f(...));
-
-      // or "stack" based
-
-  StackSyntaxHelper::push(3)
-      ->push(f(...))
-      ->apply();
-
-  StackSyntaxHelper::push(3, 4, 6)->apply('max');
-  StackSyntaxHelper::push(3, 4, 6, 'max')->applyFirstCallable();
-
-#+end_src
-
-First two do not look much of a helper really.
-
-This could be implemented in terms of notations.
-
+Do we need to ?
 ** TODO Explore use cases
 Haskell is good with constructing hexagons. What aspects of haskell do that? Are they included?
 Just providing a base to work with the given structures (ie extending Maybe or reusing it)
@@ -57,21 +27,6 @@ Write the above in the docs.
 Also rethink and add any aliases/names. Partial might need an object instead of returning an anonymous function.
 ** TODO Some things can be implemented lazy
 By returning a function and with the help of partial application.
-** TODO Implement these on Composition
-#+begin_src haskell
-
--- | @since base-2.01
-instance Applicative ((->) r) where
-    pure = const
-    (<*>) f g x = f x (g x)
-    liftA2 q f g x = q (f x) (g x)
-
--- | @since base-2.01
-instance Monad ((->) r) where
-    f >>= k = \ r -> k (f r) r
-
-#+end_src
-
 ** TODO Would mocking of functions be part of this?
 Cheers to Olle from phpc
 ** TODO Could this be implemented:
@@ -89,13 +44,8 @@ I suppose so. Does it work now?
 #+end_src
 
 Should be it.
+Leaving this here still as it might be useful?
 
-** TODO Separate data and control functors
-https://www.tweag.io/blog/2020-01-16-data-vs-control/
-
-And also here we could elaborate on the Data.IO and Control.Monad.IO
-so that the latter implements in terms of monadic operations. What
-about the first though?
 ** TODO Implement MoreAccurateFunctor
 https://stackoverflow.com/questions/53854853/why-is-there-a-distinction-between-co-and-contravariant-functors-in-haskell-but
 Also called Categorical Functor but seems like this generalisation can be very useful.
@@ -293,6 +243,67 @@ Essentially implementing "typestates".
 
 ** TODO Either could use a union instead of A,B template types?
 ** ----- DONE ----
+** DONE Separate data and control functors
+https://www.tweag.io/blog/2020-01-16-data-vs-control/
+
+And also here we could elaborate on the Data.IO and Control.Monad.IO
+so that the latter implements in terms of monadic operations. What
+about the first though?
+
+This has taken place, more or less.
+** DONE Implement these on Composition
+#+begin_src haskell
+
+-- | @since base-2.01
+instance Applicative ((->) r) where
+    pure = const
+    (<*>) f g x = f x (g x)
+    liftA2 q f g x = q (f x) (g x)
+
+-- | @since base-2.01
+instance Monad ((->) r) where
+    f >>= k = \ r -> k (f r) r
+
+#+end_src
+
+Implemented with Arr.
+
+** DONE (ergonomics) Refine Syntax helpers ?
+
+Example for : x -: f = f x
+
+#+begin_src php
+
+  SyntaxHelper::start(3)
+     ->apply(f(...));
+
+      // or "stack" based
+
+  StackSyntaxHelper::push(3)
+      ->push(f(...))
+      ->apply();
+
+  StackSyntaxHelper::push(3, 4, 6)->apply('max');
+  StackSyntaxHelper::push(3, 4, 6, 'max')->applyFirstCallable();
+
+#+end_src
+
+First two do not look much of a helper really.
+
+Implemented in terms of notations.
+
+** DONE Consider single object per typeclass instance or why not
+Lets take for example Maybe. Maybe has 1 type variable `a`. If Maybe
+is implemented in a single class there might be a type `a` that cannot
+be an instance of Show but is Functor for example. Implementing it in
+a single class may be quite restrictive as the type variable `a` will
+have to implement all requirements coming from the PHP interfaces
+(that try to map a typeclass) ? Is this right?
+
+Implemented the MethodContainer.
+** DONE Implement ReverseComposition or swap names
+I think "Composition" became natural because of partial application.
+Implemented rl / lr
 ** DONE Fix IO
 What needs to be fixed here?? Will never remember.
 ** DONE Implement Category
