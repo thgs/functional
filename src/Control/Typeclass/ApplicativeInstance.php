@@ -31,4 +31,12 @@ interface ApplicativeInstance
      * Maybe a static that takes 2 arguments would be better?
      */
     public function sequence(ApplicativeInstance $fa): ApplicativeInstance;
+
+    /**
+     * @template B1
+     * @param ApplicativeInstance<\Closure(A):B1> $fab
+     * @param ApplicativeInstance<A> ...$fas
+     * @return ApplicativeInstance<B1>
+     */
+    public function seq(ApplicativeInstance $fab, ApplicativeInstance ...$fas): ApplicativeInstance;
 }

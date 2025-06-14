@@ -151,6 +151,17 @@ class Maybe implements
      * However if I do that, then I cannot runtime type check, static analysis says we have
      * already typed it. But we have not really, any thing would pass PHP check in method
      * declaration.
+     *
+     *
+     * Maybe::pure(12)->fmap( fn ($x, $y) => $x + $y )->apply(just(4)); // won't work as apply needs to further constraint
+     * Maybe::pure(12)->sequence( fn ($x, $y) => $x + $y, just(4)); // this might work
+     *
+     * pure (+) <*> Just 3 <*> Just 5
+     * just(fn ($x, $y) => $x + $y)->apply(just(3))->apply(just(5)) // won't work as apply needs to further constraint
+     * just(fn ($x, $y) => $x + $y)->applyPure(3)->applyPure(5) // won't work as applyPure needs to further constraint
+     *
+     * Maybe::sequence(fn ($x, $y) => $x + $y, just(3), just(5)) // will work but its static
+     * Maybe::sequencePure(fn ($x, $y) => $x + $y, 3, 5) // will work but its static
      */
     public function sequence(ApplicativeInstance $fa): ApplicativeInstance
     {
@@ -175,6 +186,25 @@ class Maybe implements
 
         $closure = !$callable instanceof \Closure ? \Closure::fromCallable($callable) : $callable;
         return fmap($closure, $fa); // alternatively could write $this->fmap($fab);
+    }
+
+    /**
+     * @template B1
+     * @param Maybe<\Closure(A):B1> $fab
+     * @return Maybe<B1>
+     */
+    public function seq(ApplicativeInstance $fab, ApplicativeInstance ...$fas): ApplicativeInstance
+    {
+        if (!$fab instanceof Maybe) {
+            throw new \TypeError('Expected instance of Maybe');
+        }
+
+        $f = $fab->getValue();
+        if ($f instanceof Nothing) {
+            return nothing();
+        }
+
+        return fmap(c($f->getValue()), $this);
     }
 
     /**
