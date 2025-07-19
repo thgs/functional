@@ -1,7 +1,7 @@
 #+TITLE: Project notes
 -----
 
-* Todo [16/47]
+* Todo [16/48]
 ** TODO Fix Applicative sequence() types
 ** TODO Semigroup and Monoid in terms of Semigroup
  Implement MonoidInstance in terms of Semigroup.  Haskell's interface to making
@@ -242,6 +242,9 @@ I think phpstan documentation implements a "kind".
 Essentially implementing "typestates".
 
 ** TODO Either could use a union instead of A,B template types?
+** TODO Add a generic implementation of ~array_unique~
+PHP's ~array_unique~ does a (string) $a == (string) $b comparison, so it
+cannot be used if the elements cannot be casted to string.
 ** ----- DONE ----
 ** DONE Separate data and control functors
 https://www.tweag.io/blog/2020-01-16-data-vs-control/
