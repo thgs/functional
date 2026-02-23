@@ -18,7 +18,7 @@ certain about or for different goals and priorities.
 
 ```php
 
-$maybeInt = new Maybe(new Just(123));
+$maybeInt = Maybe::just(123);
 $maybeInt = $maybeInt->fmap(fn ($x) => $x * 2);
 
 if ($maybeInt->isJust()) {
@@ -56,7 +56,7 @@ Wrap any php function
 ```php
 $min = c('min');
 
-$maybeArrayOfInt = new Maybe(new Just(range(1,4)));
+$maybeArrayOfInt = Maybe::just(range(1,4));
 
 $maybeMinOfArray = fmap($min, $maybeArrayOfInt);
 
