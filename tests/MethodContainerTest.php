@@ -7,6 +7,8 @@ use thgs\Functional\Container\Type;
 use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
 use thgs\Functional\Data\Nothing;
+use function thgs\Functional\just;
+use function thgs\Functional\nothing;
 use function thgs\Functional\partial;
 
 class MethodContainerTest extends TestCase
@@ -18,13 +20,13 @@ class MethodContainerTest extends TestCase
                                                 function (\Closure $f, Maybe $fa) {
                                                     $maybe = $fa->getValue();
                                                     if ($maybe instanceof Nothing) {
-                                                        return new Maybe(new Nothing());
+                                                        return nothing();
                                                     }
                                                     $result = partial($f, $maybe->getValue());
-                                                    return new Maybe(new Just($result));
+                                                    return just($result);
                                                 });
         $container = new MethodContainer();
-        $fa = new Maybe(new Just(3));
+        $fa = just(3);
         $container = $container->registerMethod($fmapForMaybe);
         $invokeResult = $container->invoke('fmap', $fa,
                                            // fmap arguments

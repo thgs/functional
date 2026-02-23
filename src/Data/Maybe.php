@@ -41,12 +41,32 @@ class Maybe implements
     SemigroupInstance,
     MonoidInstance
 {
-    public function __construct(
+    protected function __construct(
         /**
          * @var Nothing|Just<A1> $x
          */
         private readonly Nothing|Just $x
     ) {}
+
+    /**
+     * @template X1
+     * @param X1 $x
+     * @return Maybe<X1>
+     */
+    public static function just(mixed $x): Maybe
+    {
+        return new self(new Just($x));
+    }
+
+    /**
+     * @return Maybe<never>
+     */
+    public static function nothing(): Maybe
+    {
+        /** @var Maybe<never> */
+        $return = new self(new Nothing());
+        return $return;
+    }
 
     /**
      * @return Nothing|Just<A1>
@@ -59,6 +79,7 @@ class Maybe implements
     /**
      * @phpstan-assert-if-true Just<A1> $this->x
      * @phpstan-assert-if-true Just<A1> $this->getValue()
+     * @phpstan-assert-if-true A1 $this->unwrap()
      * @phpstan-assert-if-false Nothing $this->x
      */
     public function isJust(): bool

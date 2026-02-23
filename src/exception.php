@@ -2,10 +2,7 @@
 
 namespace thgs\Functional;
 
-
-use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
-use thgs\Functional\Data\Nothing;
 
 
 /**
@@ -18,13 +15,9 @@ use thgs\Functional\Data\Nothing;
 function safe(\Closure $f, mixed ...$xs): Maybe
 {
     try {
-        $value = new Maybe(new Just($f(...$xs)));
+        $value = Maybe::just($f(...$xs));
     } catch (\Throwable $e) {
-        /**
-         * Type hint because of Nothing
-         * @var Maybe<R> $value
-         */
-        $value = new Maybe(new Nothing());
+        $value = Maybe::nothing();
     }
     return $value;
 }

@@ -33,6 +33,7 @@
     ],
     "scripts": {
         "phpstan": "./vendor/bin/phpstan analyse src -c phpstan.neon",
+        "phpstan-types": "./vendor/bin/phpstan analyse tests/Phpstan -c phpstan.neon",
         "test": "./vendor/bin/phpunit tests --testdox --display-deprecations",
         "coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-text --strict-coverage --path-coverage",
         "coverage-no-path": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --no-progress --coverage-text --strict-coverage",

@@ -4,10 +4,8 @@ namespace thgs\Functional;
 
 use thgs\Functional\Control\IO;
 use thgs\Functional\Data\Either;
-use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Left;
 use thgs\Functional\Data\Maybe;
-use thgs\Functional\Data\Nothing;
 use thgs\Functional\Data\Right;
 use thgs\Functional\Data\Tuple;
 use thgs\Functional\Data\Tuple3;
@@ -20,18 +18,16 @@ use thgs\Functional\Data\Tuple3;
  */
 function just(mixed $x): Maybe
 {
-    return new Maybe(new Just($x));
+    return Maybe::just($x);
 }
 
 
 /**
- * @template X
- * @return Maybe<X>
+ * @return Maybe<never>
  */
 function nothing(): Maybe
 {
-    // @todo SA has an issue here
-    return new Maybe(new Nothing());
+    return Maybe::nothing();
 }
 
 

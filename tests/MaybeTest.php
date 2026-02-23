@@ -21,7 +21,7 @@ class MaybeTest extends TestCase
 
     public function testFmap(): void
     {
-        $data = new Maybe(new Just(3));
+        $data = Maybe::just(3);
         $mapped = fmap(fn (int $x) => $x + 2, $data);
 
         $value = $mapped->getValue();
@@ -33,7 +33,7 @@ class MaybeTest extends TestCase
     public function testIsAFunctor(): void
     {
         $this->assertInstanceIsFunctor(
-            new Maybe(new Just(5)),
+            Maybe::just(5),
             fn (int $x): bool => $x == 5,
             fn (bool $x): string => $x == true ? '100' : '500'
         );
@@ -42,12 +42,12 @@ class MaybeTest extends TestCase
     public function testImplementsEqCorrectly(): void
     {
         $this->assertImplementsEqCorrectly(Maybe::pure(3), Maybe::pure(2));
-        $this->assertImplementsEqCorrectly(Maybe::pure(3), new Maybe(new Nothing()));
+        $this->assertImplementsEqCorrectly(Maybe::pure(3), Maybe::nothing());
     }
 
     public function testCanShow(): void
     {
-        $data = new Maybe(new Just(67));
+        $data = Maybe::just(67);
         $this->assertEquals('Just 67', show($data));
     }
 
@@ -55,7 +55,7 @@ class MaybeTest extends TestCase
     {
         // In PHP we have to go "in reverse", adding a constraint in the instances of Eq
 
-        $data = new Maybe(new Just(67));
+        $data = Maybe::just(67);
         $fiction = new class implements EqInstance {
             public function getValue()
             {
@@ -106,7 +106,7 @@ class MaybeTest extends TestCase
     public function testCanSequenceApplicativesWithNothing(): void
     {
         // Nothing <*> Just 67 :: Nothing
-        $apNothing = new Maybe(new Nothing());
+        $apNothing = Maybe::nothing();
         $ap2 = Maybe::pure(fn ($x) => $x + 3);
         $result = $apNothing->sequence($ap2);
         $this->assertInstanceOf(ApplicativeInstance::class, $result);
@@ -116,7 +116,7 @@ class MaybeTest extends TestCase
 
         // Just (+3) <*> Nothing :: Nothing
         $ap1 = Maybe::pure(fn ($x) => $x + 3);
-        $apNothing = new Maybe(new Nothing());
+        $apNothing = Maybe::nothing();
         $result = $ap1->sequence($apNothing);
         $this->assertInstanceOf(ApplicativeInstance::class, $result);
         $this->assertInstanceOf(Maybe::class, $result);
