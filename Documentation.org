@@ -80,20 +80,38 @@ To construct a `Maybe a` value you can:
 
 #+begin_src php
 
-  $maybe = new Maybe(new Just(123));
-  $anotherMaybe = new Maybe(new Nothing());
+  $maybe = Maybe::just(123));
+
+  /** @var Maybe<int> */
+  $anotherMaybe = Maybe::nothing();
 
   $actualValue = $maybe->getValue(); // returns Just 123, so you can match the type
   $anotherActualvalue = $anotherMaybe->getValue();  // returns Nothing for the same reason
 
 #+end_src
 
-The object itself is a generic implementation but static analysis
-should be able to infer types, ie for the above it should be able to
-infer that it is Maybe<int>.
+In the case of Nothing, the annotation is required, otherwise the type
+is `Maybe<never>`.  However, it can be inferred from the function or
+method return type.
 
-TODO: See if that can work like that or user needs to extend Maybe to
-get consistency from static analysis. (getValue())
+#+begin_src php
+
+  /** @return Maybe<string> */
+  function mapToMaybe(?string $value): Maybe
+  {
+      if ($value === null) {
+          return Maybe::nothing();
+      }
+      return Maybe::just($value);
+  }
+
+  mapToMaybe(null); // Maybe<string>
+  mapToMaybe('something'); // Maybe<string>
+
+#+end_src
+
+TODO: What about extending Maybe (ie MaybeString) to get the type from
+static analysis. (getValue() will already have the correct type)
 
 ~Maybe~ implements ~Functor~ so you can apply a function to the underlying
 value, taking into account the Maybe logic (it will apply only when it
@@ -101,11 +119,11 @@ is Just).
 
 #+begin_src php
 
-  $maybe = new Maybe(new Just(123));
+  $maybe = Maybe::just(123));
   $maybeTimes34 = $maybe->fmap(fn ($x) => $x * 34);
   $result = $maybeTimes34->getValue();  // returns a Just(4182)
 
-  $maybe = new Maybe(new Nothing());
+  $maybe = Maybe::nothing();
   $maybeTimes34 = $maybe->fmap(fn ($x) => $x * 34);
   $result = $maybeTimes34->getValue(); // returns a Nothing
 
@@ -246,7 +264,7 @@ Functor laws.  Example usage:
   public function testIsAFunctor(): void
   {
       $this->assertInstanceIsFunctor(
-          new Maybe(new Just(5)),
+          Maybe::just(5),
           fn (int $x): bool => $x == 5,
           fn (bool $x): string => $x == true ? '100' : '500'
       );

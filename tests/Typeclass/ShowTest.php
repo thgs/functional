@@ -14,7 +14,7 @@ class ShowTest extends TestCase
             show: $showImplementation,
             instanceName: 'integer'
         );
-        
+
         $this->assertEquals('Integer 123', show(123));
     }
 

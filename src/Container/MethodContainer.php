@@ -2,9 +2,7 @@
 
 namespace thgs\Functional\Container;
 
-use thgs\Functional\Data\Just;
 use thgs\Functional\Data\Maybe;
-use thgs\Functional\Data\Nothing;
 
 /**
  * Idea here is to have a quick and small inlined container rather than a
@@ -25,9 +23,7 @@ class MethodContainer
     {
         $typeClassMethods = $this->map[$method] ?? [];
         if (empty($typeClassMethods)) {
-            /** @var Maybe<Method> */
-            $return = new Maybe(new Nothing());
-            return $return;
+            return Maybe::nothing();
         }
 
         /** @phpstan-assert non-empty-array<Method> $typeClassInstances */
@@ -35,15 +31,13 @@ class MethodContainer
         if ($ofType instanceof TypeName)
             foreach ($typeClassMethods as $method)
                 if ($method->type->name == $ofType->name)
-                    return new Maybe(new Just($method));
+                    return Maybe::just($method);
 
         foreach ($typeClassMethods as $method)
             if ($method->predicate($ofType))
-                return new Maybe(new Just($method));
+                return Maybe::just($method);
 
-        /** @var Maybe<Method> */
-        $return = new Maybe(new Nothing());
-        return $return;
+        return Maybe::nothing();
     }
 
     /**
@@ -60,18 +54,11 @@ class MethodContainer
          * @todo Support multiple $ofType here and in the predicate?
          */
 
-        $maybeInstance = $this->getMethodImplementation($method, $ofType);
+        // todo: inline this for micro-optimisation?
 
-        // todo: fix maybe::unwrap or remove it -- its a mapping to nullable type
-
-        $foundInstance = $maybeInstance->getValue();
-        if ($foundInstance instanceof Nothing) {
-            return new Maybe(new Nothing());
-        }
-
-        return new Maybe(new Just(
-            $foundInstance->getValue()
-                ->invoke(...$arguments)));
+        return $this->getMethodImplementation($method, $ofType)
+            ->fmap(
+                fn (Method $method) => $method->invoke(...$arguments));
     }
 
     /**

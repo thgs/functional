@@ -10,6 +10,7 @@ use function thgs\Functional\const_;
 use function thgs\Functional\eq1;
 use function thgs\Functional\flip;
 use function thgs\Functional\fmap;
+use function thgs\Functional\just;
 use function thgs\Functional\memoize;
 use function thgs\Functional\unit;
 
@@ -19,7 +20,7 @@ class FunctionsTest extends TestCase
 
     public function testFmap(): void
     {
-        $data = new Maybe(new Just(5));
+        $data = just(5);
 
         // this fmap is :: (Int -> Bool) -> Maybe Int -> Maybe Bool
         $mapped = fmap(
@@ -42,7 +43,7 @@ class FunctionsTest extends TestCase
 
     public function testFmapWithComposition(): void
     {
-        $data = new Maybe(new Just(5));
+        $data = just(5);
 
         // this fmap is :: (Int -> Bool) -> Maybe Int -> Maybe Bool
         $mapped = fmap(
@@ -66,7 +67,7 @@ class FunctionsTest extends TestCase
     public function testShowWillTypeErrorWhenCannotShow(): void
     {
         $notShow = new class () { public int $a = 5; };
-        $data = new Maybe(new Just($notShow));
+        $data = just($notShow);
 
         $this->expectException(TypeError::class);
 
@@ -83,10 +84,10 @@ class FunctionsTest extends TestCase
             $callsCounter[$x] = isset($callsCounter[$x])
                 ? $callsCounter[$x] + 1
                 : 1;
-            
+
             return $x * $x;
         });
-        
+
         foreach (range(0,4) as $i) {
             $memoized($i);
         }
@@ -110,16 +111,16 @@ class FunctionsTest extends TestCase
             $callsCounter1[$x] = isset($callsCounter1[$x])
                 ? $callsCounter1[$x] + 1
                 : 1;
-            
+
             return $x * $x;
         });
-        
+
         $callsCounter2 = [];
         $memoized2 = memoize(function (int $x) use (&$callsCounter2) : int {
             $callsCounter2[$x] = isset($callsCounter2[$x])
                 ? $callsCounter2[$x] + 1
                 : 1;
-            
+
             return $x * $x;
         });
 
